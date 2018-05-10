@@ -1,0 +1,49 @@
+#!/bin/sh
+
+script_name="$(basename "${0}")"
+
+exec_command(){
+    "${@}" 2>&1 | tee "${log_file}"
+}
+
+# dir_name="$(dirname "${0}")"
+
+# conf_file="${dir_name}/${script_name}".conf
+conf_file="./${script_name}".conf
+
+if [ ! -f "${conf_file}" ]
+then
+	printf '%s not a file.\n' "${conf_file}"
+	exit 1
+fi
+
+. "${conf_file}"
+
+cd "${base_dir}"
+
+for target in ${folders}
+do
+
+    if [ ! -d "${target}" ]
+    then
+        printf 'Skipping %s: not a directory.\n' "${target}"
+        continue
+    fi
+
+    printf '\n%s\n\n' "${target}"
+
+    log_file="${log_dir}/${script_name}_${target}_`date +'%Y%m%d%H%M%S'`"
+
+    if ! touch "${log_file}"
+    then
+        exit 1
+    fi
+
+    cd "${target}"
+
+    exec_command git push
+
+	cd "${base_dir}"
+
+    printf '\n%s\n' '------------------------------------------------'
+done
