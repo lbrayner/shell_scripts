@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# set -x
+
+script_name="$(basename "${0}")"
+
+exec_command(){
+    "${@}" > "${log_file}" 2>"${git_error}"
+    if [ `find "${git_error}" -size +1c | wc -l` -gt 0 ]
+    then
+        printf '\n%s\n\n' "${target}"
+        printf '\n%s\n' '------------------------------------------------'
+        cat "${git_error}"
+        return 1
+    fi
+    : > "${git_error}"
+    return 0
+}
+
+conf_file="./${script_name}".conf
+
+if [ ! -f "${conf_file}" ]
+then
+	printf '%s not a file.\n' "${conf_file}"
+	exit 1
+fi
+
+. "${conf_file}"
+
+git_error=$(mktemp --suffix="_${script_name}.error")
+
+if [ -n "$1" ]
+then
+    comment="${1}"
+else
+    comment=`date +'%Y%m%d%H%M%S'`
+fi
+
+cd "${base_dir}"
+
+for target in ${folders}
+do
+
+    if [ ! -d "${target}" ]
+    then
+        printf 'Skipping %s: not a directory.\n' "${target}"
+        continue
+    fi
+
+    log_file="${log_dir}/${script_name}_${target}_${comment}"
+
+    if ! touch "${log_file}"
+    then
+        exit 1
+    fi
+
+    cd "${target}"
+
+    exec_command git add -A && exec_command git commit -am "${comment}"
+
+	cd "${base_dir}"
+
+done
