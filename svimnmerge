@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# svn merge tool
+
+# set -x
+
+get_extension(){
+    echo "${1}" | sed 's/.*\.\([^.]\+\)\(\.merge.*\|\.working.*\|$\)/\1/'
+}
+
+vim=/usr/bin/nvim
+
+old=${1}
+his=${2}
+mine=${3}
+merged=${4}
+wcpath=${5}
+
+diff_program=diff
+
+extension=`get_extension "${merged}"`
+
+if [ "${extension}" = "java" ]
+then
+    printf '\nJava file. Ignoring whitespace.\n\n'
+    diff_program=diffw
+fi
+
+if ! hash ${diff_program}
+then
+    exit 1
+fi
+
+diff3 --diff-program=${diff_program} -E -m "${mine}" "${old}" "${his}" \
+    > "${merged}"
+
+# querying for a CARRIAGE RETURN
+if grep -q $'\x0d' "${merged}"
+then
+    unix2dos -f "${merged}"
+fi
+
+${vim} -R -d "${his}" "${mine}" -c "set ft=${extension} | set nomodifiable" \
+    -c "wincmd w | set ft=${extension} | set nomodifiable" \
+    -c "split ""${merged}"" | wincmd J | silent set scrollbind cursorbind modifiable"
