@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# set -x
+
+# diff command for the svn client
+# echo "${@}"
+
+functional_name(){
+    basename "${@}"
+}
+
+is_under_version_control(){
+    svn ls "${@}" >/dev/null 2>&1
+}
+
+get_extension(){
+    echo "${1}" | sed 's@^.*(\.\.\./.*\.\([^ \t]\+\)).*$'\
+'\|^.*\.\([^ \t]\+\)[ \t]\+([^()]\+)$@\1\2@'
+}
+
+extension_3=`get_extension "${3}"`
+extension_5=`get_extension "${5}"`
+
+diff_arguments="${1}"
+
+if [ "${diff_arguments}" = "-u" -a "${extension_3}" = "java" -a "${extension_5}" = "java" ]
+then
+    printf '\nJava files. Ignoring whitespace.\n' 
+    diff_arguments="-u -a -w"
+fi
+
+name="$(basename "${7}")"
+diff_file="$(mktemp --suffix=".${name}.diff")"
+diff ${diff_arguments}  "${7}" "${6}" > "${diff_file}"
+
+file1="${6}"
+file2="${7}"
+
+if ! is_under_version_control "${file1}"
+then
+    file_name1="`functional_name "${3}"`"
+fi
+
+if ! is_under_version_control "${file2}"
+then
+    temp_file="`mktemp --suffix='.'"$(functional_name "${5}")"`"
+    cp "${file2}" "${temp_file}"
+    file2="${temp_file}"
+fi
+
+printf '\n%s\n%s\n' "${3}" "${5}"
+/usr/bin/nvim -R "${file2}" -c 'sil lefta vert diffpa '\
+"${diff_file}"' | sil exe "file " . fnameescape("'"${file_name1}"'") '\
+'| sil! set syntax='"${extension_3}"' | exec "normal! \<c-w>l" '\
+'| sil! set syntax='"${extension_5}"
