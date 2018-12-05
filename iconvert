@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# set -e
+
+print_usage() {
+	printf '\n%s\n' "$(basename $0) [-B] -f FROM_ENC -t TO_ENC FILE"
+}
+
+from=""
+to=""
+nobackup=""
+
+while getopts ":f:t:hB" opt
+do
+    case ${opt} in
+        f)
+            from="${OPTARG}"
+            ;;
+        t)
+            to="${OPTARG}"
+            ;;
+        h)
+            print_usage
+            exit 0
+            ;;
+        B)
+            nobackup="true"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [ ! ${#} -eq 1 ]
+then
+	print_usage
+	exit 1
+fi
+
+file="${1}"
+
+if [ ! -f "${file}" ]
+then
+    printf '%s does not exist or is not a file.\n' "${file}" 1>&2
+    exit 1
+fi
+
+filename="$(basename "${file}")"
+converted=$(mktemp)
+
+if [ -z "${nobackup}" ]
+then
+    bak_file="$(mktemp --suffix="_${filename}.bak")"
+    cp -vf "${file}" "${bak_file}"
+fi
+
+iconv -f "${from}" -t "${to}" "${file}" > "${converted}"
+
+cp -vf "${converted}" "${file}"
+
+rm "${converted}"
