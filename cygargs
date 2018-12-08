@@ -1,0 +1,35 @@
+#!/bin/bash
+
+is_path_absolute() {
+    if [[ "${1}" = /* ]]
+    then
+        exit 0
+    fi
+    exit 1
+}
+
+first_node() {
+    file="${1}"
+    if `is_path_absolute "${file}"`
+    then
+        echo "/"
+        exit 0
+    fi
+    path_array=("${file//\// }")
+    echo "${path_array[0]}"
+}
+
+set_args() {
+    unset args
+
+    for arg in "${@}"
+    do
+        node="`first_node "${arg}"`"
+        if [ -e "${node}" ]
+        then
+            args+=( "`cygpath -m "${arg}"`" )
+        else
+            args+=( "${arg}" )
+        fi
+    done
+}
