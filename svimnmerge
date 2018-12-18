@@ -2,13 +2,28 @@
 
 # svn merge tool
 
-# set -x
+# set -e
+
+print_usage() {
+	printf '\n%s\n' "$(basename $0) OLD HIS MINE MERGED WCPATH"
+}
+
+if [ ! ${#} -eq 5 ]
+then
+	print_usage 1>&2
+	exit 1
+fi
 
 get_extension(){
     echo "${1}" | sed 's/.*\.\([^.]\+\)\(\.merge.*\|\.working.*\|$\)/\1/'
 }
 
 vim=/usr/bin/nvim
+
+if [ -n "${EDITOR}" ]
+then
+    vim="${EDITOR}"
+fi
 
 old=${1}
 his=${2}
@@ -24,11 +39,6 @@ if [ "${extension}" = "java" ]
 then
     printf '\nJava file. Ignoring whitespace.\n\n'
     diff_program=diffw
-fi
-
-if ! hash ${diff_program}
-then
-    exit 1
 fi
 
 diff3 --diff-program=${diff_program} -E -m "${mine}" "${old}" "${his}" \
