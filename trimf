@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# Deletes the n first files in alphabetical order
+
+# set -x
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") [-n COUNT] [-m MINIMUM] FOLDER"
+}
+
+count=1
+minimum=10
+while getopts ":m:n:" opt
+do
+    case ${opt} in
+        m)
+            minimum=${OPTARG}
+            ;;
+        n)
+            count=${OPTARG}
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [ ! ${#} -eq 1 ]
+then
+	print_usage 1>&2
+    exit 1
+fi
+
+target_folder="${1}"
+
+if [ ! -d "${target_folder}" ]
+then
+    ls "${target_folder}"
+    exit 1
+fi
+
+# rm returns an error if there are no files to remove
+
+find "${target_folder}" -mindepth 1 -maxdepth 1 -type f \
+    | sort | head -n -${minimum} | head -n${count} | xargs rm -v
