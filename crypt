@@ -1,0 +1,67 @@
+#!/bin/bash
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") (-d -i IN | -i IN -o OUT)"
+}
+
+decrypt=""
+input=""
+output=""
+while getopts ":di:o:" opt
+do
+    case ${opt} in
+        d)
+            decrypt="yes"
+            ;;
+        i)
+            input="${OPTARG}"
+            ;;
+        o)
+            output="${OPTARG}"
+            ;;
+        h)
+            print_usage
+            exit 0
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ -z "${decrypt}" ]]
+then
+    if [[ -z "${input}" ]] || [[ -z "${output}" ]]
+    then
+        print_usage 1>&2
+        exit 1
+    fi
+fi
+
+if [[ -n "${decrypt}" ]]
+then
+    if [[ -z "${input}" ]] || [[ -n "${output}" ]]
+    then
+        print_usage 1>&2
+        exit 1
+    fi
+fi
+
+# Read Password
+echo -n Password: 
+read -s password1
+echo
+echo -n Confirm password: 
+read -s password2
+echo
+
+if [[ ! "${password1}" = "${password2}" ]]
+then
+    echo 'Passwords do not match!' 1>&2
+    exit 1
+fi
+
+openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
+    -pass file:<( echo -n "${password1}" )
