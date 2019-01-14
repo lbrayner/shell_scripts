@@ -33,14 +33,17 @@ fi
 echo -n Password: 
 read -s password1
 echo
-echo -n Confirm password: 
-read -s password2
-echo
 
-if [[ ! "${password1}" = "${password2}" ]]
+if [[ -z "${decrypt}" ]]
 then
-    echo 'Passwords do not match!' 1>&2
-    exit 1
+    echo -n Confirm password: 
+    read -s password2
+    echo
+    if [[ ! "${password1}" = "${password2}" ]]
+    then
+        echo 'Passwords do not match!' 1>&2
+        exit 1
+    fi
 fi
 
 encrypt(){
@@ -53,6 +56,10 @@ encrypt(){
     fi
     openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
         -pass file:<( echo -n "${password1}" )
+    if [[ ! ${?} -eq 0 ]]
+    then
+        rm "${output}"
+    fi
 }
 
 decrypt(){
@@ -65,6 +72,10 @@ decrypt(){
     fi
     openssl aes-256-cbc -a -pbkdf2 -d -in "${input}" -out "${output}" \
         -pass file:<( echo -n "${password1}" )
+    if [[ ! ${?} -eq 0 ]]
+    then
+        rm "${output}"
+    fi
 }
 
 if [[ -z "${decrypt}" ]]
