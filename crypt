@@ -1,23 +1,15 @@
 #!/bin/bash
 
 print_usage() {
-	printf '\n%s\n' "$(basename "${0}") (-d -i IN | -i IN -o OUT)"
+	printf '\n%s\n' "$(basename "${0}") [-d] FILE..."
 }
 
 decrypt=""
-input=""
-output=""
-while getopts ":di:o:" opt
+while getopts ":di:" opt
 do
     case ${opt} in
         d)
             decrypt="yes"
-            ;;
-        i)
-            input="${OPTARG}"
-            ;;
-        o)
-            output="${OPTARG}"
             ;;
         h)
             print_usage
@@ -31,22 +23,10 @@ do
 done
 shift $((OPTIND - 1))
 
-if [[ -z "${decrypt}" ]]
+if [[ ${#} -eq 0 ]]
 then
-    if [[ -z "${input}" ]] || [[ -z "${output}" ]]
-    then
-        print_usage 1>&2
-        exit 1
-    fi
-fi
-
-if [[ -n "${decrypt}" ]]
-then
-    if [[ -z "${input}" ]] || [[ -n "${output}" ]]
-    then
-        print_usage 1>&2
-        exit 1
-    fi
+    print_usage 1>&2
+    exit 1
 fi
 
 # Read Password
@@ -63,5 +43,40 @@ then
     exit 1
 fi
 
-openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
-    -pass file:<( echo -n "${password1}" )
+encrypt(){
+    input="${1}"
+    output="${input}".openssl.aes
+    if [[ -f "${output}" ]]
+    then
+        printf '%s exists.' "${output}" 1>&2
+        exit 1
+    fi
+    openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
+        -pass file:<( echo -n "${password1}" )
+}
+
+decrypt(){
+    input="${1}"
+    output="${input%.openssl.aes}"
+    if [[ -f "${output}" ]]
+    then
+        printf '%s exists.\n' "${output}" 1>&2
+        exit 1
+    fi
+    openssl aes-256-cbc -a -pbkdf2 -d -in "${input}" -out "${output}" \
+        -pass file:<( echo -n "${password1}" )
+}
+
+if [[ -z "${decrypt}" ]]
+then
+    for arg in "${@}"
+    do
+        encrypt "${arg}"
+    done
+    exit 0
+fi
+
+for arg in "${@}"
+do
+    decrypt "${arg}"
+done
