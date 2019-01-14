@@ -48,8 +48,8 @@ encrypt(){
     output="${input}".openssl.aes
     if [[ -f "${output}" ]]
     then
-        printf '%s exists.' "${output}" 1>&2
-        exit 1
+        printf '%s exists. Skipping.\n' "${output}" 1>&2
+        return 1
     fi
     openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
         -pass file:<( echo -n "${password1}" )
@@ -60,8 +60,8 @@ decrypt(){
     output="${input%.openssl.aes}"
     if [[ -f "${output}" ]]
     then
-        printf '%s exists.\n' "${output}" 1>&2
-        exit 1
+        printf '%s exists. Skipping.\n' "${output}" 1>&2
+        return 1
     fi
     openssl aes-256-cbc -a -pbkdf2 -d -in "${input}" -out "${output}" \
         -pass file:<( echo -n "${password1}" )
