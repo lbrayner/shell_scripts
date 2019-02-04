@@ -41,7 +41,5 @@ then
     exit 1
 fi
 
-# rm returns an error if there are no directories to remove
-
 find "${target_folder}" -mindepth 1 -maxdepth 1 -type d \
-    | sort | head -n -${minimum} | head -n${count} | xargs rm -rv
+    | sort | head -n -${minimum} | head -n${count} | xargs -r rm -rv
