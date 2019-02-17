@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 print_usage() {
 	printf '\n%s\n' "$(basename $0) FILE..."
@@ -16,10 +16,12 @@ while [[ -n "${1}" ]]
 do
     file="${1}"
     extension="${file##*.}"
+    name="${file%.*}"
 
     shift
 
-    if [[ ! "${extension}" = "mp3" ]] && [[ ! "${extension}" = "m4a" ]]
+    if [[ ! "${extension}" = "mp3" ]] && [[ ! "${extension}" = "m4a" ]] \
+        && [[ ! "${extension}" = "ogg" ]]
     then
         printf 'Format "%s" not supported. Skipping.\n' "${extension}" 1>&2
         continue
@@ -31,22 +33,22 @@ do
     ffmpeg -v quiet -y -i "${file}" "${wav}"
     sox "${wav}" "${vaw}" reverse
 
-    name="`reverse-string $(basename -s ".${extension}" "${file}")`"
+    reverse="`reverse-string "${name}"`"
 
     if [[ "${extension}" = "mp3" ]]
     then
-        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec  libmp3lame -ab 128k "${name}.mp3"
+        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec libmp3lame -ab 128k "${reverse}.mp3"
     fi
 
     if [[ "${extension}" = "m4a" ]]
     then
-        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec aac -ab 128k "${name}.m4a"
+        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec aac -ab 128k "${reverse}.m4a"
     fi
 
-    if [[ "${extension}" = "mp3" ]] || [[ "${extension}" = "m4a" ]]
+    if [[ "${extension}" = "ogg" ]]
     then
-        rm "${vaw}"
+        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec libvorbis -qscale:a 5 "${reverse}.ogg"
     fi
 
-    rm "${wav}"
+    rm "${wav}" "${vaw}"
 done
