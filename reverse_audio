@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# set -x
+
+print_usage() {
+	printf '\n%s\n' "$(basename $0) FILE..."
+}
+
+if [[ ! ${#} -gt 0 ]]
+then
+    print_usage
+    exit 1
+fi
+
+while [[ -n "${1}" ]]
+do
+    file="${1}"
+    extension="${file##*.}"
+
+    shift
+
+    if [[ ! "${extension}" = "mp3" ]] && [[ ! "${extension}" = "m4a" ]]
+    then
+        printf 'Format "%s" not supported. Skipping.\n' "${extension}" 1>&2
+        continue
+    fi
+
+    wav=`mktemp --suffix=.wav -p "${PWD}"`
+    vaw=`mktemp --suffix=.wav -p "${PWD}"`
+
+    ffmpeg -v quiet -y -i "${file}" "${wav}"
+    sox "${wav}" "${vaw}" reverse
+
+    name="`reverse-string $(basename -s ".${extension}" "${file}")`"
+
+    if [[ "${extension}" = "mp3" ]]
+    then
+        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec  libmp3lame -ab 128k "${name}.mp3"
+    fi
+
+    if [[ "${extension}" = "m4a" ]]
+    then
+        ffmpeg -v quiet -y -i "${vaw}" -vn -acodec aac -ab 128k "${name}.m4a"
+    fi
+
+    if [[ "${extension}" = "mp3" ]] || [[ "${extension}" = "m4a" ]]
+    then
+        rm "${vaw}"
+    fi
+
+    rm "${wav}"
+done
