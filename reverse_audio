@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
+
+if [[ ${BASH_VERSION} != 4.* ]]
+then
+    echo "bash version >= 4.0 required." 1>&2
+    exit 1
+fi
 
 print_usage() {
 	printf '\n%s\n' "$(basename $0) FILE..."
@@ -15,15 +21,17 @@ fi
 while [[ -n "${1}" ]]
 do
     file="${1}"
-    extension="${file##*.}"
+    extension_as_is="${file##*.}"
+    extension="${extension_as_is,,}" # lower case
     directory="${file%/*}"
-    name="${file##*/}"
-    name_wo_extension="${name%.*}"
+    name_with_extension="${file##*/}"
+    name="${name_with_extension%.*}"
 
     shift
 
-    if [[ ! "${extension}" = "mp3" ]] && [[ ! "${extension}" = "m4a" ]] \
-        && [[ ! "${extension}" = "ogg" ]]
+    if [[ ! "${extension}" == "mp3" ]] \
+        && [[ ! "${extension}" == "m4a" ]] \
+        && [[ ! "${extension}" == "ogg" ]]
     then
         printf 'Format "%s" not supported. Skipping.\n' "${extension}" 1>&2
         continue
@@ -35,28 +43,28 @@ do
     ffmpeg -y -i "${file}" "${wav}"
     sox "${wav}" "${vaw}" reverse
 
-    reverse="`reverse-string "${name_wo_extension}"`"
+    reverse_name="`reverse-string "${name}"`"
 
-    full_reverse=${reverse}
+    reverse="${reverse_name}"
 
-    if [[ ! "${file}" = "${directory}" ]]
+    if [[ ! "${file}" == "${directory}" ]]
     then
-        full_reverse="${directory}/${reverse}"
+        reverse="${directory}/${reverse_name}"
     fi
 
-    if [[ "${extension}" = "mp3" ]]
+    if [[ "${extension}" == "mp3" ]]
     then
-        ffmpeg -y -i "${vaw}" -vn -acodec libmp3lame -ab 128k "${full_reverse}.mp3"
+        ffmpeg -y -i "${vaw}" -vn -acodec libmp3lame -ab 128k "${reverse}.mp3"
     fi
 
-    if [[ "${extension}" = "m4a" ]]
+    if [[ "${extension}" == "m4a" ]]
     then
-        ffmpeg -y -i "${vaw}" -vn -acodec aac -ab 128k "${full_reverse}.m4a"
+        ffmpeg -y -i "${vaw}" -vn -acodec aac -ab 128k "${reverse}.m4a"
     fi
 
-    if [[ "${extension}" = "ogg" ]]
+    if [[ "${extension}" == "ogg" ]]
     then
-        ffmpeg -y -i "${vaw}" -vn -acodec libvorbis -qscale:a 5 "${full_reverse}.ogg"
+        ffmpeg -y -i "${vaw}" -vn -acodec libvorbis -qscale:a 5 "${reverse}.ogg"
     fi
 
     rm "${wav}" "${vaw}"
