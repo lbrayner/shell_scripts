@@ -36,7 +36,7 @@ then
     exit 1
 fi
 
-if [[ ${#} -eq 1  ]]
+if [[ -n "${1}" ]]
 then
     dir="${1}"
 fi
@@ -55,10 +55,12 @@ cache_file="${cache_dir}/`printf $(readlink -f "${dir}") | base64`"
 
 if [[ ! -f "${cache_file}" ]]
 then
-    find "${dir}" ! -path \*/.\* ! -path \*/classes/\* ! -path \*/build/\* \
-        ! -path \*/dumps/\* ! -path \*/bin/\* ! -path \*/test-classes/\* \
-        ! -path \*/target/\* ! -iname \*.class ! -iname \*.jasper \
-        -type f > "${cache_file}"
+    if [[ -n "${DFZF_DEFAULT_COMMAND}" ]]
+    then
+        ${DFZF_DEFAULT_COMMAND} "${dir}" > "${cache_file}"
+    else
+        find "${dir}" ! -path \*/.\* -type f > "${cache_file}"
+    fi
 fi
 
 cat "${cache_file}"
