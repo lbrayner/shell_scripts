@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# set -x
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") [-C] [-c CACHE_DIR] [DIR]"
+}
+
+clear_cache=""
+cache_dir=~/.cache/fzf_cache
+dir="."
+while getopts ":hCc:" opt
+do
+    case ${opt} in
+        h)
+            print_usage
+            exit 0
+            ;;
+        C)
+            clear_cache="true"
+            ;;
+        c)
+            cache_dir="${OPTARG}"
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ ! ${#} -le 1  ]]
+then
+    print_usage >&2
+    exit 1
+fi
+
+if [[ ${#} -eq 1  ]]
+then
+    dir="${1}"
+fi
+
+if [[ -n "${clear_cache}" ]] && [[ -d "${cache_dir}"  ]]
+then
+    rm -rf "${cache_dir}"
+fi
+
+if [[ ! -d "${cache_dir}"  ]]
+then
+    mkdir -p "${cache_dir}"
+fi
+
+cache_file="${cache_dir}/`printf $(readlink -f "${dir}") | base64`"
+
+if [[ ! -f "${cache_file}" ]]
+then
+    find "${dir}" ! -path \*/.\* ! -path \*/classes/\* ! -path \*/build/\* \
+        ! -path \*/dumps/\* ! -path \*/bin/\* ! -path \*/test-classes/\* \
+        ! -path \*/target/\* ! -iname \*.class ! -iname \*.jasper \
+        -type f > "${cache_file}"
+fi
+
+cat "${cache_file}"
