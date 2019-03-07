@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# set -x
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") [DIR]"
+}
+
+dir="."
+
+if [[ ! ${#} -le 1  ]]
+then
+    print_usage >&2
+    exit 1
+fi
+
+if [[ -n "${1}" ]]
+then
+    dir="${1}"
+fi
+
+find "${dir}" ! -path \*/.\* ! -path \*
+    -type f
+
+if [[ "`readlink -f "${PWD}"`" == "`readlink -f ~/other/git/dotvim`" ]]
+then
+    find "${dir}" ! -path \*/.\* ! -path ./pack/\* ! -path ./eclim/\* -type f
+    exit 0
+fi
+
+find "${dir}" ! -path \*/.\* -type f
