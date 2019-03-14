@@ -1,0 +1,10 @@
+#!/bin/sh
+
+tmpdir="$(dirname "$(mktemp -u)")"
+script_name="$(basename "${0}")"
+# log_file=$(mktemp --suffix="_${script_name}.log")
+
+echo "tabdo windo \
+    if expand('%:p') =~# '^\\V' . '${tmpdir}' | \
+        setlocal nomodifiable | \
+    endif | visual" |  nvim -e "${@}"
