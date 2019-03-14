@@ -4,10 +4,9 @@ tmpdir="$(dirname "$(mktemp -u)")"
 # script_name="$(basename "${0}")"
 # log_file=$(mktemp --suffix="_${script_name}.log")
 
-echo "let nomod_cur_bufnr = bufnr('%') | \
-    noautocmd argdo \
+echo "noautocmd argdo \
     if expand('%:p') =~# '^\\V' . '${tmpdir}' | \
         setlocal nomodifiable | \
     endif | \
-    exec 'b ' . nomod_cur_bufnr | \
+    b1 | \
     exec 'normal! gg' | visual" |  nvim -e "${@}"
