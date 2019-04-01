@@ -33,9 +33,6 @@ then
     dir="${1}"
 fi
 
-find "${dir}" ! -path \*/.\* ! -path \*
-    -type f
-
 if [[ -f ./init.vim ]]
 then
     vim_bundle "${dir}"
