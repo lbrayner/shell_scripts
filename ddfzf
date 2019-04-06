@@ -14,10 +14,17 @@ vim_bundle(){
 }
 
 eclipse_project(){
-find "${1}" ! -path ./.\* ! -path ./classes/\* ! -path ./build/\* \
-    ! -path ./dumps/\* ! -path ./bin/\* ! -path ./test-classes/\* \
-    ! -path ./target/\* ! -iname \*.class ! -iname \*.jasper \
-    -type f
+    find "${1}" ! -path \*/.\* ! -path ./classes/\* ! -path ./build/\* \
+        ! -path ./dumps/\* ! -path ./bin/\* ! -path ./test-classes/\* \
+        ! -path ./target/\* ! -iname \*.class ! -iname \*.jasper \
+        -type f
+}
+
+wildfly_home(){
+    find "${1}" ! -path \*/.\* ! -path ./standalone/data/\* \
+        ! -path ./standalone/standalone_xml_history/\* \
+        ! -path ./standalone/tmp/\* \
+        -type f
 }
 
 dir="."
@@ -42,6 +49,12 @@ fi
 if [[ -f ./.project ]]
 then
     eclipse_project "${dir}"
+    exit 0
+fi
+
+if [[ -f ./standalone/configuration/standalone.xml ]]
+then
+    wildfly_home "${dir}"
     exit 0
 fi
 
