@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+print_usage() {
+	printf '\nUsage:\n\n\t%s\n' "$(basename "${0}")"
+}
+
+if [[ ! ${#} -eq 0  ]]
+then
+    print_usage >&2
+    exit 1
+fi
+
+selectfile(){
+    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f \
+        ! -name \*.vtt ! -name \*.srt | fzf
+}
+
+file="`selectfile`"
+
+if [[ ! ${?} -eq 0 ]]
+then
+    printf 'Aborted.\n' 1>&2
+    exit 1
+fi
+
+if [[ ! -f "${file}" ]]
+then
+    printf 'No such file: %s.\n' "${file}" 1>&2
+    exit 1
+fi
+
+mpv --volume=50 "${file}"
