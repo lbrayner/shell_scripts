@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# set -x
+
 print_usage() {
 	printf '\nUsage:\n\n\t%s\n' "$(basename "${0}")"
 }
@@ -11,11 +13,38 @@ then
 fi
 
 selectfile(){
+    history_file=~/.cache/fplay_fzf_history
+
+    if [[ ! -f "${history_file}" ]]
+    then
+        touch "${history_file}"
+    fi
+
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f \
-        ! -name \*.vtt ! -name \*.srt | fzf
+        ! -name \*.vtt ! -name \*.srt | fzf --history "${history_file}"
+}
+
+cachefile(){
+    recent_file="${1}"
+
+    recent_files=~/.cache/fplay_recent_files
+
+    if [[ ! -f "${recent_files}" ]]
+    then
+        touch "${recent_files}"
+    else
+        temp_file=$(mktemp)
+        cp "${recent_files}" "${temp_file}"
+        tail -n -9 "${temp_file}" | uniq -u > "${recent_files}"
+        rm "${temp_file}"
+    fi
+
+    printf '%s\n' "${recent_file}" >> "${recent_files}"
 }
 
 file="`selectfile`"
+
+cachefile "${file}"
 
 if [[ ! ${?} -eq 0 ]]
 then
