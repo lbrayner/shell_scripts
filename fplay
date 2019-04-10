@@ -67,10 +67,11 @@ selectlast(){
 selectrecent(){
     if [[ ! -f "${recent_files}" ]]
     then
-        touch "${recent_files}"
+        return 1
     fi
 
-    fzf --header="`generate_header`" --history "${history_file}" < "${recent_files}"
+    sort -u "${recent_files}" \
+        | fzf --header="`generate_header`" --history "${history_file}"
 }
 
 cachefile(){
@@ -108,7 +109,14 @@ esac
 
 if [[ ! ${?} -eq 0 ]]
 then
-    printf 'Aborted.\n' 1>&2
+    case ${choice} in
+        last|recent)
+            printf 'No recent files.\n' 1>&2
+            ;;
+        *)
+            printf 'Aborted.\n' 1>&2
+            ;;
+    esac
     exit 1
 fi
 
