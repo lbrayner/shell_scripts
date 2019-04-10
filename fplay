@@ -67,7 +67,7 @@ selectlast(){
 selectrecent(){
     if [[ ! -f "${recent_files}" ]]
     then
-        return 1
+        return 3
     fi
 
     sort -u "${recent_files}" \
@@ -107,16 +107,24 @@ case ${choice} in
         ;;
 esac
 
-if [[ ! ${?} -eq 0 ]]
+err=${?}
+
+if [[ ! ${err} -eq 0 ]]
 then
     case ${choice} in
-        last|recent)
+        last)
             printf 'No recent files.\n' 1>&2
+            exit 1
             ;;
-        *)
-            printf 'Aborted.\n' 1>&2
+        recent)
+            if [[ ${err} -eq 3 ]]
+            then
+                printf 'No recent files.\n' 1>&2
+                exit 1
+            fi
             ;;
     esac
+    printf 'Aborted.\n' 1>&2
     exit 1
 fi
 
