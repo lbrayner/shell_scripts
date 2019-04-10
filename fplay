@@ -1,10 +1,33 @@
 #!/usr/bin/env bash
 
 # set -x
+shopt -s extglob
 
 print_usage() {
 	printf '\nUsage:\n\n\t%s\n' "$(basename "${0}")"
 }
+
+choice=""
+while getopts ":lrh" opt
+do
+    case ${opt} in
+        l)
+            choice="last"
+            ;;
+        r)
+            choice="recent"
+            ;;
+        h)
+            print_usage
+            exit 0
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
 
 if [[ ! ${#} -eq 0  ]]
 then
@@ -12,8 +35,14 @@ then
     exit 1
 fi
 
+generate_header(){
+    ls -1t !(*@(.vtt|.srt)) | head -n10
+}
+
+history_file=~/.cache/fplay_fzf_history
+recent_files=~/.cache/fplay_recent_files
+
 selectfile(){
-    history_file=~/.cache/fplay_fzf_history
 
     if [[ ! -f "${history_file}" ]]
     then
@@ -21,13 +50,27 @@ selectfile(){
     fi
 
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f \
-        ! -name \*.vtt ! -name \*.srt | fzf --history "${history_file}"
+        ! -name \*.vtt ! -name \*.srt \
+        | fzf --header="`generate_header`" \
+            --history "${history_file}"
+}
+
+selectrecent(){
+    if [[ ! -f "${recent_files}" ]]
+    then
+        touch "${recent_files}"
+    fi
+
+    fzf --header="`generate_header`" --history "${history_file}" < "${recent_files}"
 }
 
 cachefile(){
     recent_file="${1}"
 
-    recent_files=~/.cache/fplay_recent_files
+    if [[ -z "${recent_file}" ]]
+    then
+        return 1
+    fi
 
     if [[ ! -f "${recent_files}" ]]
     then
@@ -42,13 +85,29 @@ cachefile(){
     printf '%s\n' "${recent_file}" >> "${recent_files}"
 }
 
-file="`selectfile`"
+case ${choice} in
+    last)
+        file="`selectlast`"
+        ;;
+    recent)
+        file="`selectrecent`"
+        ;;
+    *)
+        file="`selectfile`"
+        ;;
+esac
+
+if [[ ! ${?} -eq 0 ]]
+then
+    printf 'Aborted.\n' 1>&2
+    exit 1
+fi
 
 cachefile "${file}"
 
 if [[ ! ${?} -eq 0 ]]
 then
-    printf 'Aborted.\n' 1>&2
+    printf 'Could not cache file.\n' 1>&2
     exit 1
 fi
 
