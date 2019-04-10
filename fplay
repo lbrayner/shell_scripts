@@ -55,6 +55,15 @@ selectfile(){
             --history "${history_file}"
 }
 
+selectlast(){
+    if [[ ! -f "${recent_files}" ]]
+    then
+        return 1
+    fi
+
+    tail -n1 "${recent_files}"
+}
+
 selectrecent(){
     if [[ ! -f "${recent_files}" ]]
     then
