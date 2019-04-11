@@ -56,7 +56,9 @@ selectfile(){
     fi
 
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f \
-        ! -name \*.vtt ! -name \*.srt \
+        ! -name \*.vtt ! -name \*.srt -printf '%T@ %p\n' \
+        | sort -nr \
+        | cut -d \  -f 2- \
         | fzf --header="`generate_header`" \
             --history "${history_file}"
 }
