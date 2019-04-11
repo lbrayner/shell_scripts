@@ -7,6 +7,12 @@ print_usage() {
 	printf '\nUsage:\n\n\t%s\n' "$(basename "${0}")"
 }
 
+if [[ -z "${FPLAY_PLAYER}" ]]
+then
+    printf 'FPLAY_PLAYER not set.\n' 1>&2
+    exit 1
+fi
+
 choice=""
 while getopts ":lrh" opt
 do
@@ -142,4 +148,4 @@ then
     exit 1
 fi
 
-mpv --volume=50 "${file}"
+${FPLAY_PLAYER} "${file}"
