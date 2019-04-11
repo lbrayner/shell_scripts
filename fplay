@@ -41,12 +41,20 @@ then
     exit 1
 fi
 
+candidates=~/.cache/fplay_candidates
+history_file=~/.cache/fplay_fzf_history
+recent_files=~/.cache/fplay_recent_files
+
+update_candidates(){
+    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f \
+        ! -name \*.vtt ! -name \*.srt -printf '%T@ %p\n' \
+        | sort -nr \
+        | cut -d \  -f 2- > "${candidates}"
+}
+
 generate_header(){
     ls -1t !(*@(.vtt|.srt)) | head -n10
 }
-
-history_file=~/.cache/fplay_fzf_history
-recent_files=~/.cache/fplay_recent_files
 
 selectfile(){
 
@@ -55,12 +63,10 @@ selectfile(){
         touch "${history_file}"
     fi
 
-    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f \
-        ! -name \*.vtt ! -name \*.srt -printf '%T@ %p\n' \
-        | sort -nr \
-        | cut -d \  -f 2- \
-        | fzf --header="`generate_header`" \
-            --history "${history_file}"
+    update_candidates
+
+    fzf --header="`generate_header`" \
+        --history "${history_file}" < "${candidates}"
 }
 
 selectlast(){
