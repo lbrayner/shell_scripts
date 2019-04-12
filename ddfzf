@@ -20,6 +20,10 @@ eclipse_project(){
         -type f
 }
 
+maven_project(){
+    eclipse_project "${1}"
+}
+
 wildfly_home(){
     find "${1}" ! -path \*/.\* ! -path ./standalone/data/\* \
         ! -path ./standalone/standalone_xml_history/\* \
@@ -49,6 +53,12 @@ fi
 if [[ -f ./.project ]]
 then
     eclipse_project "${dir}"
+    exit 0
+fi
+
+if [[ -f ./pom.xml ]]
+then
+    maven_project "${dir}"
     exit 0
 fi
 
