@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # set -x
+# set -e
 
 print_usage() {
 	printf '\nUsage:\n\n\t%s\n' "$(basename "${0}")"
@@ -43,8 +44,31 @@ fi
 history_file=~/.cache/fplay_fzf_history
 recent_files=~/.cache/fplay_recent_files
 
+inode=""
+get_inode(){
+    if [[ -z "${inode}" ]]
+    then
+        inode=$(find . -mindepth 0 -maxdepth 0 -type d -printf '%i')
+    fi
+    echo ${inode}
+}
+
+get_files(){
+    inode=`get_inode`
+    file_database -q \
+        "SELECT t.name \
+        from media_mime_type t \
+        join media_last_access l \
+            on l.parent_inode = t.parent_inode \
+            and l.name = t.name \
+            and l.parent_inode = ${inode}
+        where mime_type like '%video%' \
+        or mime_type like '%audio%' \
+        order by timestamp desc;"
+}
+
 generate_header(){
-    fplay_database get_files | head
+    get_files | head
 }
 
 selectfile(){
@@ -54,8 +78,10 @@ selectfile(){
         touch "${history_file}"
     fi
 
+    file_database -u .
+
     fzf --header="`generate_header`" \
-        --history "${history_file}" < <( fplay_database get_files )
+        --history "${history_file}" < <( get_files )
 }
 
 selectlast(){
@@ -72,6 +98,8 @@ selectrecent(){
     then
         return 3
     fi
+
+    file_database -u .
 
     sort -u "${recent_files}" \
         | fzf --header="`generate_header`" --history "${history_file}"

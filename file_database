@@ -3,38 +3,72 @@
 # set -x
 
 print_usage() {
-    printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (update|recreate|get_files)"
+    printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (-u FOLDER|-r FOLDER|-q QUERY)"
 }
 
-if [[ ! ${#} -eq 1  ]]
+cmd=""
+while getopts ":u:r:q:" opt
+do
+    case ${opt} in
+        u)
+            cmd="update"
+            folder="${OPTARG}"
+            ;;
+        r)
+            cmd="recent"
+            folder="${OPTARG}"
+            ;;
+        q)
+            cmd="query"
+            query="${OPTARG}"
+            ;;
+        h)
+            print_usage
+            exit 0
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ -z "${cmd}" ]]
 then
     print_usage >&2
     exit 1
 fi
 
-fplay_database=~/.cache/fplay_database.db
+if [[ ! ${#} -eq 0  ]]
+then
+    print_usage >&2
+    exit 1
+fi
+
+file_database=~/.cache/file_database.db
 
 inode=""
 get_inode(){
     if [[ -z "${inode}" ]]
     then
-        inode=$(find . -mindepth 0 -maxdepth 0 -type d -printf '%i')
+        inode=$(find "${folder}" -mindepth 0 -maxdepth 0 -type d -printf '%i')
     fi
     echo ${inode}
 }
 
 purge_database(){
-    if [[ -f "${fplay_database}" ]]
+    if [[ -f "${file_database}" ]]
     then
-        rm "${fplay_database}"
+        rm "${file_database}"
     fi
 }
 
 import_folder_metadata(){
     folder_metadata="$(mktemp)"
-    find . -mindepth 0 -maxdepth 0 -type d -printf '%i\t%T@' \
+    find "${folder}" -mindepth 0 -maxdepth 0 -type d -printf '%i\t%T@' \
         > "${folder_metadata}"
-    sqlite3 -batch "${fplay_database}" <<EOF
+    sqlite3 -batch "${file_database}" <<EOF
 CREATE TEMPORARY TABLE folder_metadata_temp(
     inode INTEGER,
     timestamp DOUBLE PRECISION
@@ -56,9 +90,9 @@ EOF
 import_last_acess(){
     inode=`get_inode`
     last_access="$(mktemp)"
-    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -printf '%T@\t%p\n' \
+    find "${folder}" -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -printf '%T@\t%p\n' \
         > "${last_access}"
-    sqlite3 -batch "${fplay_database}" <<EOF
+    sqlite3 -batch "${file_database}" <<EOF
 CREATE TEMPORARY TABLE media_last_access_temp(
     timestamp DOUBLE PRECISION,
     name TEXT
@@ -76,9 +110,9 @@ EOF
 import_mime_type(){
     inode=`get_inode`
     mime_type="$(mktemp)"
-    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -exec file -i -F '	' "{}" \+ \
+    find "${folder}" -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -exec file -i -F '	' "{}" \+ \
         > "${mime_type}"
-    sqlite3 -batch "${fplay_database}" <<EOF
+    sqlite3 -batch "${file_database}" <<EOF
 CREATE TEMPORARY TABLE media_mime_type_temp(
     name TEXT,
     mime_type TEXT
@@ -98,9 +132,9 @@ create_database(){
     then
         mkdir ~/.cache
     fi
-    if [[ ! -f "${fplay_database}" ]]
+    if [[ ! -f "${file_database}" ]]
     then
-        sqlite3 -batch "${fplay_database}" <<EOF
+        sqlite3 -batch "${file_database}" <<EOF
 CREATE TABLE folder_metadata(
     inode INTEGER PRIMARY KEY,
     timestamp DOUBLE PRECISION
@@ -161,35 +195,18 @@ recreate(){
     update
 }
 
-get_files(){
-    inode=`get_inode`
-    update
-    sqlite3 "${fplay_database}" \
-        "SELECT t.name \
-        from media_mime_type t \
-        join media_last_access l \
-            on l.parent_inode = t.parent_inode \
-            and l.name = t.name \
-            and l.parent_inode = ${inode}
-        where mime_type like '%video%' \
-        or mime_type like '%audio%' \
-        order by timestamp desc;"
+query(){
+    sqlite3 "${file_database}" "${1}"
 }
-
-cmd="${1}"
 
 case ${cmd} in
     update)
         update
         ;;
-    get_files)
-        get_files
-        ;;
     recreate)
         recreate
         ;;
-    \?)
-        echo "Invalid option: -$OPTARG" >&2 
-        exit 1
+    query)
+        query "${query}"
         ;;
 esac
