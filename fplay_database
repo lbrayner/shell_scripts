@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 print_usage() {
     printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (update|recreate|get_files)"
@@ -19,6 +19,29 @@ purge_database(){
     then
         rm "${fplay_database}"
     fi
+}
+
+import_folder_metadata(){
+    folder_metadata="$(mktemp)"
+    find . -mindepth 0 -maxdepth 0 ! -path \*/.\* -type d -printf '%i\t%T@' \
+        > "${folder_metadata}"
+    sqlite3 -batch "${fplay_database}" <<EOF
+CREATE TEMPORARY TABLE folder_metadata_temp(
+    inode INTEGER,
+    timestamp DOUBLE PRECISION
+);
+.separator "\t"
+.import "${folder_metadata}" folder_metadata_temp
+SELECT m.inode
+from folder_metadata_temp t
+left join folder_metadata m
+    on m.inode = t.inode
+where m.timestamp is NULL
+or t.timestamp > m.timestamp;
+insert or ignore into folder_metadata
+SELECT * from folder_metadata_temp;
+EOF
+    rm "${folder_metadata}"
 }
 
 import_last_acess(){
@@ -63,25 +86,53 @@ create_database(){
     if [[ ! -f "${fplay_database}" ]]
     then
         sqlite3 -batch "${fplay_database}" <<EOF
+CREATE TABLE folder_metadata(
+    inode INTEGER PRIMARY KEY,
+    timestamp DOUBLE PRECISION
+);
 CREATE TABLE media_last_access(
-timestamp DOUBLE PRECISION,
-name TEXT PRIMARY KEY
+    timestamp DOUBLE PRECISION,
+    name TEXT PRIMARY KEY
 );
 CREATE TABLE media_mime_type(
-name TEXT PRIMARY KEY,
-mime_type TEXT
+    name TEXT PRIMARY KEY,
+    mime_type TEXT
 );
 CREATE INDEX ix_last_access_timestamp ON media_last_access(timestamp);
 CREATE INDEX ix_last_access_name ON media_last_access(name);
 CREATE INDEX ix_mime_type_name ON media_mime_type(name);
 EOF
+    else
+        return 1
     fi
 }
 
-update(){
-    create_database
+get_folder_inode(){
+    find . -mindepth 0 -maxdepth 0 -type d -printf '%i\t%T@'
+}
+
+folder_modified(){
+    if create_database
+    then
+        return 0
+    fi
+    rows="`import_folder_metadata`"
+    if [[ -z "${rows}" ]]
+    then
+        return 1
+    fi
+}
+
+import_data(){
     import_last_acess
     import_mime_type
+}
+
+update(){
+    if folder_modified
+    then
+        import_data
+    fi
 }
 
 recreate(){
@@ -89,7 +140,15 @@ recreate(){
     update
 }
 
+create(){
+    if create_database
+    then
+        import_data
+    fi
+}
+
 get_files(){
+    create
     sqlite3 "${fplay_database}" \
         "SELECT t.name \
         from media_mime_type t \
