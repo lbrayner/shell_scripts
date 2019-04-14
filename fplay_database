@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+print_usage() {
+    printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (update|get_files)"
+}
+
+if [[ ! ${#} -eq 1  ]]
+then
+    print_usage >&2
+    exit 1
+fi
+
+fplay_database=~/.cache/fplay_database.db
+
+maybe_create_database(){
+    if [[ ! -d ~/.cache ]]
+    then
+        mkdir ~/.cache
+    fi
+    if [[ ! -f "${fplay_database}" ]]
+    then
+        sqlite3 -batch "${1}" <<EOF
+CREATE TABLE media_last_access(
+timestamp DOUBLE PRECISION,
+name TEXT
+);
+CREATE TABLE media_mime_type(
+name TEXT,
+mime_type TEXT
+);
+CREATE INDEX ix_last_access_timestamp ON media_last_access(timestamp);
+CREATE INDEX ix_last_access_name ON media_last_access(name);
+CREATE INDEX ix_mime_type_name ON media_mime_type(name);
+EOF
+    fi
+}
+
+update(){
+    maybe_create_database
+}
+
+get_files(){
+}
+
+cmd="${1}"
+
+case ${cmd} in
+    update)
+        choice="last"
+        ;;
+    get_files)
+        choice="recent"
+        ;;
+    \?)
+        echo "Invalid option: -$OPTARG" >&2 
+        exit 1
+        ;;
+esac
