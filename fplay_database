@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+# set -x
+
 print_usage() {
-    printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (update|get_files)"
+    printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (update|recreate|get_files)"
 }
 
 if [[ ! ${#} -eq 1  ]]
@@ -12,14 +14,41 @@ fi
 
 fplay_database=~/.cache/fplay_database.db
 
-maybe_create_database(){
+purge_database(){
+    if [[ -f "${fplay_database}" ]]
+    then
+        rm "${fplay_database}"
+    fi
+}
+
+import_last_acess(){
+    last_access="$(mktemp)"
+    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -printf '%T@\t%p\n' \
+        > "${last_access}"
+    sqlite3 -batch "${fplay_database}" <<EOF
+.separator "\t"
+.import "${last_access}" media_last_access
+EOF
+}
+
+import_mime_type(){
+    mime_type="$(mktemp)"
+    find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -exec file -i -F '	' "{}" \+ \
+        > "${mime_type}"
+    sqlite3 -batch "${fplay_database}" <<EOF
+.separator "\t"
+.import "${mime_type}" media_mime_type
+EOF
+}
+
+create_database(){
     if [[ ! -d ~/.cache ]]
     then
         mkdir ~/.cache
     fi
     if [[ ! -f "${fplay_database}" ]]
     then
-        sqlite3 -batch "${1}" <<EOF
+        sqlite3 -batch "${fplay_database}" <<EOF
 CREATE TABLE media_last_access(
 timestamp DOUBLE PRECISION,
 name TEXT
@@ -36,20 +65,38 @@ EOF
 }
 
 update(){
-    maybe_create_database
+    create_database
+}
+
+recreate(){
+    purge_database
+    create_database
+    import_last_acess
+    import_mime_type
 }
 
 get_files(){
+    sqlite3 "${fplay_database}" \
+        "SELECT t.name \
+        from media_mime_type t \
+        join media_last_access l \
+            on l.name = t.name \
+        where mime_type like '%video%' \
+        or mime_type like '%audio%' \
+        order by timestamp desc;"
 }
 
 cmd="${1}"
 
 case ${cmd} in
     update)
-        choice="last"
+        update
         ;;
     get_files)
-        choice="recent"
+        get_files
+        ;;
+    recreate)
+        recreate
         ;;
     \?)
         echo "Invalid option: -$OPTARG" >&2 
