@@ -80,8 +80,8 @@ import_mime_type(){
         > "${mime_type}"
     sqlite3 -batch "${fplay_database}" <<EOF
 CREATE TEMPORARY TABLE media_mime_type_temp(
-name TEXT,
-mime_type TEXT
+    name TEXT,
+    mime_type TEXT
 );
 .separator "\t"
 .import "${mime_type}" media_mime_type_temp
