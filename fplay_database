@@ -65,6 +65,8 @@ CREATE TEMPORARY TABLE media_last_access_temp(
 );
 .separator "\t"
 .import "${last_access}" media_last_access_temp
+delete from media_last_access
+where parent_inode = ${inode};
 insert or ignore into media_last_access
 SELECT ${inode}, t.* from media_last_access_temp t;
 EOF
@@ -83,6 +85,8 @@ mime_type TEXT
 );
 .separator "\t"
 .import "${mime_type}" media_mime_type_temp
+delete from media_mime_type
+where parent_inode = ${inode};
 insert or ignore into media_mime_type
 SELECT ${inode}, t.* from media_mime_type_temp t;
 EOF
@@ -158,12 +162,15 @@ recreate(){
 }
 
 get_files(){
+    inode=`get_inode`
     update
     sqlite3 "${fplay_database}" \
         "SELECT t.name \
         from media_mime_type t \
         join media_last_access l \
-            on l.name = t.name \
+            on l.parent_inode = t.parent_inode \
+            and l.name = t.name \
+            and l.parent_inode = ${inode}
         where mime_type like '%video%' \
         or mime_type like '%audio%' \
         order by timestamp desc;"
