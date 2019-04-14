@@ -14,6 +14,15 @@ fi
 
 fplay_database=~/.cache/fplay_database.db
 
+inode=""
+get_inode(){
+    if [[ -z "${inode}" ]]
+    then
+        inode=$(find . -mindepth 0 -maxdepth 0 -type d -printf '%i')
+    fi
+    echo ${inode}
+}
+
 purge_database(){
     if [[ -f "${fplay_database}" ]]
     then
@@ -23,7 +32,7 @@ purge_database(){
 
 import_folder_metadata(){
     folder_metadata="$(mktemp)"
-    find . -mindepth 0 -maxdepth 0 ! -path \*/.\* -type d -printf '%i\t%T@' \
+    find . -mindepth 0 -maxdepth 0 -type d -printf '%i\t%T@' \
         > "${folder_metadata}"
     sqlite3 -batch "${fplay_database}" <<EOF
 CREATE TEMPORARY TABLE folder_metadata_temp(
@@ -45,23 +54,25 @@ EOF
 }
 
 import_last_acess(){
+    inode=`get_inode`
     last_access="$(mktemp)"
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -printf '%T@\t%p\n' \
         > "${last_access}"
     sqlite3 -batch "${fplay_database}" <<EOF
 CREATE TEMPORARY TABLE media_last_access_temp(
-timestamp DOUBLE PRECISION,
-name TEXT
+    timestamp DOUBLE PRECISION,
+    name TEXT
 );
 .separator "\t"
 .import "${last_access}" media_last_access_temp
 insert or ignore into media_last_access
-SELECT * from media_last_access_temp;
+SELECT ${inode}, t.* from media_last_access_temp t;
 EOF
     rm "${last_access}"
 }
 
 import_mime_type(){
+    inode=`get_inode`
     mime_type="$(mktemp)"
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -exec file -i -F '	' "{}" \+ \
         > "${mime_type}"
@@ -73,7 +84,7 @@ mime_type TEXT
 .separator "\t"
 .import "${mime_type}" media_mime_type_temp
 insert or ignore into media_mime_type
-SELECT * from media_mime_type_temp;
+SELECT ${inode}, t.* from media_mime_type_temp t;
 EOF
     rm "${mime_type}"
 }
@@ -91,16 +102,26 @@ CREATE TABLE folder_metadata(
     timestamp DOUBLE PRECISION
 );
 CREATE TABLE media_last_access(
+    parent_inode INTEGER,
     timestamp DOUBLE PRECISION,
-    name TEXT PRIMARY KEY
+    name TEXT,
+    PRIMARY KEY (parent_inode,name),
+    CONSTRAINT fk_last_access_metadata
+    FOREIGN KEY (parent_inode)
+    REFERENCES folder_metadata(inode)
 );
 CREATE TABLE media_mime_type(
-    name TEXT PRIMARY KEY,
-    mime_type TEXT
+    parent_inode INTEGER,
+    name TEXT,
+    mime_type TEXT,
+    PRIMARY KEY (parent_inode,name),
+    CONSTRAINT fk_mime_type_metadata
+    FOREIGN KEY (parent_inode)
+    REFERENCES folder_metadata(inode)
 );
-CREATE INDEX ix_last_access_timestamp ON media_last_access(timestamp);
-CREATE INDEX ix_last_access_name ON media_last_access(name);
-CREATE INDEX ix_mime_type_name ON media_mime_type(name);
+CREATE INDEX ix_last_access_timestamp ON media_last_access(parent_inode,timestamp);
+CREATE INDEX ix_last_access_name ON media_last_access(parent_inode,name);
+CREATE INDEX ix_mime_type_name ON media_mime_type(parent_inode,name);
 EOF
     else
         return 1
