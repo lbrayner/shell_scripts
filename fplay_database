@@ -26,9 +26,16 @@ import_last_acess(){
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -printf '%T@\t%p\n' \
         > "${last_access}"
     sqlite3 -batch "${fplay_database}" <<EOF
+CREATE TEMPORARY TABLE media_last_access_temp(
+timestamp DOUBLE PRECISION,
+name TEXT
+);
 .separator "\t"
-.import "${last_access}" media_last_access
+.import "${last_access}" media_last_access_temp
+insert or ignore into media_last_access
+SELECT * from media_last_access_temp;
 EOF
+    rm "${last_access}"
 }
 
 import_mime_type(){
@@ -36,9 +43,16 @@ import_mime_type(){
     find . -mindepth 1 -maxdepth 1 ! -path \*/.\* -type f -exec file -i -F '	' "{}" \+ \
         > "${mime_type}"
     sqlite3 -batch "${fplay_database}" <<EOF
+CREATE TEMPORARY TABLE media_mime_type_temp(
+name TEXT,
+mime_type TEXT
+);
 .separator "\t"
-.import "${mime_type}" media_mime_type
+.import "${mime_type}" media_mime_type_temp
+insert or ignore into media_mime_type
+SELECT * from media_mime_type_temp;
 EOF
+    rm "${mime_type}"
 }
 
 create_database(){
@@ -51,10 +65,10 @@ create_database(){
         sqlite3 -batch "${fplay_database}" <<EOF
 CREATE TABLE media_last_access(
 timestamp DOUBLE PRECISION,
-name TEXT
+name TEXT PRIMARY KEY
 );
 CREATE TABLE media_mime_type(
-name TEXT,
+name TEXT PRIMARY KEY,
 mime_type TEXT
 );
 CREATE INDEX ix_last_access_timestamp ON media_last_access(timestamp);
@@ -66,13 +80,13 @@ EOF
 
 update(){
     create_database
+    import_last_acess
+    import_mime_type
 }
 
 recreate(){
     purge_database
-    create_database
-    import_last_acess
-    import_mime_type
+    update
 }
 
 get_files(){
