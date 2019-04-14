@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 print_usage() {
     printf '\nUsage:\n\n\t%s\n' "$(basename "${0}") (update|recreate|get_files)"
@@ -38,7 +38,7 @@ left join folder_metadata m
     on m.inode = t.inode
 where m.timestamp is NULL
 or t.timestamp > m.timestamp;
-insert or ignore into folder_metadata
+insert or replace into folder_metadata
 SELECT * from folder_metadata_temp;
 EOF
     rm "${folder_metadata}"
@@ -107,10 +107,6 @@ EOF
     fi
 }
 
-get_folder_inode(){
-    find . -mindepth 0 -maxdepth 0 -type d -printf '%i\t%T@'
-}
-
 folder_modified(){
     if create_database
     then
@@ -140,15 +136,8 @@ recreate(){
     update
 }
 
-create(){
-    if create_database
-    then
-        import_data
-    fi
-}
-
 get_files(){
-    create
+    update
     sqlite3 "${fplay_database}" \
         "SELECT t.name \
         from media_mime_type t \
