@@ -1022,5 +1022,4 @@ then
     exit 1
 fi
 
-# list_media_files | fzf | tr -d '\n' | xargs -0 ${FPLAY_PLAYER}
 ${FPLAY_PLAYER} "${file}"
