@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ -z "${FPLAY_PLAYER}" ]]
+then
+    printf 'FPLAY_PLAYER not set.\n' 1>&2
+    exit 1
+fi
+
 list_media_files(){
     find . ! -path \*/.\* -type f \( \
     -iname \*.mp4 -o \
@@ -1002,4 +1008,19 @@ list_media_files(){
     -iname \*.kin \)
 }
 
-list_media_files
+selectfile(){
+    list_media_files | fzf
+}
+
+file="`selectfile`"
+
+err=${?}
+
+if [[ ! ${err} -eq 0 ]]
+then
+    printf 'Aborted.\n' 1>&2
+    exit 1
+fi
+
+# list_media_files | fzf | tr -d '\n' | xargs -0 ${FPLAY_PLAYER}
+${FPLAY_PLAYER} "${file}"
