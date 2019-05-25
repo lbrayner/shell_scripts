@@ -1,1004 +1,1005 @@
 #!/usr/bin/env bash
 
-find . ! -path \*/.\* -type f \
-# mp4
-# 264
-# dav
-# exo
-# h264
-# n3r
-# wve
-# swf
-# avc
-# tscproj
-# ts
-# hkv
-# avi
-# g64x
-# vproj
-# mepx
-# dvr
-# vob
-# mkv
-# encm
-# trec
-# bup
-# webm
-# rec
-# dv4
-# kux
-# v264
-# yify
-# pz
-# arf
-# ifv
-# pds
-# mov
-# dv5
-# h260
-# lrv
-# nfv
-# dash
-# bu
-# wlmp
-# es3
-# flv
-# etrg
-# ezp
-# fbr
-# dvt
-# prproj
-# tvs
-# vcr
-# gifv
-# m4s
-# strg
-# trp
-# rf
-# dxa
-# bvr
-# um4
-# veg
-# hbox
-# dcf
-# mk3d
-# dat
-# wmv
-# dc8
-# vvf
-# bik
-# dxr
-# mks
-# lrec
-# vpj
-# vse
-# mts
-# mxf
-# m2t
-# demo
-# vep
-# dfxp
-# mp41
-# mpg
-# usm
-# dir
-# 3gp
-# stx
-# bnk
-# vp6
-# vgz
-# sdr2
-# dtcp
-# mod
-# viv
-# avh
-# m4f
-# xvid
-# vf
-# dce
-# h265
-# ogv
-# doink
-# hevc
-# m4v
-# evo
-# asf
-# rdt
-# cine
-# moff
-# vghd
-# mjpeg
-# ssif
-# m2p
-# 3gp_128x96
-# eti
-# vfo
-# sol
-# ub1
-# ravi
-# asx
-# avf
-# mts1
-# hmt
-# ismv
-# dmx
-# irf
-# nmm
-# tod
-# camproj
-# nvc
-# ivf
-# vro
-# tp
-# stu
-# vcd
-# vp3
-# xba
-# fcpxml
-# tts
-# mjpg
-# 3g2
-# sdv
-# rec_part0
-# h3r
-# amv
-# hav
-# crec
-# dmsd
-# amc
-# h64
-# camrec
-# hup
-# vid
-# eztv
-# 265
-# mpg4
-# mps
-# mtv
-# epm
-# p2
-# djanimations
-# mpeg
-# m2ts
-# swi
-# rmvb
-# vmlf
-# rdg
-# mj2
-# cct
-# flux
-# m65
-# ts4
-# rt4
-# awlive
-# ifv
-# 3gpp
-# flm
-# r3d
-# g2m
-# rm
-# mpv
-# mmv
-# vs4
-# prel
-# wsve
-# mpgv
-# rargb
-# jyk
-# ppj
-# dmsm
-# fsv
-# otrkey
-# urc
-# rpl
-# dvr
-# mvc
-# cpvc
-# mpgx
-# avd
-# f4v
-# qt
-# swc
-# gmm
-# 60d
-# w32
-# str
-# eye
-# ml20
-# bdav
-# dscf
-# rv
-# bdmv
-# jmf
-# eva
-# w3d
-# m1v
-# fm2
-# mp4
-# mxv
-# tsp
-# lsf
-# dvm
-# rcproject
-# xvw
-# fmv
-# mpcpl
-# dv
-# dlx
-# aut
-# tmi
-# ilm
-# iva
-# swz
-# ty
-# rax
-# g64
-# dtv
-# m2v
-# mv
-# epj
-# rtv
-# vcl
-# san
-# cpk
-# vp9
-# rec_part1
-# m2s
-# fcp
-# xpv
-# mpeg2
-# mvy
-# vpg
-# flexolibrary
-# movie
-# pgmx
-# ivm
-# mvd
-# seq
-# rvl
-# divx
-# rca
-# y4m
-# pxm
-# theater
-# hlv
-# cvc
-# mpeg4
-# cx3
-# dmss
-# mv4
-# s4ud
-# wtv
-# 44
-# h263
-# 603
-# hmv
-# gir
-# vp8
-# ssm
-# ogm
-# slc
-# tgv
-# mjp
-# nde
-# mkv3D
-# wmv3
-# lsproj
-# hgd
-# mpegps
-# flc
-# st4
-# mcv
-# gts
-# tms
-# kmv
-# tp0
-# 890
-#  file extension $ts	DTC 2030 recorded movie
-# vdr
-# mv2
-# vg2
-# htd
-# hq
-# iis
-# m
-# film
-# vep4
-# ratDVD
-# nxv
-# mbv
-# mqv
-# 3mm
-# xmv
-# vs2
-# ev2
-# fli
-# jmm
-# dvx
-# lsx
-# stj
-# gvi
-# k3g
-# scc
-# bdtp
-# pyv
-# dof
-# smv
-# dvddata
-# mvv
-# pmf
-# fvt
-# ivs
-# vod
-# 263
-# mjp
-# svcd
-# mio
-# tvv
-# flh
-# apz
-# dsm
-# aqt
-# rcrec
-# dgw
-# vivo
-# bbv
-# sqz
-# s11
-# gxf
-# bsf
-# l32
-# l3
-# flvat
-# s2e
-# xtodvd
-# dvdrip
-# m1s
-# uvs
-# ncor
-# jpv
-# rtsp
-# 261
-# imovietrailer
-# splash
-# am2
-# vg
-# imovieproj
-# h4v
-# mgv
-# demo4
-# 800
-# hnm
-# tivo
-# mjp2
-# pxv
-# vc1
-# rec_part2
-# 3gpp2
-# bub
-# wm3
-# vcm
-# mpeg1
-# vid
-# fli_
-# sbst
-# dwz
-# rki
-# scm
-# qtc
-# am7
-# qtm
-# wfsp
-# dcr
-# video
-# sbs
-# htp
-# ssw
-# mep
-# axm
-# rec_part3
-# dcr
-# zeg
-# kava
-# noa
-# flm
-# pmp
-# nvl
-# bay
-# roq
-# tridefmovie
-# wm
-# ogx
-# moov
-# xas
-# 3gp2
-# viewlet
-# tdt2
-# lza
-# mvf
-# mpe
-# 4xm
-# hdmov
-# rvx
-# svi
-# olproj
-# moo
-# buy
-# mpg2
-# clk
-# hls
-# stk
-# qvt
-# rum
-# px
-# vcpf
-# c2r
-# qmx
-# mp4v
-# nvavi
-# ipr
-# mp7
-# dvsd
-# xlmv
-# m21
-# scn
-# biz
-# aec
-# qcif
-# crv
-# siv
-# d2v
-# mcf
-# bs4
-# vgx
-# vprj
-# mhg
-# arcut
-# ml20
-# jts
-# xmm
-# dpg
-# mmp
-# ppp
-# mvr
-# pvr
-# mpj
-# dfv
-# tv
-# el8
-# vpd
-# vp5
-# osp
-# vcv
-# tab
-# vp7
-# ftvx
-# h261
-# mp2v
-# mnv
-# cak
-# pproj
-# qtvr
-# cam
-# par
-# ivr
-# zrb
-# daproj
-# dv
-# wpe
-# tvs
-# gfp
-# 3ivx
-# avr
-# pro
-# grasp
-# ctd
-# avb
-# hkm
-# dvdmedia
-# mv1
-# cmmp
-# drc
-# m4e
-# ctd
+list_media_files(){
+    find . ! -path \*/.\* -type f \( \
+    -iname \*.mp4 -o \
+    -iname \*.264 -o \
+    -iname \*.dav -o \
+    -iname \*.exo -o \
+    -iname \*.h264 -o \
+    -iname \*.n3r -o \
+    -iname \*.wve -o \
+    -iname \*.swf -o \
+    -iname \*.avc -o \
+    -iname \*.tscproj -o \
+    -iname \*.ts -o \
+    -iname \*.hkv -o \
+    -iname \*.avi -o \
+    -iname \*.g64x -o \
+    -iname \*.vproj -o \
+    -iname \*.mepx -o \
+    -iname \*.dvr -o \
+    -iname \*.vob -o \
+    -iname \*.mkv -o \
+    -iname \*.encm -o \
+    -iname \*.trec -o \
+    -iname \*.bup -o \
+    -iname \*.webm -o \
+    -iname \*.rec -o \
+    -iname \*.dv4 -o \
+    -iname \*.kux -o \
+    -iname \*.v264 -o \
+    -iname \*.yify -o \
+    -iname \*.pz -o \
+    -iname \*.arf -o \
+    -iname \*.ifv -o \
+    -iname \*.pds -o \
+    -iname \*.mov -o \
+    -iname \*.dv5 -o \
+    -iname \*.h260 -o \
+    -iname \*.lrv -o \
+    -iname \*.nfv -o \
+    -iname \*.dash -o \
+    -iname \*.bu -o \
+    -iname \*.wlmp -o \
+    -iname \*.es3 -o \
+    -iname \*.flv -o \
+    -iname \*.etrg -o \
+    -iname \*.ezp -o \
+    -iname \*.fbr -o \
+    -iname \*.dvt -o \
+    -iname \*.prproj -o \
+    -iname \*.tvs -o \
+    -iname \*.vcr -o \
+    -iname \*.gifv -o \
+    -iname \*.m4s -o \
+    -iname \*.strg -o \
+    -iname \*.trp -o \
+    -iname \*.rf -o \
+    -iname \*.dxa -o \
+    -iname \*.bvr -o \
+    -iname \*.um4 -o \
+    -iname \*.veg -o \
+    -iname \*.hbox -o \
+    -iname \*.dcf -o \
+    -iname \*.mk3d -o \
+    -iname \*.dat -o \
+    -iname \*.wmv -o \
+    -iname \*.dc8 -o \
+    -iname \*.vvf -o \
+    -iname \*.bik -o \
+    -iname \*.dxr -o \
+    -iname \*.mks -o \
+    -iname \*.lrec -o \
+    -iname \*.vpj -o \
+    -iname \*.vse -o \
+    -iname \*.mts -o \
+    -iname \*.mxf -o \
+    -iname \*.m2t -o \
+    -iname \*.demo -o \
+    -iname \*.vep -o \
+    -iname \*.dfxp -o \
+    -iname \*.mp41 -o \
+    -iname \*.mpg -o \
+    -iname \*.usm -o \
+    -iname \*.dir -o \
+    -iname \*.3gp -o \
+    -iname \*.stx -o \
+    -iname \*.bnk -o \
+    -iname \*.vp6 -o \
+    -iname \*.vgz -o \
+    -iname \*.sdr2 -o \
+    -iname \*.dtcp -o \
+    -iname \*.mod -o \
+    -iname \*.viv -o \
+    -iname \*.avh -o \
+    -iname \*.m4f -o \
+    -iname \*.xvid -o \
+    -iname \*.vf -o \
+    -iname \*.dce -o \
+    -iname \*.h265 -o \
+    -iname \*.ogv -o \
+    -iname \*.doink -o \
+    -iname \*.hevc -o \
+    -iname \*.m4v -o \
+    -iname \*.evo -o \
+    -iname \*.asf -o \
+    -iname \*.rdt -o \
+    -iname \*.cine -o \
+    -iname \*.moff -o \
+    -iname \*.vghd -o \
+    -iname \*.mjpeg -o \
+    -iname \*.ssif -o \
+    -iname \*.m2p -o \
+    -iname \*.3gp_128x96 -o \
+    -iname \*.eti -o \
+    -iname \*.vfo -o \
+    -iname \*.sol -o \
+    -iname \*.ub1 -o \
+    -iname \*.ravi -o \
+    -iname \*.asx -o \
+    -iname \*.avf -o \
+    -iname \*.mts1 -o \
+    -iname \*.hmt -o \
+    -iname \*.ismv -o \
+    -iname \*.dmx -o \
+    -iname \*.irf -o \
+    -iname \*.nmm -o \
+    -iname \*.tod -o \
+    -iname \*.camproj -o \
+    -iname \*.nvc -o \
+    -iname \*.ivf -o \
+    -iname \*.vro -o \
+    -iname \*.tp -o \
+    -iname \*.stu -o \
+    -iname \*.vcd -o \
+    -iname \*.vp3 -o \
+    -iname \*.xba -o \
+    -iname \*.fcpxml -o \
+    -iname \*.tts -o \
+    -iname \*.mjpg -o \
+    -iname \*.3g2 -o \
+    -iname \*.sdv -o \
+    -iname \*.rec_part0 -o \
+    -iname \*.h3r -o \
+    -iname \*.amv -o \
+    -iname \*.hav -o \
+    -iname \*.crec -o \
+    -iname \*.dmsd -o \
+    -iname \*.amc -o \
+    -iname \*.h64 -o \
+    -iname \*.camrec -o \
+    -iname \*.hup -o \
+    -iname \*.vid -o \
+    -iname \*.eztv -o \
+    -iname \*.265 -o \
+    -iname \*.mpg4 -o \
+    -iname \*.mps -o \
+    -iname \*.mtv -o \
+    -iname \*.epm -o \
+    -iname \*.p2 -o \
+    -iname \*.djanimations -o \
+    -iname \*.mpeg -o \
+    -iname \*.m2ts -o \
+    -iname \*.swi -o \
+    -iname \*.rmvb -o \
+    -iname \*.vmlf -o \
+    -iname \*.rdg -o \
+    -iname \*.mj2 -o \
+    -iname \*.cct -o \
+    -iname \*.flux -o \
+    -iname \*.m65 -o \
+    -iname \*.ts4 -o \
+    -iname \*.rt4 -o \
+    -iname \*.awlive -o \
+    -iname \*.ifv -o \
+    -iname \*.3gpp -o \
+    -iname \*.flm -o \
+    -iname \*.r3d -o \
+    -iname \*.g2m -o \
+    -iname \*.rm -o \
+    -iname \*.mpv -o \
+    -iname \*.mmv -o \
+    -iname \*.vs4 -o \
+    -iname \*.prel -o \
+    -iname \*.wsve -o \
+    -iname \*.mpgv -o \
+    -iname \*.rargb -o \
+    -iname \*.jyk -o \
+    -iname \*.ppj -o \
+    -iname \*.dmsm -o \
+    -iname \*.fsv -o \
+    -iname \*.otrkey -o \
+    -iname \*.urc -o \
+    -iname \*.rpl -o \
+    -iname \*.dvr -o \
+    -iname \*.mvc -o \
+    -iname \*.cpvc -o \
+    -iname \*.mpgx -o \
+    -iname \*.avd -o \
+    -iname \*.f4v -o \
+    -iname \*.qt -o \
+    -iname \*.swc -o \
+    -iname \*.gmm -o \
+    -iname \*.60d -o \
+    -iname \*.w32 -o \
+    -iname \*.str -o \
+    -iname \*.eye -o \
+    -iname \*.ml20 -o \
+    -iname \*.bdav -o \
+    -iname \*.dscf -o \
+    -iname \*.rv -o \
+    -iname \*.bdmv -o \
+    -iname \*.jmf -o \
+    -iname \*.eva -o \
+    -iname \*.w3d -o \
+    -iname \*.m1v -o \
+    -iname \*.fm2 -o \
+    -iname \*.mp4 -o \
+    -iname \*.mxv -o \
+    -iname \*.tsp -o \
+    -iname \*.lsf -o \
+    -iname \*.dvm -o \
+    -iname \*.rcproject -o \
+    -iname \*.xvw -o \
+    -iname \*.fmv -o \
+    -iname \*.mpcpl -o \
+    -iname \*.dv -o \
+    -iname \*.dlx -o \
+    -iname \*.aut -o \
+    -iname \*.tmi -o \
+    -iname \*.ilm -o \
+    -iname \*.iva -o \
+    -iname \*.swz -o \
+    -iname \*.ty -o \
+    -iname \*.rax -o \
+    -iname \*.g64 -o \
+    -iname \*.dtv -o \
+    -iname \*.m2v -o \
+    -iname \*.mv -o \
+    -iname \*.epj -o \
+    -iname \*.rtv -o \
+    -iname \*.vcl -o \
+    -iname \*.san -o \
+    -iname \*.cpk -o \
+    -iname \*.vp9 -o \
+    -iname \*.rec_part1 -o \
+    -iname \*.m2s -o \
+    -iname \*.fcp -o \
+    -iname \*.xpv -o \
+    -iname \*.mpeg2 -o \
+    -iname \*.mvy -o \
+    -iname \*.vpg -o \
+    -iname \*.flexolibrary -o \
+    -iname \*.movie -o \
+    -iname \*.pgmx -o \
+    -iname \*.ivm -o \
+    -iname \*.mvd -o \
+    -iname \*.seq -o \
+    -iname \*.rvl -o \
+    -iname \*.divx -o \
+    -iname \*.rca -o \
+    -iname \*.y4m -o \
+    -iname \*.pxm -o \
+    -iname \*.theater -o \
+    -iname \*.hlv -o \
+    -iname \*.cvc -o \
+    -iname \*.mpeg4 -o \
+    -iname \*.cx3 -o \
+    -iname \*.dmss -o \
+    -iname \*.mv4 -o \
+    -iname \*.s4ud -o \
+    -iname \*.wtv -o \
+    -iname \*.44 -o \
+    -iname \*.h263 -o \
+    -iname \*.603 -o \
+    -iname \*.hmv -o \
+    -iname \*.gir -o \
+    -iname \*.vp8 -o \
+    -iname \*.ssm -o \
+    -iname \*.ogm -o \
+    -iname \*.slc -o \
+    -iname \*.tgv -o \
+    -iname \*.mjp -o \
+    -iname \*.nde -o \
+    -iname \*.mkv3D -o \
+    -iname \*.wmv3 -o \
+    -iname \*.lsproj -o \
+    -iname \*.hgd -o \
+    -iname \*.mpegps -o \
+    -iname \*.flc -o \
+    -iname \*.st4 -o \
+    -iname \*.mcv -o \
+    -iname \*.gts -o \
+    -iname \*.tms -o \
+    -iname \*.kmv -o \
+    -iname \*.tp0 -o \
+    -iname \*.890 -o \
+    -iname \*.vdr -o \
+    -iname \*.mv2 -o \
+    -iname \*.vg2 -o \
+    -iname \*.htd -o \
+    -iname \*.hq -o \
+    -iname \*.iis -o \
+    -iname \*.m -o \
+    -iname \*.film -o \
+    -iname \*.vep4 -o \
+    -iname \*.ratDVD -o \
+    -iname \*.nxv -o \
+    -iname \*.mbv -o \
+    -iname \*.mqv -o \
+    -iname \*.3mm -o \
+    -iname \*.xmv -o \
+    -iname \*.vs2 -o \
+    -iname \*.ev2 -o \
+    -iname \*.fli -o \
+    -iname \*.jmm -o \
+    -iname \*.dvx -o \
+    -iname \*.lsx -o \
+    -iname \*.stj -o \
+    -iname \*.gvi -o \
+    -iname \*.k3g -o \
+    -iname \*.scc -o \
+    -iname \*.bdtp -o \
+    -iname \*.pyv -o \
+    -iname \*.dof -o \
+    -iname \*.smv -o \
+    -iname \*.dvddata -o \
+    -iname \*.mvv -o \
+    -iname \*.pmf -o \
+    -iname \*.fvt -o \
+    -iname \*.ivs -o \
+    -iname \*.vod -o \
+    -iname \*.263 -o \
+    -iname \*.mjp -o \
+    -iname \*.svcd -o \
+    -iname \*.mio -o \
+    -iname \*.tvv -o \
+    -iname \*.flh -o \
+    -iname \*.apz -o \
+    -iname \*.dsm -o \
+    -iname \*.aqt -o \
+    -iname \*.rcrec -o \
+    -iname \*.dgw -o \
+    -iname \*.vivo -o \
+    -iname \*.bbv -o \
+    -iname \*.sqz -o \
+    -iname \*.s11 -o \
+    -iname \*.gxf -o \
+    -iname \*.bsf -o \
+    -iname \*.l32 -o \
+    -iname \*.l3 -o \
+    -iname \*.flvat -o \
+    -iname \*.s2e -o \
+    -iname \*.xtodvd -o \
+    -iname \*.dvdrip -o \
+    -iname \*.m1s -o \
+    -iname \*.uvs -o \
+    -iname \*.ncor -o \
+    -iname \*.jpv -o \
+    -iname \*.rtsp -o \
+    -iname \*.261 -o \
+    -iname \*.imovietrailer -o \
+    -iname \*.splash -o \
+    -iname \*.am2 -o \
+    -iname \*.vg -o \
+    -iname \*.imovieproj -o \
+    -iname \*.h4v -o \
+    -iname \*.mgv -o \
+    -iname \*.demo4 -o \
+    -iname \*.800 -o \
+    -iname \*.hnm -o \
+    -iname \*.tivo -o \
+    -iname \*.mjp2 -o \
+    -iname \*.pxv -o \
+    -iname \*.vc1 -o \
+    -iname \*.rec_part2 -o \
+    -iname \*.3gpp2 -o \
+    -iname \*.bub -o \
+    -iname \*.wm3 -o \
+    -iname \*.vcm -o \
+    -iname \*.mpeg1 -o \
+    -iname \*.vid -o \
+    -iname \*.fli_ -o \
+    -iname \*.sbst -o \
+    -iname \*.dwz -o \
+    -iname \*.rki -o \
+    -iname \*.scm -o \
+    -iname \*.qtc -o \
+    -iname \*.am7 -o \
+    -iname \*.qtm -o \
+    -iname \*.wfsp -o \
+    -iname \*.dcr -o \
+    -iname \*.video -o \
+    -iname \*.sbs -o \
+    -iname \*.htp -o \
+    -iname \*.ssw -o \
+    -iname \*.mep -o \
+    -iname \*.axm -o \
+    -iname \*.rec_part3 -o \
+    -iname \*.dcr -o \
+    -iname \*.zeg -o \
+    -iname \*.kava -o \
+    -iname \*.noa -o \
+    -iname \*.flm -o \
+    -iname \*.pmp -o \
+    -iname \*.nvl -o \
+    -iname \*.bay -o \
+    -iname \*.roq -o \
+    -iname \*.tridefmovie -o \
+    -iname \*.wm -o \
+    -iname \*.ogx -o \
+    -iname \*.moov -o \
+    -iname \*.xas -o \
+    -iname \*.3gp2 -o \
+    -iname \*.viewlet -o \
+    -iname \*.tdt2 -o \
+    -iname \*.lza -o \
+    -iname \*.mvf -o \
+    -iname \*.mpe -o \
+    -iname \*.4xm -o \
+    -iname \*.hdmov -o \
+    -iname \*.rvx -o \
+    -iname \*.svi -o \
+    -iname \*.olproj -o \
+    -iname \*.moo -o \
+    -iname \*.buy -o \
+    -iname \*.mpg2 -o \
+    -iname \*.clk -o \
+    -iname \*.hls -o \
+    -iname \*.stk -o \
+    -iname \*.qvt -o \
+    -iname \*.rum -o \
+    -iname \*.px -o \
+    -iname \*.vcpf -o \
+    -iname \*.c2r -o \
+    -iname \*.qmx -o \
+    -iname \*.mp4v -o \
+    -iname \*.nvavi -o \
+    -iname \*.ipr -o \
+    -iname \*.mp7 -o \
+    -iname \*.dvsd -o \
+    -iname \*.xlmv -o \
+    -iname \*.m21 -o \
+    -iname \*.scn -o \
+    -iname \*.biz -o \
+    -iname \*.aec -o \
+    -iname \*.qcif -o \
+    -iname \*.crv -o \
+    -iname \*.siv -o \
+    -iname \*.d2v -o \
+    -iname \*.mcf -o \
+    -iname \*.bs4 -o \
+    -iname \*.vgx -o \
+    -iname \*.vprj -o \
+    -iname \*.mhg -o \
+    -iname \*.arcut -o \
+    -iname \*.ml20 -o \
+    -iname \*.jts -o \
+    -iname \*.xmm -o \
+    -iname \*.dpg -o \
+    -iname \*.mmp -o \
+    -iname \*.ppp -o \
+    -iname \*.mvr -o \
+    -iname \*.pvr -o \
+    -iname \*.mpj -o \
+    -iname \*.dfv -o \
+    -iname \*.tv -o \
+    -iname \*.el8 -o \
+    -iname \*.vpd -o \
+    -iname \*.vp5 -o \
+    -iname \*.osp -o \
+    -iname \*.vcv -o \
+    -iname \*.tab -o \
+    -iname \*.vp7 -o \
+    -iname \*.ftvx -o \
+    -iname \*.h261 -o \
+    -iname \*.mp2v -o \
+    -iname \*.mnv -o \
+    -iname \*.cak -o \
+    -iname \*.pproj -o \
+    -iname \*.qtvr -o \
+    -iname \*.cam -o \
+    -iname \*.par -o \
+    -iname \*.ivr -o \
+    -iname \*.zrb -o \
+    -iname \*.daproj -o \
+    -iname \*.dv -o \
+    -iname \*.wpe -o \
+    -iname \*.tvs -o \
+    -iname \*.gfp -o \
+    -iname \*.3ivx -o \
+    -iname \*.avr -o \
+    -iname \*.pro -o \
+    -iname \*.grasp -o \
+    -iname \*.ctd -o \
+    -iname \*.avb -o \
+    -iname \*.hkm -o \
+    -iname \*.dvdmedia -o \
+    -iname \*.mv1 -o \
+    -iname \*.cmmp -o \
+    -iname \*.drc -o \
+    -iname \*.m4e -o \
+    -iname \*.ctd -o \
+    -iname \*.mp3 -o \
+    -iname \*.i3pack -o \
+    -iname \*.waptt -o \
+    -iname \*.opus -o \
+    -iname \*.3ga -o \
+    -iname \*.cda -o \
+    -iname \*.ocdf -o \
+    -iname \*.flac -o \
+    -iname \*.wpl -o \
+    -iname \*.zab -o \
+    -iname \*.vdjsample -o \
+    -iname \*.rec -o \
+    -iname \*.2ch -o \
+    -iname \*.arf -o \
+    -iname \*.avr -o \
+    -iname \*.mus -o \
+    -iname \*.2 -o \
+    -iname \*.sesx -o \
+    -iname \*.ds2 -o \
+    -iname \*.aax -o \
+    -iname \*.br25 -o \
+    -iname \*.wem -o \
+    -iname \*.mpdp -o \
+    -iname \*.dss -o \
+    -iname \*.nmf -o \
+    -iname \*.sng -o \
+    -iname \*.wv -o \
+    -iname \*.nvf -o \
+    -iname \*.trm -o \
+    -iname \*.sib -o \
+    -iname \*.xkr -o \
+    -iname \*.wav -o \
+    -iname \*.amr -o \
+    -iname \*.m4a -o \
+    -iname \*.ap4 -o \
+    -iname \*.dvf -o \
+    -iname \*.br28 -o \
+    -iname \*.dcf -o \
+    -iname \*.bnk -o \
+    -iname \*.aac -o \
+    -iname \*.mscz -o \
+    -iname \*.gp5 -o \
+    -iname \*.ses -o \
+    -iname \*.alb -o \
+    -iname \*.ogg -o \
+    -iname \*.acd -o \
+    -iname \*.pcm -o \
+    -iname \*.midi -o \
+    -iname \*.xpak -o \
+    -iname \*.wma -o \
+    -iname \*.aa -o \
+    -iname \*.nwc -o \
+    -iname \*.ram -o \
+    -iname \*.aup -o \
+    -iname \*.mxl -o \
+    -iname \*.thd -o \
+    -iname \*.ytif -o \
+    -iname \*.snd -o \
+    -iname \*.cdfs -o \
+    -iname \*.moi -o \
+    -iname \*.ad4 -o \
+    -iname \*.vox -o \
+    -iname \*.fsb -o \
+    -iname \*.eac3 -o \
+    -iname \*.au -o \
+    -iname \*.zvr -o \
+    -iname \*.seq -o \
+    -iname \*.cdg -o \
+    -iname \*.vdj -o \
+    -iname \*.ajp -o \
+    -iname \*.band -o \
+    -iname \*.asf -o \
+    -iname \*.mgu -o \
+    -iname \*.sdx -o \
+    -iname \*.xsb -o \
+    -iname \*.mka -o \
+    -iname \*.mid -o \
+    -iname \*.dlp -o \
+    -iname \*.oma -o \
+    -iname \*.sf2 -o \
+    -iname \*.ksf -o \
+    -iname \*.sgw -o \
+    -iname \*.muk -o \
+    -iname \*.voc -o \
+    -iname \*.rpp -o \
+    -iname \*.16 -o \
+    -iname \*.mogg -o \
+    -iname \*.msv -o \
+    -iname \*.asx -o \
+    -iname \*.gp4 -o \
+    -iname \*.audionote -o \
+    -iname \*.ulaw -o \
+    -iname \*.mp4a -o \
+    -iname \*.spx -o \
+    -iname \*.sbk -o \
+    -iname \*.uax -o \
+    -iname \*.m4r -o \
+    -iname \*.wrf -o \
+    -iname \*.abm -o \
+    -iname \*.sabs -o \
+    -iname \*.10 -o \
+    -iname \*.nmsv -o \
+    -iname \*.nki -o \
+    -iname \*.fls -o \
+    -iname \*.h2song -o \
+    -iname \*.aaf -o \
+    -iname \*.kmp -o \
+    -iname \*.acm -o \
+    -iname \*.sd -o \
+    -iname \*.musx -o \
+    -iname \*.elastik -o \
+    -iname \*.cmf -o \
+    -iname \*.gpx -o \
+    -iname \*.br4 -o \
+    -iname \*.rip -o \
+    -iname \*.slx -o \
+    -iname \*.sgu -o \
+    -iname \*.apex -o \
+    -iname \*.vce -o \
+    -iname \*.br5 -o \
+    -iname \*.nsmp -o \
+    -iname \*.sf -o \
+    -iname \*.aiff -o \
+    -iname \*.svq -o \
+    -iname \*.gig -o \
+    -iname \*.vsb -o \
+    -iname \*.mx6 -o \
+    -iname \*.m4b -o \
+    -iname \*.kar -o \
+    -iname \*.mmm -o \
+    -iname \*.rns -o \
+    -iname \*.song -o \
+    -iname \*.rtm -o \
+    -iname \*.fst -o \
+    -iname \*.caf -o \
+    -iname \*.hma -o \
+    -iname \*.m4p -o \
+    -iname \*.smf -o \
+    -iname \*.dmpatch -o \
+    -iname \*.xwb -o \
+    -iname \*.la -o \
+    -iname \*.flm -o \
+    -iname \*.ra -o \
+    -iname \*.sabl -o \
+    -iname \*.ape -o \
+    -iname \*.vag -o \
+    -iname \*.plp -o \
+    -iname \*.h2p -o \
+    -iname \*.record -o \
+    -iname \*.kfn -o \
+    -iname \*.smp -o \
+    -iname \*.ec3 -o \
+    -iname \*.cdo -o \
+    -iname \*.sfd -o \
+    -iname \*.pc -o \
+    -iname \*.cpa -o \
+    -iname \*.its -o \
+    -iname \*.xpf -o \
+    -iname \*.logic -o \
+    -iname \*.tl -o \
+    -iname \*.dmkit -o \
+    -iname \*.rx2 -o \
+    -iname \*.ove -o \
+    -iname \*.mx5 -o \
+    -iname \*.gm -o \
+    -iname \*.efa -o \
+    -iname \*.sdir -o \
+    -iname \*.ac7 -o \
+    -iname \*.bmw -o \
+    -iname \*.7 -o \
+    -iname \*.cdr -o \
+    -iname \*.imf -o \
+    -iname \*.vsq -o \
+    -iname \*.itz -o \
+    -iname \*.tsh -o \
+    -iname \*.nist -o \
+    -iname \*.myr -o \
+    -iname \*.vif -o \
+    -iname \*.sfr -o \
+    -iname \*.sw -o \
+    -iname \*.gtp -o \
+    -iname \*.wrk -o \
+    -iname \*.swa -o \
+    -iname \*.mfb -o \
+    -iname \*.sdk -o \
+    -iname \*.ngrr -o \
+    -iname \*.mmpz -o \
+    -iname \*.mp3a -o \
+    -iname \*.uvn -o \
+    -iname \*.g726 -o \
+    -iname \*.fnf -o \
+    -iname \*.w03 -o \
+    -iname \*.mtd -o \
+    -iname \*.d00 -o \
+    -iname \*.ibk -o \
+    -iname \*.my -o \
+    -iname \*.mmp -o \
+    -iname \*.rad -o \
+    -iname \*.sfark -o \
+    -iname \*.nak -o \
+    -iname \*.fzf -o \
+    -iname \*.dau -o \
+    -iname \*.w02 -o \
+    -iname \*.stem -o \
+    -iname \*.krx -o \
+    -iname \*.wax -o \
+    -iname \*.amz -o \
+    -iname \*.s3p -o \
+    -iname \*.omf -o \
+    -iname \*.vm1 -o \
+    -iname \*.dkd -o \
+    -iname \*.mpc -o \
+    -iname \*.xmi -o \
+    -iname \*.ang -o \
+    -iname \*.dx7 -o \
+    -iname \*.ftc -o \
+    -iname \*.dvc -o \
+    -iname \*.dls -o \
+    -iname \*.mpa -o \
+    -iname \*.alc -o \
+    -iname \*.dtm -o \
+    -iname \*.bvf -o \
+    -iname \*.gog -o \
+    -iname \*.dtshd -o \
+    -iname \*.kam -o \
+    -iname \*.svx -o \
+    -iname \*.mp_ -o \
+    -iname \*.dva -o \
+    -iname \*.logicx -o \
+    -iname \*.sd2f -o \
+    -iname \*.dpdoc -o \
+    -iname \*.stmp -o \
+    -iname \*.br27 -o \
+    -iname \*.plm -o \
+    -iname \*.mv3 -o \
+    -iname \*.s48 -o \
+    -iname \*.sfz -o \
+    -iname \*.ckf -o \
+    -iname \*.elp -o \
+    -iname \*.weba -o \
+    -iname \*.alaw -o \
+    -iname \*.sty -o \
+    -iname \*.dmf -o \
+    -iname \*.vyf -o \
+    -iname \*.mss -o \
+    -iname \*.rex -o \
+    -iname \*.gbs -o \
+    -iname \*.aud -o \
+    -iname \*.architect -o \
+    -iname \*.sts -o \
+    -iname \*.wfp -o \
+    -iname \*.son -o \
+    -iname \*.wpp -o \
+    -iname \*.adts -o \
+    -iname \*.esu -o \
+    -iname \*.w07 -o \
+    -iname \*.exs -o \
+    -iname \*.mld -o \
+    -iname \*.rtttl -o \
+    -iname \*.fsc -o \
+    -iname \*.brr -o \
+    -iname \*.nsp -o \
+    -iname \*.mp1 -o \
+    -iname \*.mff -o \
+    -iname \*.dsf -o \
+    -iname \*.stem -o \
+    -iname \*.puma -o \
+    -iname \*.aria -o \
+    -iname \*.dig -o \
+    -iname \*.xa -o \
+    -iname \*.hsc -o \
+    -iname \*.uni -o \
+    -iname \*.nxt -o \
+    -iname \*.s3m -o \
+    -iname \*.cwp -o \
+    -iname \*.tn7 -o \
+    -iname \*.psi -o \
+    -iname \*.nfm8 -o \
+    -iname \*.zax -o \
+    -iname \*.nst -o \
+    -iname \*.w01 -o \
+    -iname \*.mx4 -o \
+    -iname \*.m2s -o \
+    -iname \*.mes -o \
+    -iname \*.aa3 -o \
+    -iname \*.dwp -o \
+    -iname \*.ac3 -o \
+    -iname \*.shn -o \
+    -iname \*.vy3 -o \
+    -iname \*.rgp -o \
+    -iname \*.mk1 -o \
+    -iname \*.lso -o \
+    -iname \*.sri -o \
+    -iname \*.pttune -o \
+    -iname \*.mz -o \
+    -iname \*.mww -o \
+    -iname \*.sbm -o \
+    -iname \*.adg -o \
+    -iname \*.dvw -o \
+    -iname \*.alw -o \
+    -iname \*.sbg -o \
+    -iname \*.rf64 -o \
+    -iname \*.cs3 -o \
+    -iname \*.als -o \
+    -iname \*.fsm -o \
+    -iname \*.mkf -o \
+    -iname \*.tsl -o \
+    -iname \*.ede -o \
+    -iname \*.dmse -o \
+    -iname \*.dro -o \
+    -iname \*.669 -o \
+    -iname \*.eda -o \
+    -iname \*.wsx -o \
+    -iname \*.dr8 -o \
+    -iname \*.lvp -o \
+    -iname \*.lms -o \
+    -iname \*.x3a -o \
+    -iname \*.laa -o \
+    -iname \*.arl -o \
+    -iname \*.iti -o \
+    -iname \*.kma -o \
+    -iname \*.bmu -o \
+    -iname \*.g723 -o \
+    -iname \*.oga -o \
+    -iname \*.ly -o \
+    -iname \*.dm1 -o \
+    -iname \*.sag -o \
+    -iname \*.mf3 -o \
+    -iname \*.rmp -o \
+    -iname \*.rmx -o \
+    -iname \*.nsla -o \
+    -iname \*.qcp -o \
+    -iname \*.rcp -o \
+    -iname \*.aob -o \
+    -iname \*.mscx -o \
+    -iname \*.minibank -o \
+    -iname \*.efe -o \
+    -iname \*.tak -o \
+    -iname \*.mct -o \
+    -iname \*.ckb -o \
+    -iname \*.smfmf -o \
+    -iname \*.niff -o \
+    -iname \*.pno -o \
+    -iname \*.sds -o \
+    -iname \*.zaf -o \
+    -iname \*.w64 -o \
+    -iname \*.sdat -o \
+    -iname \*.cvs -o \
+    -iname \*.rol -o \
+    -iname \*.vsi -o \
+    -iname \*.orc -o \
+    -iname \*.xmz -o \
+    -iname \*.gi -o \
+    -iname \*.uvd -o \
+    -iname \*.hh -o \
+    -iname \*.rma -o \
+    -iname \*.mx1 -o \
+    -iname \*.amxd -o \
+    -iname \*.rhl -o \
+    -iname \*.mwk -o \
+    -iname \*.cdda -o \
+    -iname \*.swv -o \
+    -iname \*.vsqx -o \
+    -iname \*.x3v -o \
+    -iname \*.xi -o \
+    -iname \*.sc2 -o \
+    -iname \*.br29 -o \
+    -iname \*.spd -o \
+    -iname \*.sg4 -o \
+    -iname \*.mgb -o \
+    -iname \*.xwma -o \
+    -iname \*.fc4 -o \
+    -iname \*.mjf -o \
+    -iname \*.svd -o \
+    -iname \*.mo3 -o \
+    -iname \*.zik -o \
+    -iname \*.afc -o \
+    -iname \*.vgm -o \
+    -iname \*.ad3 -o \
+    -iname \*.wave -o \
+    -iname \*.cwb -o \
+    -iname \*.xt -o \
+    -iname \*.tks -o \
+    -iname \*.tvn -o \
+    -iname \*.w06 -o \
+    -iname \*.gdm -o \
+    -iname \*.xm -o \
+    -iname \*.s -o \
+    -iname \*.isb -o \
+    -iname \*.sqt -o \
+    -iname \*.mt_ -o \
+    -iname \*.eol -o \
+    -iname \*.mg2 -o \
+    -iname \*.404 -o \
+    -iname \*.camelsounds -o \
+    -iname \*.vig -o \
+    -iname \*.w7v -o \
+    -iname \*.ams -o \
+    -iname \*.edv -o \
+    -iname \*.sa1 -o \
+    -iname \*.sxt -o \
+    -iname \*.w7a -o \
+    -iname \*.sd2 -o \
+    -iname \*.koz -o \
+    -iname \*.vy4 -o \
+    -iname \*.odd -o \
+    -iname \*.m3a -o \
+    -iname \*.dsd -o \
+    -iname \*._02 -o \
+    -iname \*.rso -o \
+    -iname \*.m3v -o \
+    -iname \*.bwf -o \
+    -iname \*.rmj -o \
+    -iname \*.evx -o \
+    -iname \*.dmptrn -o \
+    -iname \*.edk -o \
+    -iname \*.rhp -o \
+    -iname \*.vbk -o \
+    -iname \*.xvag -o \
+    -iname \*.rockwell -o \
+    -iname \*.vqf -o \
+    -iname \*.nwp -o \
+    -iname \*.ftm -o \
+    -iname \*.gpbank -o \
+    -iname \*.nbs -o \
+    -iname \*.snc -o \
+    -iname \*.s -o \
+    -iname \*.msq -o \
+    -iname \*.ssdl -o \
+    -iname \*.aifc -o \
+    -iname \*.emb -o \
+    -iname \*.mls -o \
+    -iname \*.sn -o \
+    -iname \*.bam -o \
+    -iname \*.glue -o \
+    -iname \*.erg -o \
+    -iname \*.krz -o \
+    -iname \*.dat -o \
+    -iname \*.mpega -o \
+    -iname \*.pw3 -o \
+    -iname \*.ss3 -o \
+    -iname \*.raw -o \
+    -iname \*.v8 -o \
+    -iname \*.32 -o \
+    -iname \*.ea -o \
+    -iname \*.vm -o \
+    -iname \*.ofs -o \
+    -iname \*.wproj -o \
+    -iname \*.sonic -o \
+    -iname \*.sg2 -o \
+    -iname \*.tqd -o \
+    -iname \*.a3s -o \
+    -iname \*.aud -o \
+    -iname \*.bww -o \
+    -iname \*.jlw -o \
+    -iname \*.wfd -o \
+    -iname \*.cmo -o \
+    -iname \*.efq -o \
+    -iname \*.bn -o \
+    -iname \*.uvo -o \
+    -iname \*.vab -o \
+    -iname \*.atp -o \
+    -iname \*.dkt -o \
+    -iname \*.rfl -o \
+    -iname \*.rix -o \
+    -iname \*.cpt -o \
+    -iname \*.dtg -o \
+    -iname \*.ptb -o \
+    -iname \*.rsn -o \
+    -iname \*.vmo -o \
+    -iname \*.jo -o \
+    -iname \*.alac -o \
+    -iname \*.agm -o \
+    -iname \*.stz -o \
+    -iname \*.abc -o \
+    -iname \*.akai -o \
+    -iname \*.mt2 -o \
+    -iname \*.dp3 -o \
+    -iname \*.g726 -o \
+    -iname \*.mg4 -o \
+    -iname \*.voi -o \
+    -iname \*.voxal -o \
+    -iname \*.hsb -o \
+    -iname \*.mp3g -o \
+    -iname \*.w05 -o \
+    -iname \*.vox -o \
+    -iname \*.mpga -o \
+    -iname \*.lam -o \
+    -iname \*.ca3 -o \
+    -iname \*.en -o \
+    -iname \*.n3a -o \
+    -iname \*.atak -o \
+    -iname \*.mxmf -o \
+    -iname \*.dfh -o \
+    -iname \*.ptx -o \
+    -iname \*.ad2 -o \
+    -iname \*.bgp -o \
+    -iname \*.oxm -o \
+    -iname \*.kin \)
+}
 
-# mp3
-# i3pack
-# waptt
-# opus
-# 3ga
-# cda
-# ocdf
-# flac
-# wpl
-# zab
-# vdjsample
-# rec
-# 2ch
-# arf
-# avr
-# mus
-# 2
-# sesx
-# ds2
-# aax
-# br25
-# wem
-# mpdp
-# dss
-# nmf
-# sng
-# wv
-# nvf
-# trm
-# sib
-# xkr
-# wav
-# amr
-# m4a
-# ap4
-# dvf
-# br28
-# dcf
-# bnk
-# aac
-# mscz
-# gp5
-# ses
-# alb
-# ogg
-# acd
-# pcm
-# midi
-# xpak
-# wma
-# aa
-# nwc
-# ram
-# aup
-# mxl
-# thd
-# ytif
-# snd
-# cdfs
-# moi
-# ad4
-# vox
-# fsb
-# eac3
-# au
-# zvr
-# seq
-# cdg
-# vdj
-# ajp
-# band
-# asf
-# mgu
-# sdx
-# xsb
-# mka
-# mid
-# dlp
-# oma
-# sf2
-# ksf
-# sgw
-# muk
-# voc
-# rpp
-# 16
-# mogg
-# msv
-# asx
-# gp4
-# audionote
-# ulaw
-# mp4a
-# spx
-# sbk
-# uax
-# m4r
-# wrf
-# abm
-# sabs
-# 10
-# nmsv
-# nki
-# fls
-# h2song
-# aaf
-# kmp
-# acm
-# sd
-# musx
-# elastik
-# cmf
-# gpx
-# br4
-# rip
-# slx
-# sgu
-# apex
-# vce
-# br5
-# nsmp
-# sf
-# aiff
-# svq
-# gig
-# vsb
-# mx6
-# m4b
-# kar
-# mmm
-# rns
-# song
-# rtm
-# fst
-# caf
-# hma
-# m4p
-# smf
-# dmpatch
-# xwb
-# la
-# flm
-# ra
-# sabl
-# ape
-# vag
-# plp
-# h2p
-# record
-# kfn
-# smp
-# ec3
-# cdo
-# sfd
-# pc
-# cpa
-# its
-# xpf
-# logic
-# tl
-# dmkit
-# rx2
-# ove
-# mx5
-# gm
-# efa
-# sdir
-# ac7
-# bmw
-# 7
-# cdr
-# imf
-# vsq
-# itz
-# tsh
-# nist
-# myr
-# vif
-# sfr
-# sw
-# gtp
-# wrk
-# swa
-# mfb
-# sdk
-# ngrr
-# mmpz
-# mp3a
-# uvn
-# g726
-# fnf
-# w03
-# mtd
-# d00
-# ibk
-# my
-# mmp
-# rad
-# sfark
-# nak
-# fzf
-# dau
-# w02
-# stem
-# krx
-# wax
-# amz
-# s3p
-# omf
-# vm1
-# dkd
-# mpc
-# xmi
-# ang
-# dx7
-# ftc
-# dvc
-# dls
-# mpa
-#  file extension $ri	Steinberg Cubase compressed audio data
-# alc
-# dtm
-# bvf
-# gog
-# dtshd
-# kam
-# svx
-# mp_
-# dva
-# logicx
-# sd2f
-# dpdoc
-# stmp
-# br27
-# plm
-# mv3
-# s48
-# sfz
-# ckf
-# elp
-# weba
-# alaw
-# sty
-# dmf
-# vyf
-# mss
-# rex
-# gbs
-# aud
-# architect
-# sts
-# wfp
-# son
-# wpp
-# adts
-# esu
-# w07
-# exs
-# mld
-# rtttl
-# fsc
-# brr
-# nsp
-# mp1
-# mff
-# dsf
-# stem
-# puma
-# aria
-# dig
-# xa
-# hsc
-# uni
-# nxt
-# s3m
-# cwp
-# tn7
-# psi
-# nfm8
-# zax
-# nst
-# w01
-# mx4
-# m2s
-# mes
-# aa3
-# dwp
-# ac3
-# shn
-# vy3
-# rgp
-# mk1
-# lso
-# sri
-# pttune
-# mz
-# mww
-# sbm
-# adg
-# dvw
-# alw
-# sbg
-# rf64
-# cs3
-# als
-# fsm
-# mkf
-# tsl
-# ede
-# dmse
-# dro
-# 669
-# eda
-# wsx
-# dr8
-# lvp
-# lms
-# x3a
-# laa
-# arl
-# iti
-# kma
-# bmu
-# g723
-# oga
-# ly
-# dm1
-# sag
-# mf3
-# rmp
-# rmx
-# nsla
-# qcp
-# rcp
-# aob
-# mscx
-# minibank
-# efe
-# tak
-# mct
-# ckb
-# smfmf
-# niff
-# pno
-# sds
-# zaf
-# w64
-# sdat
-# cvs
-# rol
-# vsi
-# orc
-# xmz
-# gi
-# uvd
-# hh
-# rma
-# mx1
-# amxd
-# rhl
-# mwk
-# cdda
-# swv
-# vsqx
-# x3v
-# xi
-# sc2
-# br29
-# spd
-# sg4
-# mgb
-# xwma
-# fc4
-# mjf
-# svd
-# mo3
-# zik
-# afc
-# vgm
-# ad3
-# wave
-# cwb
-# xt
-# tks
-# tvn
-# w06
-# gdm
-# xm
-# s
-# isb
-# sqt
-# mt_
-# eol
-# mg2
-# 404
-# camelsounds
-# vig
-# w7v
-# ams
-# edv
-# sa1
-# sxt
-# w7a
-# sd2
-# koz
-# vy4
-# odd
-# m3a
-# dsd
-# _02
-# rso
-# m3v
-# bwf
-# rmj
-# evx
-# dmptrn
-# edk
-# rhp
-# vbk
-# xvag
-# rockwell
-# vqf
-# nwp
-# ftm
-# gpbank
-# nbs
-# snc
-# s
-# msq
-# ssdl
-# aifc
-# emb
-# mls
-# sn
-# bam
-# glue
-# erg
-# krz
-# dat
-# mpega
-# pw3
-# ss3
-# raw
-# v8
-# 32
-# ea
-# vm
-# ofs
-# wproj
-# sonic
-# sg2
-# tqd
-# a3s
-# aud
-# bww
-# jlw
-# wfd
-# cmo
-# efq
-# bn
-# uvo
-# vab
-# atp
-# dkt
-# rfl
-# rix
-# cpt
-# dtg
-# ptb
-# rsn
-# vmo
-# jo
-# alac
-# agm
-# stz
-# abc
-# akai
-# mt2
-# dp3
-# g726
-# mg4
-# voi
-# voxal
-# hsb
-# mp3g
-# w05
-# vox
-# mpga
-# lam
-# ca3
-# en
-# n3a
-# atak
-# mxmf
-# dfh
-# ptx
-# ad2
-# bgp
-# oxm
-# kin
+list_media_files
