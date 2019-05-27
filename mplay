@@ -1005,11 +1005,12 @@ list_media_files(){
     -iname \*.ad2 -o \
     -iname \*.bgp -o \
     -iname \*.oxm -o \
-    -iname \*.kin \)
+    -iname \*.kin \) \
+    -printf '%T@ %p\n'
 }
 
 selectfile(){
-    list_media_files | fzf
+    list_media_files | sort -nr | sed -E 's/^[0-9]+\.[0-9]+ //' | fzf
 }
 
 file="`selectfile`"
