@@ -9,6 +9,7 @@ fi
 list_media_files(){
     find . ! -path \*/.\* -type f \( \
     -iname \*.mp4 -o \
+    -iname \*.part -o \
     -iname \*.264 -o \
     -iname \*.dav -o \
     -iname \*.exo -o \
