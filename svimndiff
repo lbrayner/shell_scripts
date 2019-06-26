@@ -3,7 +3,7 @@
 # set -x
 
 functional_name(){
-    basename "${@}"
+    echo "${1##*.}"
 }
 
 is_under_version_control(){
@@ -12,18 +12,18 @@ is_under_version_control(){
 
 get_extension(){
     extension_revision="${1##*.}"
-    extension_only="${extension_revision%%  *}"
+    extension_only="${extension_revision%%	*}"
     echo "${extension_only}"
 }
 
-extension_3=`get_extension "${@: -5:1}"`
-extension_5=`get_extension "${@: -3:1}"`
+extension_left=`get_extension "${@: -5:1}"`
+extension_right=`get_extension "${@: -3:1}"`
 
 diff_arguments_size="$((${#} - 6))"
 diff_arguments="${@:1:${diff_arguments_size}}"
 
-if [[ "${diff_arguments}" = "-u" ]] && [[ "${extension_3}" = "java" ]] \
-    && [[ "${extension_5}" = "java" ]]
+if [[ "${diff_arguments}" = "-u" ]] && [[ "${extension_left}" = "java" ]] \
+    && [[ "${extension_right}" = "java" ]]
 then
     printf '\nJava files. Ignoring whitespace.\n' 
     diff_arguments="-u -a -w"
@@ -62,5 +62,5 @@ fi
 
 "${vim}" -R "${file2}" -c 'sil lefta vert diffpa '\
 "${diff_file}"' | sil exe "file " . fnameescape("'"${file_name1}"'") '\
-'| sil! set syntax='"${extension_3}"' | exec "normal! \<c-w>l" '\
-'| sil! set syntax='"${extension_5}"
+'| sil! set syntax='"${extension_left}"' | exec "normal! \<c-w>l" '\
+'| sil! set syntax='"${extension_right}"
