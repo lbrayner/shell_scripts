@@ -12,7 +12,7 @@ is_under_version_control(){
 
 get_extension(){
     extension_revision="${1##*.}"
-    extension_only="${extension_revision%%	*}"
+    extension_only="${extension_revision%%  *}"
     echo "${extension_only}"
 }
 
@@ -25,7 +25,7 @@ diff_arguments="${@:1:${diff_arguments_size}}"
 if [[ "${diff_arguments}" = "-u" ]] && [[ "${extension_left}" = "java" ]] \
     && [[ "${extension_right}" = "java" ]]
 then
-    printf '\nJava files. Ignoring whitespace.\n' 
+    printf '\nJava files. Ignoring whitespace.\n'
     diff_arguments="-u -a -w"
 fi
 
