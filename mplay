@@ -6,8 +6,31 @@ then
     exit 1
 fi
 
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") [DIR]"
+}
+
+if [[ ! ${#} -le 1 ]]
+then
+    print_usage 1>&2
+    exit 1
+fi
+
+dir="."
+
+if [[ -n "${1}" ]]
+then
+    dir="${1}"
+fi
+
+if [[ ! -d "${dir}" ]]
+then
+    printf '%s is not a directory.\n' "${dir}" 1>&2
+    exit 1
+fi
+
 list_media_files(){
-    find . ! -path \*/.\* -type f \( \
+    find "${1}" ! -path \*/.\* -type f \( \
     -iname \*.mp4 -o \
     -iname \*.part -o \
     -iname \*.264 -o \
@@ -1011,7 +1034,7 @@ list_media_files(){
 }
 
 selectfile(){
-    list_media_files | sort -nr | sed -E 's/^[0-9]+\.[0-9]+ //' | fzf
+    list_media_files "${dir}" | sort -nr | sed -E 's/^[0-9]+\.[0-9]+ //' | fzf
 }
 
 file="`selectfile`"
@@ -1023,5 +1046,7 @@ then
     printf 'Aborted.\n' 1>&2
     exit 1
 fi
+
+printf 'Playing %s.\n' "${file}"
 
 ${FPLAY_PLAYER} "${file}"
