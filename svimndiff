@@ -2,12 +2,19 @@
 
 # set -x
 
+config_dir=""
+
+if [[ -n "${SVN_CONFIG_DIR}" ]]
+then
+    config_dir="--config-dir="${SVN_CONFIG_DIR}""
+fi
+
 functional_name(){
     echo "${1##*.}"
 }
 
 is_under_version_control(){
-    svn ls "${@}" >/dev/null 2>&1
+    svn "${config_dir}" ls "${@}" >/dev/null 2>&1
 }
 
 get_extension(){
@@ -60,7 +67,7 @@ then
     printf '\nEditor is: "%s".\n' "${vim}"
 fi
 
-"${vim}" -R "${file2}" -c 'sil lefta vert diffpa '\
+"${vim}" "${file2}" -c 'sil lefta vert diffpa '\
 "${diff_file}"' | sil exe "file " . fnameescape("'"${file_name1}"'") '\
 '| sil! set syntax='"${extension_left}"' | exec "normal! \<c-w>l" '\
 '| sil! set syntax='"${extension_right}"
