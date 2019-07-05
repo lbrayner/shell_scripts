@@ -1,12 +1,10 @@
 #!/bin/sh
 
 tmpdir="$(dirname "$(mktemp -u)")"
-# script_name="$(basename "${0}")"
-# log_file=$(mktemp --suffix="_${script_name}.log")
 
 echo "noautocmd argdo \
     if expand('%:p') =~# '^\\V' . '${tmpdir}' | \
         setlocal nomodifiable | \
     endif | \
     b1 | \
-    exec 'normal! gg' | visual" |  nvim -e "${@}"
+    exec 'normal! gg' |  call histdel('cmd','^noautocmd argdo') | visual" |  nvim -e "${@}"
