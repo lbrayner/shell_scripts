@@ -59,6 +59,8 @@ then
     printf '\nEditor is: "%s".\n' "${vim}"
 fi
 
-${vim} -R -d "${his}" "${mine}" -c "set ft=${extension} | set nomodifiable" \
-    -c "wincmd w | set ft=${extension} | set nomodifiable" \
-    -c "split ""${merged}"" | wincmd J | silent set scrollbind cursorbind modifiable"
+${vim} -d "${his}" "${old}" "${mine}" \
+    -c "set ft=${extension} | setlocal nomodifiable" \
+    -c "wincmd w | set ft=${extension} | setlocal nomodifiable" \
+    -c "exec 'split '.fnameescape('""${merged}""') | wincmd J"\
+    -c "silent set scrollbind cursorbind modifiable"
