@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # svn merge tool
 
@@ -8,22 +8,17 @@ print_usage() {
 	printf '\n%s\n' "$(basename $0) OLD HIS MINE MERGED WCPATH"
 }
 
-if [ ! ${#} -eq 5 ]
+if [[ ! ${#} -eq 5 ]]
 then
 	print_usage 1>&2
 	exit 1
 fi
 
 get_extension(){
-    echo "${1}" | sed 's/.*\.\([^.]\+\)\(\.merge.*\|\.working.*\|$\)/\1/'
+    extension_revision="${1##*.}"
+    extension_only="${extension_revision%%  *}"
+    echo "${extension_only}"
 }
-
-vim=/usr/bin/nvim
-
-if [ -n "${EDITOR}" ]
-then
-    vim="${EDITOR}"
-fi
 
 old=${1}
 his=${2}
@@ -35,7 +30,7 @@ diff_program=diff
 
 extension=`get_extension "${merged}"`
 
-if [ "${extension}" = "java" ]
+if [[ "${extension}" = "java" ]]
 then
     printf '\nJava file. Ignoring whitespace.\n\n'
     diff_program=diffw
@@ -47,7 +42,21 @@ diff3 --diff-program=${diff_program} -E -m "${mine}" "${old}" "${his}" \
 # querying for a CARRIAGE RETURN
 if grep -q $'\x0d' "${merged}"
 then
+    if ! hash unix2dos
+    then
+        printf 'File contains carriage returns: unix2dos required.\n' 1>&2
+        exit 1
+    fi
+
     unix2dos -f "${merged}"
+fi
+
+vim=/usr/bin/vim
+
+if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
+then
+    vim="${EDITOR}"
+    printf '\nEditor is: "%s".\n' "${vim}"
 fi
 
 ${vim} -R -d "${his}" "${mine}" -c "set ft=${extension} | set nomodifiable" \
