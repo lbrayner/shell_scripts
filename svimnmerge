@@ -20,11 +20,11 @@ get_extension(){
     echo "${extension_only}"
 }
 
-old=${1}
-his=${2}
-mine=${3}
-merged=${4}
-wcpath=${5}
+old="${1}"
+his="${2}"
+mine="${3}"
+merged="${4}"
+wcpath="${5}"
 
 diff_program=diff
 
@@ -36,11 +36,19 @@ then
     diff_program=diffw
 fi
 
+if ! hash "${diff_program}"
+then
+    printf '%s required.' "${diff_program}" 1>&2
+    exit 1
+fi
+
+temp_merged="$(mktemp --suffix=.merged)"
+
 diff3 --diff-program=${diff_program} -E -m "${mine}" "${old}" "${his}" \
-    > "${merged}"
+    > "${temp_merged}"
 
 # querying for a CARRIAGE RETURN
-if grep -q $'\x0d' "${merged}"
+if grep -q $'\x0d' "${temp_merged}"
 then
     if ! hash unix2dos
     then
@@ -48,8 +56,10 @@ then
         exit 1
     fi
 
-    unix2dos -f "${merged}"
+    unix2dos -f "${temp_merged}"
 fi
+
+cp -f "${temp_merged}" "${merged}" && rm "${temp_merged}"
 
 vim=/usr/bin/vim
 
