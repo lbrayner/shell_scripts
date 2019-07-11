@@ -27,6 +27,7 @@ merged="${4}"
 wcpath="${5}"
 
 diff_program=diff
+diffopt=""
 
 extension=`get_extension "${merged}"`
 
@@ -34,6 +35,7 @@ if [[ "${extension}" = "java" ]]
 then
     printf '\nJava file. Ignoring whitespace.\n\n'
     diff_program=diffw
+    diffopt="| set diffopt+=iwhite"
 fi
 
 if ! hash "${diff_program}"
@@ -70,7 +72,7 @@ then
 fi
 
 ${vim} -d "${his}" "${old}" "${mine}" \
-    -c "set ft=${extension} | setlocal nomodifiable" \
+    -c "set ft=${extension} | setlocal nomodifiable ${diffopt}" \
     -c "wincmd w | set ft=${extension} | setlocal nomodifiable" \
     -c "exec 'split '.fnameescape('""${merged}""') | wincmd J"\
     -c "silent set scrollbind cursorbind modifiable"
