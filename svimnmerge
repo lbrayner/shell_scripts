@@ -72,6 +72,8 @@ then
 fi
 
 ${vim} -d "${mine}" "${old}" "${his}" "${merged}" \
-    -c "bufdo set ft=${extension} | bufdo setlocal nomodifiable | b1 ${diffopt}" \
     -c "exec bufwinnr(4) . 'wincmd w' | wincmd J" \
-    -c "silent setlocal modifiable"
+    -c "let file_type=&ft | if !empty(file_type) | bufdo let &ft=file_type" \
+    -c "unlet file_type | bufdo set nomodifiable" \
+    -c "b4 ${diffopt}" \
+    -c "silent set modifiable"
