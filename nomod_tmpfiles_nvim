@@ -7,4 +7,6 @@ echo "noautocmd argdo \
         setlocal nomodifiable | \
     endif | \
     b1 | \
-    exec 'normal! gg' |  call histdel('cmd','^noautocmd argdo') | visual" |  nvim -e "${@}"
+    exec 'normal! gg' |  \
+    call histdel('cmd','^noautocmd argdo.*\\<b1\\>') | visual" \
+    |  nvim -e "${@}"
