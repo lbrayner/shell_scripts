@@ -1,11 +1,11 @@
 #!/bin/bash
 
 print_usage() {
-	printf '\n%s\n' "$(basename "${0}") [-d] FILE..."
+	printf '\n%s\n' "$(basename "${0}") [-d] [-h] FILE..."
 }
 
 decrypt=""
-while getopts ":di:" opt
+while getopts ":dh" opt
 do
     case ${opt} in
         d)
