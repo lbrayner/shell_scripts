@@ -2,8 +2,6 @@
 
 # set -x
 
-echo "${@}"
-
 config_dir=""
 
 if [[ -n "${SVN_CONFIG_DIR}" ]]
