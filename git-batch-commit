@@ -61,10 +61,11 @@ do
     cd "${target}"
 
     current_branch=$(get_git_branch)
+    echo "${target}"
 
     if [ ${current_branch} != "master" ]
     then
-        printf '%s not in master branch.' ${target} >&2
+        printf '%s not in master branch.\n' "${target}" >&2
         exit 1
     fi
 
