@@ -4,6 +4,10 @@
 
 script_name="$(basename "${0}")"
 
+get_git_branch(){
+    git branch | grep \* | cut -d ' ' -f2
+}
+
 exec_command(){
     "${@}" > "${stdout_file}" 2>"${stderr_file}"
     if [ `find "${stderr_file}" -size +1c | wc -l` -gt 0 ]
@@ -56,9 +60,20 @@ do
 
     cd "${target}"
 
-    exec_command git checkout master \
-        ; exec_command git add -A \
+    current_branch=$(get_git_branch)
+
+    if [ ${current_branch} != "master" ]
+    then
+        exec_command git checkout master
+    fi
+
+    exec_command git add -A \
         && exec_command git commit -am "${comment}"
+
+    if [ ${current_branch} != "master" ]
+    then
+        exec_command git checkout ${current_branch}
+    fi
 
 	cd "${base_dir}"
 
