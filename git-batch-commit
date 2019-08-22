@@ -64,16 +64,12 @@ do
 
     if [ ${current_branch} != "master" ]
     then
-        exec_command git checkout master
+        printf '%s not in master branch.' ${target} >&2
+        exit 1
     fi
 
     exec_command git add -A \
         && exec_command git commit -am "${comment}"
-
-    if [ ${current_branch} != "master" ]
-    then
-        exec_command git checkout ${current_branch}
-    fi
 
 	cd "${base_dir}"
 
