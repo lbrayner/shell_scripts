@@ -1,28 +1,18 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 script_name="$(basename "${0}")"
+
+get_git_branch(){
+    git branch | grep \* | cut -d ' ' -f2
+}
 
 exec_command(){
     "${@}" 2>&1 | tee "${stdouterr_file}"
 }
 
-sil_exec_command(){
-    "${@}" > "${stdout_file}" 2>"${stderr_file}"
-    err_code=${?}
-    if [ ${err_code} -gt 1 ]
-    then
-        printf '\n%s\n\n' "${target}"
-        printf '\n%s\n' '------------------------------------------------'
-        cat "${stderr_file}"
-        return 1
-    fi
-    : > "${stderr_file}"
-    return 0
-}
-
 conf_file="./${script_name}".conf
 
-if [ ! -f "${conf_file}" ]
+if [[ ! -f "${conf_file}" ]]
 then
 	printf '%s not a file.\n' "${conf_file}"
 	exit 1
@@ -37,7 +27,7 @@ cd "${base_dir}"
 for target in ${folders}
 do
 
-    if [ ! -d "${target}" ]
+    if [[ ! -d "${target}" ]]
     then
         printf 'Skipping %s: not a directory.\n' "${target}"
         continue
@@ -55,8 +45,14 @@ do
 
     cd "${target}"
 
-    sil_exec_command git checkout master \
-        ; exec_command git push
+    current_branch=$(get_git_branch)
+
+    if [[ ${current_branch} = "master" ]]
+    then
+        exec_command git push
+    else
+        printf '%s not in master branch.\n' "${target}" >&2
+    fi
 
 	cd "${base_dir}"
 
