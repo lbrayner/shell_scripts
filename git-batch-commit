@@ -61,7 +61,7 @@ do
     cd "${target}"
 
     current_branch=$(get_git_branch)
-    echo "${target}"
+    echo "${target} ${current_branch}"
 
     if [ ${current_branch} != "master" ]
     then
