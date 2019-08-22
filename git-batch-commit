@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 script_name="$(basename "${0}")"
 
@@ -61,7 +61,6 @@ do
     cd "${target}"
 
     current_branch=$(get_git_branch)
-    # echo "${target} ${current_branch}"
 
     if [[ ${current_branch} != "master" ]]
     then
