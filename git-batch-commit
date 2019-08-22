@@ -5,15 +5,15 @@
 script_name="$(basename "${0}")"
 
 exec_command(){
-    "${@}" > "${log_file}" 2>"${git_error}"
-    if [ `find "${git_error}" -size +1c | wc -l` -gt 0 ]
+    "${@}" > "${stdout_file}" 2>"${stderr_file}"
+    if [ `find "${stderr_file}" -size +1c | wc -l` -gt 0 ]
     then
         printf '\n%s\n\n' "${target}"
         printf '\n%s\n' '------------------------------------------------'
-        cat "${git_error}"
+        cat "${stderr_file}"
         return 1
     fi
-    : > "${git_error}"
+    : > "${stderr_file}"
     return 0
 }
 
@@ -27,7 +27,7 @@ fi
 
 . "${conf_file}"
 
-git_error=$(mktemp --suffix="_${script_name}.error")
+stderr_file=$(mktemp --suffix="_${script_name}.error")
 
 if [ -n "$1" ]
 then
@@ -47,16 +47,18 @@ do
         continue
     fi
 
-    log_file="${log_dir}/${script_name}_${target}_${comment}"
+    stdout_file="${log_dir}/${script_name}_${target}_${comment}"
 
-    if ! touch "${log_file}"
+    if ! touch "${stdout_file}"
     then
         exit 1
     fi
 
     cd "${target}"
 
-    exec_command git add -A && exec_command git commit -am "${comment}"
+    exec_command git checkout master \
+        ; exec_command git add -A \
+        && exec_command git commit -am "${comment}"
 
 	cd "${base_dir}"
 
