@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # set -e
 
 print_usage() {
-	printf '\n%s\n' "$(basename $0) [-B] -f FROM_ENC -t TO_ENC FILE"
+	printf '\n%s\n' "$(basename $0) [-B] -f FROM_ENC -t TO_ENC FILE FILE"
 }
 
 from=""
@@ -34,7 +34,7 @@ do
 done
 shift $((OPTIND - 1))
 
-if [ ! ${#} -eq 1 ]
+if [[ -z "${from}" ]] || [[ -z "${to}" ]] || [[ ! ${#} -eq 1 ]]
 then
 	print_usage
 	exit 1
@@ -42,7 +42,7 @@ fi
 
 file="${1}"
 
-if [ ! -f "${file}" ]
+if [[ ! -f "${file}" ]]
 then
     printf '%s does not exist or is not a file.\n' "${file}" 1>&2
     exit 1
@@ -51,7 +51,7 @@ fi
 filename="$(basename "${file}")"
 converted=$(mktemp)
 
-if [ -z "${nobackup}" ]
+if [[ -z "${nobackup}" ]]
 then
     bak_file="$(mktemp --suffix="_${filename}.bak")"
     cp -vf "${file}" "${bak_file}"
