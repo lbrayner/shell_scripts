@@ -19,4 +19,11 @@ do
     fi
 done
 
+# 76 is the number of the UTF-8 encoding (and 44 the comma and 34 the double
+# quote character ASCII value)
+# Source {{{
+# https://ask.libreoffice.org/en/question/144942/how-to-convert-to-csv-with-utf-8-encoding-using-lo5-command-line
+# }}}
 libreoffice --convert-to xlsx --infilter=csv:44,34,76 "${@}"
+
+# vim: foldmethod=marker
