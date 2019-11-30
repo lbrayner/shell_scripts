@@ -1049,4 +1049,4 @@ fi
 
 printf 'Playing %s.\n' "${file}"
 
-${FPLAY_PLAYER} "${file}"
+"${FPLAY_PLAYER}" "${file}"
