@@ -1,12 +1,9 @@
 #!/bin/sh
 
+# set -x
+
 tmpdir="$(dirname "$(mktemp -u)")"
 
-echo "noautocmd argdo \
+nvim -c "autocmd VimEnter * noautocmd windo \
     if expand('%:p') =~# '^\\V' . '${tmpdir}' | \
-        setlocal nomodifiable | \
-    endif | \
-    b1 | \
-    exec 'normal! gg' |  \
-    call histdel('cmd','^noautocmd argdo.*\\<b1\\>') | visual" \
-    |  nvim -e "${@}"
+        setlocal nomodifiable | endif" "${@}"
