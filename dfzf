@@ -36,6 +36,15 @@ then
     exit 1
 fi
 
+list_files(){
+    find "${1}" ! -path \*/.\* -type f \
+        ! -iname \*.o \
+        ! -iname \*.lo \
+        ! -iname \*.exe \
+        ! -iname \*.bin
+}
+
+
 if [[ -n "${1}" ]]
 then
     dir="${1}"
@@ -55,11 +64,10 @@ fi
 
 if [[ ! -f "${cache_file}" ]]
 then
-    if [[ -n "${DFZF_DEFAULT_COMMAND}" ]]
+    if [[ -z "${DFZF_DEFAULT_COMMAND}" ]] || \
+        ! ${DFZF_DEFAULT_COMMAND} "${dir}" > "${cache_file}"
     then
-        ${DFZF_DEFAULT_COMMAND} "${dir}" > "${cache_file}"
-    else
-        find "${dir}" ! -path \*/.\* -type f > "${cache_file}"
+        list_files "${dir}" > "${cache_file}"
     fi
 fi
 
