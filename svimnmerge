@@ -46,7 +46,7 @@ fi
 
 temp_merged="$(mktemp --suffix=.merged)"
 
-diff3 --diff-program=${diff_program} -E -m "${mine}" "${old}" "${his}" \
+diff3 --diff-program=${diff_program} -A -m "${mine}" "${old}" "${his}" \
     > "${temp_merged}"
 
 # querying for a CARRIAGE RETURN
