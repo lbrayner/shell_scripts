@@ -34,62 +34,56 @@ get_extension(){
     echo "${extension_only}"
 }
 
-name_left="${@: -5:1}"
-name_right="${@: -3:1}"
+path_left="${@: -5:1}"
+path_right="${@: -3:1}"
 
-extension_left=`get_extension "${name_left}"`
-extension_right=`get_extension "${name_right}"`
+extension_left=`get_extension "${path_left}"`
+extension_right=`get_extension "${path_right}"`
 
 diff_arguments_size="$((${#} - 6))"
 diff_arguments="${@:1:${diff_arguments_size}}"
+
+diffopt=""
 
 if [[ "${diff_arguments}" = "-u" ]] && [[ "${extension_left}" = "java" ]] \
     && [[ "${extension_right}" = "java" ]]
 then
     printf '\nJava files. Ignoring whitespace.\n'
-    diff_arguments="-u -a -w"
+    diffopt="set diffopt+=iwhite |"
 fi
-
-printf '\nDiff arguments are: "%s".\n' "${diff_arguments}"
-
-file_left="${@: -2:1}"
-file_right="${@: -1}"
-
-name="$(get_file_name "${file_right}")"
-diff_file="$(mktemp --suffix=".${name}.diff")"
-diff ${diff_arguments} "${file_right}" "${file_left}" > "${diff_file}"
-
-if ! is_under_version_control "${file_right}"
-then
-    name_right_no_tabs="$(tabs_for_spaces "${name_right}")"
-    temp_file="$(mktemp -d)/${name_right_no_tabs}"
-    cp -v "${file_right}" "${temp_file}"
-    file_right="${temp_file}"
-fi
-
-printf '\n%s\n%s\n' "${name_left}" "${name_right}"
 
 vim=/usr/bin/vim
 
 if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
 then
     vim="${EDITOR}"
-    printf '\nEditor is: "%s".\n' "${vim}"
 fi
 
-if is_under_version_control "${file_left}"
+printf '\nDiff arguments are: "%s".\n' "${diff_arguments}"
+printf '%s\n%s\n' "${path_left}" "${path_right}"
+printf 'Editor is: "%s".\n\n' "${vim}"
+
+file_left="${@: -2:1}"
+file_right="${@: -1}"
+
+if ! is_under_version_control "${file_left}"
 then
-    "${vim}" "${file_right}" -c 'sil lefta vert diffpa '"${diff_file}"\
-    '| sil! set syntax='"${extension_left}"' | wincmd w '\
-    '| sil! set syntax='"${extension_right}"
-
-    exit 0
+    name_left="$(get_file_name "${path_left}")"
+    name_left_no_tabs="$(tabs_for_spaces "${name_left}")"
+    temp_file="$(mktemp -d)/${name_left_no_tabs}"
+    cp -v "${file_left}" "${temp_file}"
+    file_left="${temp_file}"
 fi
 
-name_left_no_tabs="$(tabs_for_spaces "${name_left}")"
-file_name_left="`get_file_name "${name_left_no_tabs}"`"
+if ! is_under_version_control "${file_right}"
+then
+    name_right="$(get_file_name "${path_right}")"
+    name_right_no_tabs="$(tabs_for_spaces "${path_right}")"
+    temp_file="$(mktemp -d)/${name_right_no_tabs}"
+    cp -v "${file_right}" "${temp_file}"
+    file_right="${temp_file}"
+fi
 
-"${vim}" "${file_right}" -c 'sil lefta vert diffpa '"${diff_file}"\
-'| sil exe "file " . fnameescape("'"${file_name_left}"'") '\
-'| sil! set syntax='"${extension_left}"' | wincmd w '\
-'| sil! set syntax='"${extension_right}"
+"${vim}" -d "${file_left}" "${file_right}"\
+    -c "${diffopt}"'silent! set syntax='"${extension_left}"' | wincmd w '\
+'| silent! set syntax='"${extension_right}"
