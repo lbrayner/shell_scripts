@@ -57,7 +57,7 @@ diff ${diff_arguments} "${file_right}" "${file_left}" > "${diff_file}"
 
 if ! is_under_version_control "${file_right}"
 then
-    temp_file="`mktemp --suffix=".${file_right}"`"
+    temp_file="$(mktemp -d)/${name_right}"
     cp -v "${file_right}" "${temp_file}"
     file_right="${temp_file}"
 fi
