@@ -20,14 +20,6 @@ is_under_version_control(){
     svn ls "${@}" >/dev/null 2>&1
 }
 
-get_file_name(){
-    echo "${1##*/}"
-}
-
-tabs_for_spaces(){
-    echo "${1//	/ }"
-}
-
 get_extension(){
     extension_revision="${1##*.}"
     extension_only="${extension_revision%%	*}"
@@ -67,22 +59,22 @@ printf 'Editor is: "%s".\n\n' "${vim}"
 file_left="${@: -2:1}"
 file_right="${@: -1}"
 
+make_file(){
+    name="${1##*/}"
+    name_no_tabs="${name//	/ }"
+    temp_file="$(mktemp -d)/${name_no_tabs}"
+    cp -f "${2}" "${temp_file}"
+    echo "${temp_file}"
+}
+
 if ! is_under_version_control "${file_left}"
 then
-    name_left="$(get_file_name "${path_left}")"
-    name_left_no_tabs="$(tabs_for_spaces "${name_left}")"
-    temp_file="$(mktemp -d)/${name_left_no_tabs}"
-    cp -v "${file_left}" "${temp_file}"
-    file_left="${temp_file}"
+    file_left="$(make_file "${path_left}" "${file_left}")"
 fi
 
 if ! is_under_version_control "${file_right}"
 then
-    name_right="$(get_file_name "${path_right}")"
-    name_right_no_tabs="$(tabs_for_spaces "${name_right}")"
-    temp_file="$(mktemp -d)/${name_right_no_tabs}"
-    cp -v "${file_right}" "${temp_file}"
-    file_right="${temp_file}"
+    file_right="$(make_file "${path_right}" "${file_right}")"
 fi
 
 "${vim}" -d "${file_left}" "${file_right}"\
