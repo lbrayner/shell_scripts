@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
-echo "${@}"
+# echo "${@}"
 
 config_dir=""
 
@@ -45,10 +45,11 @@ diff_arguments="${@:1:${diff_arguments_size}}"
 
 diffopt=""
 
-if [[ "${diff_arguments}" = "-u" ]] && [[ "${extension_left}" = "java" ]] \
-    && [[ "${extension_right}" = "java" ]]
+if [[ "${diff_arguments}" == "-w" || \
+      "${diff_arguments}" = "-u" && \
+      "${extension_left}" = "java" && "${extension_right}" = "java" ]]
 then
-    printf '\nJava files. Ignoring whitespace.\n'
+    printf '\nIgnoring whitespace.\n'
     diffopt="set diffopt+=iwhite |"
 fi
 
