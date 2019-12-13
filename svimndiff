@@ -26,7 +26,7 @@ is_under_version_control(){
 
 get_extension(){
     extension_revision="${1##*.}"
-    extension_only="${extension_revision%%  *}"
+    extension_only="${extension_revision%%	*}"
     echo "${extension_only}"
 }
 
@@ -75,7 +75,7 @@ fi
 if is_under_version_control "${file_left}"
 then
     "${vim}" "${file_right}" -c 'sil lefta vert diffpa '"${diff_file}"\
-    '| sil! set syntax='"${extension_left}"' | exec "normal! \<c-w>l" '\
+    '| sil! set syntax='"${extension_left}"' | wincmd w '\
     '| sil! set syntax='"${extension_right}"
 
     exit 0
@@ -83,7 +83,7 @@ fi
 
 file_name_left="`get_file_name "${name_left}"`"
 
-"${vim}" "${file_right}" -c 'sil lefta vert diffpa '"${diff_file}"
-' | sil exe "file " . fnameescape("'"${file_name_left}"'") '\
-'| sil! set syntax='"${extension_left}"' | exec "normal! \<c-w>l" '\
+"${vim}" "${file_right}" -c 'sil lefta vert diffpa '"${diff_file}"\
+'| sil exe "file " . fnameescape("'"${file_name_left}"'") '\
+'| sil! set syntax='"${extension_left}"' | wincmd w '\
 '| sil! set syntax='"${extension_right}"
