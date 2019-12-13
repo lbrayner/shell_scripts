@@ -15,6 +15,10 @@ get_file_name(){
     echo "${1##*/}"
 }
 
+tabs_for_spaces(){
+    echo "${1//	/ }"
+}
+
 is_under_version_control(){
     if [[ -n "${config_dir}" ]]
     then
@@ -57,7 +61,8 @@ diff ${diff_arguments} "${file_right}" "${file_left}" > "${diff_file}"
 
 if ! is_under_version_control "${file_right}"
 then
-    temp_file="$(mktemp -d)/${name_right}"
+    name_right_no_tabs="$(tabs_for_spaces "${name_right}")"
+    temp_file="$(mktemp -d)/${name_right_no_tabs}"
     cp -v "${file_right}" "${temp_file}"
     file_right="${temp_file}"
 fi
@@ -81,7 +86,8 @@ then
     exit 0
 fi
 
-file_name_left="`get_file_name "${name_left}"`"
+name_left_no_tabs="$(tabs_for_spaces "${name_left}")"
+file_name_left="`get_file_name "${name_left_no_tabs}"`"
 
 "${vim}" "${file_right}" -c 'sil lefta vert diffpa '"${diff_file}"\
 '| sil exe "file " . fnameescape("'"${file_name_left}"'") '\
