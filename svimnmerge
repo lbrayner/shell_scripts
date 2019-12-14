@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# svn merge tool
+# set -x
 
-# set -e
+# echo "${@}"
 
 print_usage() {
 	printf '\n%s\n' "$(basename $0) OLD HIS MINE MERGED WCPATH"
@@ -38,7 +38,7 @@ extension="${merged##*.}"
 
 if [[ "${extension}" = "java" ]]
 then
-    printf '\nJava file. Ignoring whitespace.\n\n'
+    printf '\nIgnoring whitespace.\n\n'
     diff_program=diffw
     diffopt="| set diffopt+=iwhite"
 fi
@@ -46,7 +46,16 @@ fi
 # diff_program required
 has "${diff_program}"
 
-temp_merged="$(mktemp --suffix=.merged)"
+vim=/usr/bin/vim
+
+if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
+then
+    vim="${EDITOR}"
+    printf 'Editor is: "%s".\n\n' "${vim}"
+fi
+
+name="${merged##*/}"
+temp_merged="$(mktemp -d)/${name}"
 
 diff3 --diff-program=${diff_program} -A -m "${mine}" "${old}" "${his}" \
     > "${temp_merged}"
@@ -64,14 +73,6 @@ then
 fi
 
 cp -fv "${temp_merged}" "${merged}"
-
-vim=/usr/bin/vim
-
-if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
-then
-    vim="${EDITOR}"
-    printf '\nEditor is: "%s".\n' "${vim}"
-fi
 
 # if whithout endif, because bufdo consumes bars
 ${vim} -d "${mine}" "${old}" "${his}" "${merged}" \
