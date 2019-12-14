@@ -14,11 +14,16 @@ then
 	exit 1
 fi
 
-get_extension(){
-    extension_revision="${1##*.}"
-    extension_only="${extension_revision%%  *}"
-    echo "${extension_only}"
+has(){
+    if ! hash "${1}"
+    then
+        printf '%s required.' "${1}" 1>&2
+        exit 1
+    fi
 }
+
+# diff3 required
+has diff3
 
 old="${1}"
 his="${2}"
@@ -29,7 +34,7 @@ wcpath="${5}"
 diff_program=diff
 diffopt=""
 
-extension=`get_extension "${merged}"`
+extension="${merged##*.}"
 
 if [[ "${extension}" = "java" ]]
 then
@@ -38,11 +43,8 @@ then
     diffopt="| set diffopt+=iwhite"
 fi
 
-if ! hash "${diff_program}"
-then
-    printf '%s required.' "${diff_program}" 1>&2
-    exit 1
-fi
+# diff_program required
+has "${diff_program}"
 
 temp_merged="$(mktemp --suffix=.merged)"
 
@@ -61,7 +63,7 @@ then
     unix2dos -f "${temp_merged}"
 fi
 
-cp -f "${temp_merged}" "${merged}" && rm "${temp_merged}"
+cp -fv "${temp_merged}" "${merged}"
 
 vim=/usr/bin/vim
 
@@ -71,9 +73,8 @@ then
     printf '\nEditor is: "%s".\n' "${vim}"
 fi
 
+# if whithout endif, because bufdo consumes bars
 ${vim} -d "${mine}" "${old}" "${his}" "${merged}" \
     -c "exec bufwinnr(4) . 'wincmd w' | wincmd J" \
-    -c "let file_type=&ft | if !empty(file_type) | bufdo let &ft=file_type" \
-    -c "unlet file_type | bufdo set nomodifiable" \
-    -c "b4 ${diffopt}" \
-    -c "silent set modifiable"
+    -c "let merge_ft=&ft | windo silent! let &ft=merge_ft | set nomodifiable" \
+    -c "unlet merge_ft | silent set modifiable ${diffopt}"
