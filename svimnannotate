@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# set -x
+
+case ${1} in
+    blame|praise|annotate|ann) ;;
+    *) echo "First argument must be one of blame, praise, annotate, or ann." 1>&2; exit 1 ;;
+esac
+
+is_under_version_control(){
+    if [[ -n "${config_dir}" ]]
+    then
+        svn "${config_dir}" ls "${@}" >/dev/null 2>&1 \
+            && return 0 || return 1
+    fi
+    svn ls "${@}" >/dev/null 2>&1
+}
+
+node="${@: -1:1}"
+
+if ! $(is_under_version_control "${node}")
+then
+    svn "${@}"
+    exit $?
+fi
+
+name="${node##*/}"
+annotated="$(mktemp -d)/${name}"
+
+svn "${@}" > "${annotated}"
+
+vim=/usr/bin/vim
+
+if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
+then
+    vim="${EDITOR}"
+fi
+
+if [[ ! -f "${node}" ]]
+then
+    ${vim} -c "setlocal nomodifiable" "${annotated}"
+    exit $?
+fi
+
+${vim} -O \
+    -c "setlocal nomodifiable" \
+    -c "windo set cursorbind scrollbind" \
+    "${annotated}" "${node}"
