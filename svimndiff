@@ -14,8 +14,8 @@ fi
 is_under_version_control(){
     if [[ -n "${config_dir}" ]]
     then
-        svn "${config_dir}" ls "${@}" >/dev/null 2>&1
-        return 0
+        svn "${config_dir}" ls "${@}" >/dev/null 2>&1 \
+            && return 0 || return 1
     fi
     svn ls "${@}" >/dev/null 2>&1
 }
