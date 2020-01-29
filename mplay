@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# set -x
+
 if [[ -z "${FPLAY_PLAYER}" ]]
 then
     printf 'FPLAY_PLAYER not set.\n' 1>&2
@@ -1048,5 +1050,13 @@ then
 fi
 
 printf 'Playing %s.\n' "${file}"
+
+FPLAY_PLAYER=$(eval echo "${FPLAY_PLAYER}")
+
+if [[ -n "${FPLAY_BACKGROUND}" ]]
+then
+    "${FPLAY_PLAYER}" "${file}" >/dev/null 2>&1 &
+    exit $?
+fi
 
 "${FPLAY_PLAYER}" "${file}"
