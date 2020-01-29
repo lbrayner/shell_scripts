@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 if [[ -z "${FPLAY_PLAYER}" ]]
 then
@@ -1049,14 +1049,17 @@ then
     exit 1
 fi
 
-printf 'Playing %s.\n' "${file}"
+if [[ "${FPLAY_PLAYER}" == $(eval echo "${FPLAY_PLAYER}") ]]
+then
+    FPLAY_PLAYER=( ${FPLAY_PLAYER} )
+fi
 
-FPLAY_PLAYER=$(eval echo "${FPLAY_PLAYER}")
+printf 'Playing %s.\n' "${file}"
 
 if [[ -n "${FPLAY_BACKGROUND}" ]]
 then
-    "${FPLAY_PLAYER}" "${file}" >/dev/null 2>&1 &
+    "${FPLAY_PLAYER[@]}" "${file}" >/dev/null 2>&1 &
     exit $?
 fi
 
-"${FPLAY_PLAYER}" "${file}"
+"${FPLAY_PLAYER[@]}" "${file}"
