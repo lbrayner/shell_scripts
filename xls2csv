@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") FILE..."
+}
+
+if [[ ${#} -lt 1 ]]
+then
+    print_usage 1>&2
+    exit 1
+fi
+
+for arg in "${@}"
+do
+    if [[ ! -f "${arg}" ]]
+    then
+        printf '%s is not a file.\n' "${arg}" 1>&2
+        exit 1
+    fi
+done
+
+libreoffice --convert-to csv "${@}"
+
+# vim: foldmethod=marker
