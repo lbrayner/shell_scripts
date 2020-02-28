@@ -4,6 +4,6 @@
 
 tmpdir="$(dirname "$(mktemp -u)")"
 
-nvim -c "autocmd VimEnter * noautocmd windo \
+nvim --cmd "autocmd VimEnter * noautocmd windo \
     if expand('%:p') =~# '^\\V' . '${tmpdir}' | \
         setlocal nomodifiable | endif" "${@}"
