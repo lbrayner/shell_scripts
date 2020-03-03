@@ -14,6 +14,12 @@ vim_bundle(){
         -type f
 }
 
+emacs_bundle(){
+    find "${1}" ! -path \*/.\* ! -path ./elpa/\* \
+        ! -path ./github/\* ! -path ./auto-save-list/\* ! -name abbrev_defs \
+        ! -name srecode-map.el ! -name bookmarks -type f
+}
+
 eclipse_project(){
     find "${1}" ! -path \*/.\* ! -path ./classes/\* ! -path ./build/\* \
         ! -path ./dumps/\* ! -path ./bin/\* ! -path ./test-classes/\* \
@@ -52,6 +58,12 @@ fi
 if [[ -f ./init.vim ]]
 then
     vim_bundle "${dir}"
+    exit 0
+fi
+
+if [[ -f ./init.el ]]
+then
+    emacs_bundle "${dir}"
     exit 0
 fi
 
