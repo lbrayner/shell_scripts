@@ -32,7 +32,7 @@ then
 fi
 
 selectfile(){
-    list_video_files "${dir}" | sort -nr | sed -E 's/^[0-9]+\.[0-9]+ //' | fzf
+    list_video_files | fzf
 }
 
 file="`selectfile`"
