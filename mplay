@@ -32,7 +32,7 @@ then
 fi
 
 selectfile(){
-    list_video_files | fzf
+    list_video_files "${dir}" | fzf
 }
 
 file="`selectfile`"
