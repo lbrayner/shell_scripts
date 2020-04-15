@@ -78,4 +78,5 @@ cp -fv "${temp_merged}" "${merged}"
 ${vim} -d "${mine}" "${old}" "${his}" "${merged}" \
     -c "exec bufwinnr(4) . 'wincmd w' | wincmd J" \
     -c "let merge_syntax=&syn | windo silent! let &syn=merge_syntax | set nomodifiable" \
-    -c "unlet merge_syntax | silent set modifiable ${diffopt}"
+    -c "unlet merge_syntax | silent set modifiable ${diffopt}" \
+    -c "diffoff | setlocal scrollbind cursorbind"
