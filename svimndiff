@@ -65,7 +65,7 @@ printf 'Editor is: "%s".\n\n' "${vim}"
 file_left="${@: -2:1}"
 file_right="${@: -1}"
 
-make_file(){
+make_temp_copy(){
     name="${1##*/}"
     name_no_tabs="${name//	/ }"
     temp_file="$(mktemp -d)/${name_no_tabs}"
@@ -75,12 +75,12 @@ make_file(){
 
 if ! is_under_version_control "${file_left}"
 then
-    file_left="$(make_file "${path_left}" "${file_left}")"
+    file_left="$(make_temp_copy "${path_left}" "${file_left}")"
 fi
 
 if ! is_under_version_control "${file_right}"
 then
-    file_right="$(make_file "${path_right}" "${file_right}")"
+    file_right="$(make_temp_copy "${path_right}" "${file_right}")"
 fi
 
 "${vim}" -d "${file_left}" "${file_right}"\
