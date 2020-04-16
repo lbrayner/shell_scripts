@@ -29,6 +29,12 @@ get_extension(){
 path_left="${@: -5:1}"
 path_right="${@: -3:1}"
 
+if [[ "${path_left}" == *"(nonexistent)"* ]] || [[ "${path_right}" == *"(nonexistent)"* ]]
+then
+    echo "One of the paths is nonexistent. Skipping." 1>&2
+    exit 1
+fi
+
 extension_left=`get_extension "${path_left}"`
 extension_right=`get_extension "${path_right}"`
 
