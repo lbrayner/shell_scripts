@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 print_usage() {
 	printf '\n%s\n' "$(basename "${0}") [-d] [-h] FILE..."
