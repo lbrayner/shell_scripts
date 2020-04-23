@@ -74,7 +74,6 @@ fi
 
 cp -fv "${temp_merged}" "${merged}"
 
-# if whithout endif, because windo consumes bars
 ${vim} -d "${mine}" "${old}" "${his}" "${merged}" \
     -c "exec bufwinnr(4) . 'wincmd w' | wincmd J" \
     -c "let merge_syntax=&syn | windo silent! let &syn=merge_syntax | set nomodifiable" \
