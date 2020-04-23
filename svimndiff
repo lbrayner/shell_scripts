@@ -44,8 +44,8 @@ diff_arguments="${@:1:${diff_arguments_size}}"
 diffopt=""
 
 if [[ "${diff_arguments}" == "-w" || \
-      "${diff_arguments}" = "-u" && \
-      "${extension_left}" = "java" && "${extension_right}" = "java" ]]
+      "${diff_arguments}" == "-u" && \
+      "${extension_left}" == "java" && "${extension_right}" == "java" ]]
 then
     printf '\nIgnoring whitespace.\n'
     diffopt="set diffopt+=iwhite |"
