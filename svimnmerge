@@ -63,11 +63,7 @@ diff3 --diff-program=${diff_program} -A -m "${mine}" "${old}" "${his}" \
 # querying for a CARRIAGE RETURN
 if grep -q $'\x0d' "${temp_merged}"
 then
-    if ! hash unix2dos
-    then
-        printf 'File contains carriage returns: unix2dos required.\n' 1>&2
-        exit 1
-    fi
+    has unix2dos
 
     unix2dos -f "${temp_merged}"
 fi
