@@ -10,7 +10,7 @@ get_git_branch(){
 
 exec_command(){
     "${@}" > "${stdout_file}" 2>"${stderr_file}"
-    if [[ `find "${stderr_file}" -size +1c | wc -l` -gt 0 ]]
+    if [[ $(find "${stderr_file}" -size +1c | wc -l) -gt 0 ]]
     then
         printf '\n%s\n\n' "${target}"
         printf '\n%s\n' '------------------------------------------------'
@@ -37,7 +37,7 @@ if [[ -n "$1" ]]
 then
     comment="${1}"
 else
-    comment=`date +'%Y%m%d%H%M%S'`
+    comment=$(date +'%Y%m%d%H%M%S')
 fi
 
 cd "${base_dir}"
