@@ -6,10 +6,6 @@ get_git_branch(){
     git branch | grep \* | cut -d ' ' -f2
 }
 
-exec_command(){
-    "${@}" 2>&1 | tee "${stdouterr_file}"
-}
-
 conf_file="./${script_name}".conf
 
 if [[ ! -f "${conf_file}" ]]
@@ -19,8 +15,6 @@ then
 fi
 
 . "${conf_file}"
-
-stderr_file=$(mktemp --suffix="_${script_name}.error")
 
 cd "${base_dir}"
 
@@ -35,10 +29,9 @@ do
 
     printf '\n%s\n\n' "${target}"
 
-    stdout_file="${log_dir}/${script_name}_${target}_${comment}"
-    stdouterr_file="${log_dir}/${script_name}_${target}_`date +'%Y%m%d%H%M%S'`"
+    log_file="${log_dir}/${script_name}_${target}_`date +'%Y%m%d%H%M%S'`"
 
-    if ! touch "${stdouterr_file}"
+    if ! touch "${log_file}"
     then
         exit 1
     fi
@@ -49,7 +42,7 @@ do
 
     if [[ ${current_branch} = "master" ]]
     then
-        exec_command git push
+        git push 2>&1 | tee "${log_file}"
     else
         printf '\033[0;31m%s not in master branch.\n\033[0m' "${target}" >&2
     fi
