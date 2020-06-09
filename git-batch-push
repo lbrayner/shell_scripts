@@ -51,7 +51,7 @@ do
     then
         exec_command git push
     else
-        printf '%s not in master branch.\n' "${target}" >&2
+        printf '\033[0;31m%s not in master branch.\n\033[0m' "${target}" >&2
     fi
 
 	cd "${base_dir}"
