@@ -28,4 +28,4 @@ then
     cd "${path}"
 fi
 
-/usr/local/bin/st "${@}"
+/usr/local/bin/st "${@}" >/dev/null 2>&1 &
