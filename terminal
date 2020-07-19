@@ -1,0 +1,31 @@
+#!/bin/sh
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") [-c PATH] [ARGS...]"
+}
+
+path=""
+while getopts ":c:h" opt
+do
+    case ${opt} in
+        c)
+            path="${OPTARG}"
+            ;;
+        h)
+            print_usage
+            exit 0
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [ -n "${path}" ]
+then
+    cd "${path}"
+fi
+
+/usr/local/bin/st "${@}"
