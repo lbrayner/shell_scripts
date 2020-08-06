@@ -30,13 +30,13 @@ then
 fi
 
 # Read Password
-echo -n Password: 
+echo -n "Password: "
 read -s password1
 echo
 
 if [[ -z "${decrypt}" ]]
 then
-    echo -n Confirm password: 
+    echo -n "Confirm password: "
     read -s password2
     echo
     if [[ ! "${password1}" = "${password2}" ]]
