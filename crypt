@@ -16,7 +16,7 @@ do
             exit 0
             ;;
         \?)
-            echo "Invalid option: -$OPTARG" >&2
+            echo "Invalid option: -$OPTARG" 1>&2
             exit 1
             ;;
     esac
@@ -32,16 +32,16 @@ fi
 # Read Password
 echo -n "Password: "
 read -s password1
-echo
+printf "\n"
 
 if [[ -z "${decrypt}" ]]
 then
     echo -n "Confirm password: "
     read -s password2
-    echo
+    printf "\n"
     if [[ ! "${password1}" = "${password2}" ]]
     then
-        echo 'Passwords do not match!' 1>&2
+        echo "Passwords do not match!" 1>&2
         exit 1
     fi
 fi
@@ -51,7 +51,7 @@ encrypt(){
     output="${input}".openssl.aes
     if [[ -f "${output}" ]]
     then
-        printf '%s exists. Skipping.\n' "${output}" 1>&2
+        echo "${output} exists. Skipping." 1>&2
         return 1
     fi
     openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
@@ -67,12 +67,12 @@ decrypt(){
     output="${input%.openssl.aes}"
     if [[ "${input}" = "${output}" ]]
     then
-        printf 'Files must end in << .openssl.aes >>.\n' 1>&2
+        echo "Files must end in << .openssl.aes >>." 1>&2
         return 1
     fi
     if [[ -f "${output}" ]]
     then
-        printf '%s exists. Skipping.\n' "${output}" 1>&2
+        echo "${output} exists. Skipping." 1>&2
         return 1
     fi
     openssl aes-256-cbc -a -pbkdf2 -d -in "${input}" -out "${output}" \
