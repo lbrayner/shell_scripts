@@ -3,9 +3,20 @@
 # set -x
 
 case ${1} in
-    blame|praise|annotate|ann) ;;
-    *) echo "First argument must be one of blame, praise, annotate, or ann." 1>&2; exit 1 ;;
+    blame|praise|annotate|ann)
+        ;;
+    *)
+        echo "First argument must be one of blame, praise, annotate, or ann." 1>&2
+        exit 1
+        ;;
 esac
+
+config_dir=""
+
+if [[ -n "${SVN_CONFIG_DIR}" ]]
+then
+    config_dir=--config-dir="${SVN_CONFIG_DIR}"
+fi
 
 is_under_version_control(){
     if [[ -n "${config_dir}" ]]
@@ -18,7 +29,7 @@ is_under_version_control(){
 
 node="${@: -1:1}"
 
-if ! $(is_under_version_control "${node}")
+if ! is_under_version_control "${node}"
 then
     svn "${@}"
     exit $?
