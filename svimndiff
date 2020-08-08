@@ -7,7 +7,7 @@ config_dir=""
 
 if [[ -n "${SVN_CONFIG_DIR}" ]]
 then
-    config_dir="--config-dir="${SVN_CONFIG_DIR}""
+    config_dir=--config-dir="${SVN_CONFIG_DIR}"
 fi
 
 is_under_version_control(){
