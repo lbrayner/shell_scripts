@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # set -x
-
 # echo "${@}"
 
 print_usage() {
@@ -17,7 +16,7 @@ fi
 has(){
     if ! hash "${1}"
     then
-        printf '%s required.' "${1}" 1>&2
+        echo "${1} required." 1>&2
         exit 1
     fi
 }
@@ -31,21 +30,6 @@ mine="${3}"
 merged="${4}"
 wcpath="${5}"
 
-diff_program=diff
-diffopt=""
-
-extension="${merged##*.}"
-
-if [[ "${extension}" = "java" ]]
-then
-    printf '\nIgnoring whitespace.\n\n'
-    diff_program=diffw
-    diffopt="| set diffopt+=iwhite"
-fi
-
-# diff_program required
-has "${diff_program}"
-
 vim=/usr/bin/vim
 
 if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
@@ -54,18 +38,33 @@ then
     printf 'Editor is: "%s".\n\n' "${vim}"
 fi
 
+extension="${merged##*.}"
+diff_program=diff
+diffw=""
+diffopt=""
+
+if [[ "${extension}" = "java" ]]
+then
+    printf '\nIgnoring whitespace.\n\n'
+    diffw="$(mktemp)"
+    chmod +x "${diffw}"
+    echo 'diff -w "${@}"' > "${diffw}"
+    diff_program="${diffw}"
+    diffopt="| set diffopt+=iwhite"
+fi
+
 name="${merged##*/}"
 temp_merged="$(mktemp -d)/${name}"
 
 diff3 --diff-program=${diff_program} -A -m "${mine}" "${old}" "${his}" \
     > "${temp_merged}"
 
+[[ -n "${diffw}" ]] && rm "${diffw}"
+
 # querying for a CARRIAGE RETURN
 if grep -q $'\x0d' "${temp_merged}"
 then
-    has unix2dos
-
-    unix2dos -f "${temp_merged}"
+    has unix2dos && unix2dos -f "${temp_merged}"
 fi
 
 cp -fv "${temp_merged}" "${merged}"
