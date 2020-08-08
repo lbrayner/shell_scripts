@@ -56,7 +56,7 @@ fi
 name="${merged##*/}"
 temp_merged="$(mktemp -d)/${name}"
 
-diff3 --diff-program=${diff_program} -A -m "${mine}" "${old}" "${his}" \
+diff3 --diff-program="${diff_program}" -A -m "${mine}" "${old}" "${his}" \
     > "${temp_merged}"
 
 [[ -n "${diffw}" ]] && rm "${diffw}"
