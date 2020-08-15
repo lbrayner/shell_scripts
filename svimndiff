@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 # echo "${@}"
 
 config_dir=""
@@ -52,7 +52,7 @@ fi
 
 vim=/usr/bin/vim
 
-if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
+if [[ "${EDITOR}" == *"vim" ]]
 then
     vim="${EDITOR}"
 fi
