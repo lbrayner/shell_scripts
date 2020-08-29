@@ -6,6 +6,11 @@ print_usage() {
 	printf '\n%s\n' "$(basename "${0}") [DIR]"
 }
 
+dotfiles(){
+    find "${1}" ! -path \*/.\* ! -path ./mpv/dot-config/mpv/watch_later/\* \
+        -type f
+}
+
 vim_bundle(){
     find "${1}" ! -path \*/.\* ! -path ./pack/\* \
         ! -path ./eclim/\* ! -path ./swap/\* ! -path ./backup/\* \
@@ -53,6 +58,12 @@ fi
 if [[ -n "${1}" ]]
 then
     dir="${1}"
+fi
+
+if [[ -d ./mpv ]]
+then
+    dotfiles "${dir}"
+    exit 0
 fi
 
 if [[ -f ./init.vim ]]
