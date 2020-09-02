@@ -44,7 +44,7 @@ do
     then
         git push 2>&1 | tee "${log_file}"
     else
-        printf '\033[0;31m%s not in master branch.\n\033[0m' "${target}" >&2
+        printf '\033[0;31m%s not on master branch.\n\033[0m' "${target}" >&2
     fi
 
 	cd "${base_dir}"
