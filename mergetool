@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# set -x
+# echo "${@}"
+
+if [[ -z "${BASE}" || -z "${LOCAL}" || -z "${REMOTE}" || -z "${MERGED}" ]]
+then
+    echo '$BASE, $LOCAL, $REMOTE & $MERGED must be set.' 1>&2
+    exit 1
+fi
+
+exit 1
