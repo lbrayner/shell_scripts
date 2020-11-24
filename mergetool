@@ -3,10 +3,29 @@
 # set -x
 # echo "${@}"
 
-if [[ -z "${BASE}" || -z "${LOCAL}" || -z "${REMOTE}" || -z "${MERGED}" ]]
+print_usage() {
+    echo -e "\n$(basename $0) OLD HIS MINE MERGED"
+}
+
+if [[ ! ${#} -eq 4 ]]
 then
-    echo '$BASE, $LOCAL, $REMOTE & $MERGED must be set.' 1>&2
-    exit 1
+	print_usage 1>&2
+	exit 1
 fi
 
-exit 1
+old="${1}"
+his="${2}"
+mine="${3}"
+merged="${4}"
+
+vim=/usr/bin/vim
+
+if [[ "${EDITOR}" != "${EDITOR%%vim}" ]]
+then
+    vim="${EDITOR}"
+    echo -e "Editor is: ${vim}\n"
+fi
+
+${vim} -d "${mine}" "${old}" "${his}" "${merged}" \
+    -c "exec bufwinnr(4) . 'wincmd w' | wincmd J" \
+    -c "silent set modifiable | diffoff | setlocal scrollbind cursorbind"
