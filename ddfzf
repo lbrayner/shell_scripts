@@ -40,6 +40,10 @@ gradle_project(){
     eclipse_project "${1}"
 }
 
+ant_project(){
+    eclipse_project "${1}"
+}
+
 wildfly_home(){
     find "${1}" ! -path \*/.\* ! -path ./standalone/data/\* \
         ! -path ./standalone/standalone_xml_history/\* \
@@ -63,43 +67,49 @@ fi
 if [[ -d ./mpv ]]
 then
     dotfiles "${dir}"
-    exit 0
+    exit
 fi
 
 if [[ -f ./init.vim ]]
 then
     vim_bundle "${dir}"
-    exit 0
+    exit
 fi
 
 if [[ -f ./init.el ]]
 then
     emacs_bundle "${dir}"
-    exit 0
+    exit
 fi
 
 if [[ -f ./.project ]]
 then
     eclipse_project "${dir}"
-    exit 0
+    exit
 fi
 
 if [[ -f ./pom.xml ]]
 then
     maven_project "${dir}"
-    exit 0
+    exit
+fi
+
+if [[ -f ./build.xml ]]
+then
+    ant_project "${dir}"
+    exit
 fi
 
 if ls *.gradle >/dev/null 2>&1
 then
     gradle_project "${dir}"
-    exit 0
+    exit
 fi
 
 if [[ -f ./standalone/configuration/standalone.xml ]]
 then
     wildfly_home "${dir}"
-    exit 0
+    exit
 fi
 
 exit 1
