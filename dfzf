@@ -8,13 +8,12 @@ print_usage() {
 
 clear_cache=""
 cache_dir=~/.cache/fzf_cache
-dir="."
 while getopts ":hCc:" opt
 do
     case ${opt} in
         h)
             print_usage
-            exit 0
+            exit
             ;;
         C)
             clear_cache="true"
@@ -47,20 +46,14 @@ list_files(){
         ! -iname \*.bin
 }
 
+dir="."
+[[ -n "${1}" ]] && dir="${1}"
 
-if [[ -n "${1}" ]]
-then
-    dir="${1}"
-fi
+[[ ! -d "${cache_dir}"  ]] && mkdir -p "${cache_dir}"
 
-if [[ ! -d "${cache_dir}"  ]]
-then
-    mkdir -p "${cache_dir}"
-fi
+cache_file="${cache_dir}/$(printf $(readlink -f "${dir}") | base64)"
 
-cache_file="${cache_dir}/`printf $(readlink -f "${dir}") | base64`"
-
-if [[ -n "${clear_cache}" ]] && [[ -f "${cache_file}" ]]
+if [[ -n "${clear_cache}" && -f "${cache_file}" ]]
 then
     rm "${cache_file}"
 fi
