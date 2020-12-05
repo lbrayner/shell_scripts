@@ -86,7 +86,7 @@ then
     do
         encrypt "${arg}"
     done
-    exit 0
+    exit
 fi
 
 for arg in "${@}"
