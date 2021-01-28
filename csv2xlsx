@@ -3,7 +3,9 @@
 # set -x
 
 print_usage() {
-	printf '\n%s\n' "$(basename "${0}") FILE..."
+	printf "Converts comma-separated CSV files to XLSX
+
+$(basename "${0}") FILE...\n"
 }
 
 if [[ ${#} -lt 1 ]]
