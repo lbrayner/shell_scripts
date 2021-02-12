@@ -80,16 +80,16 @@ decrypt(){
     fi
 }
 
-if [[ -z "${decrypt}" ]]
+if [[ -n "${decrypt}" ]]
 then
     for arg in "${@}"
     do
-        encrypt "${arg}"
+        decrypt "${arg}"
     done
     exit
 fi
 
 for arg in "${@}"
 do
-    decrypt "${arg}"
+    encrypt "${arg}"
 done
