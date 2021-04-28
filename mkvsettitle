@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+print_usage() {
+	printf '\n%s\n' "$(basename "${0}") FILE"
+}
+
+if [[ ! ${#} -eq 1 ]]
+then
+    print_usage 1>&2
+    exit 1
+fi
+
+file="${1}"
+
+title="$(xmllint --xpath "string(/Tags/Tag[Targets/TargetTypeValue='30']/"\
+"Simple[Name='TITLE']/String)" <( mkvextract tags "${file}" ))"
+
+mkvpropedit "${file}" --set "title=${title}"
