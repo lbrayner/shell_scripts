@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 print_usage() {
-	printf '\n%s\n' "$(basename "${0}") FILE"
+    printf '\n%s\n' "$(basename "${0}") FILE"
 }
 
 if [[ ! ${#} -eq 1 ]]
