@@ -46,11 +46,6 @@ fi
 encrypt(){
     input="${1}"
     output="${input}".openssl.aes
-    if [[ -f "${output}" ]]
-    then
-        echo "${output} exists. Skipping." 1>&2
-        return 1
-    fi
     openssl aes-256-cbc -a -pbkdf2 -salt -in "${input}" -out "${output}" \
         -pass file:<( echo -n "${password1}" )
     if [[ ! ${?} -eq 0 ]]
@@ -65,11 +60,6 @@ decrypt(){
     if [[ "${input}" = "${output}" ]]
     then
         echo "Files must end in << .openssl.aes >>." 1>&2
-        return 1
-    fi
-    if [[ -f "${output}" ]]
-    then
-        echo "${output} exists. Skipping." 1>&2
         return 1
     fi
     openssl aes-256-cbc -a -pbkdf2 -d -in "${input}" -out "${output}" \
