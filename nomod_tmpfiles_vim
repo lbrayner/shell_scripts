@@ -2,6 +2,19 @@
 
 # set -x
 
+case "${EDITOR}" in
+    *vim)
+        ;;
+    "")
+        echo '$EDITOR not set.' >&2
+        exit 1
+        ;;
+    \?)
+        echo "Editor '${EDITOR}' not supported." >&2
+        exit 1
+        ;;
+esac
+
 for arg in "${@}"
 do
     if [ "${arg}" = "/dev/null" ]
@@ -13,6 +26,6 @@ done
 
 tmpdir="$(dirname "$(mktemp -u)")"
 
-vim --cmd "autocmd VimEnter * noautocmd windo \
+"${EDITOR}" --cmd "autocmd VimEnter * noautocmd windo \
     if expand('%:p') =~# '^\\V' . '${tmpdir}' | \
         setlocal nomodifiable | endif" "${@}"
