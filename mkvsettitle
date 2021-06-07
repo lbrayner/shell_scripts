@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 print_usage() {
     printf '\n%s\n' "$(basename "${0}") FILE"
 }
