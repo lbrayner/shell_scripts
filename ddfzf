@@ -52,7 +52,7 @@ wildfly_home(){
 }
 
 node_project(){
-    find "${1}" ! -path \*/.\* ! -path ./node_modules/\* \
+    find "${1}" ! -path \*/.\* ! -path ./node_modules/\* ! -path ./compiled/\* \
         -type f
 }
 
