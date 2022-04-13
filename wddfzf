@@ -19,6 +19,6 @@ fi
 
 find "${dir}" ! -path \*/.\* ! -path \*/classes/\* ! -path \*/build/\* \
     ! -path \*/dumps/\* ! -path \*/bin/\* ! -path \*/test-classes/\* \
-    ! -path \*/target/\* ! -iname \*.class ! -iname \*.jasper \
-    ! -path \*/node_modules/\* \
+    ! -path \*/target/\* ! -path \*/node_modules/\* ! -path \*/compiled/\* \
+    ! -iname \*.class ! -iname \*.jasper \
     -type f
