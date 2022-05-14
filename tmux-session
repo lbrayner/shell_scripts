@@ -6,7 +6,7 @@ set -e
 
 dump() {
   local d=$'\t'
-  tmux list-windows -a -F "#S${d}#W${d}#{pane_current_path}"
+  tmux list-windows -a -F "#S${d}#W${d}#{automatic-rename}${d}#{pane_current_path}"
 }
 
 save() {
@@ -35,13 +35,16 @@ restore() {
   local count=0
   local dimensions="$(terminal_size)"
 
-  while IFS=$'\t' read session_name window_name dir; do
+  while IFS=$'\t' read session_name window_name automatic_rename dir; do
     if [[ -d "$dir" && $window_name != "log" && $window_name != "man" ]]; then
       if session_exists "$session_name"; then
         add_window "$session_name" "$window_name" "$dir"
       else
         new_session "$session_name" "$window_name" "$dir" "$dimensions"
         count=$(( count + 1 ))
+      fi
+      if [[ ${automatic_rename} -gt 0 ]]; then
+          tmux setw -t "${session_name}:${window_name}" automatic-rename on
       fi
     fi
   done < ~/.tmux-session
