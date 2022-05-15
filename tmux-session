@@ -33,7 +33,7 @@ new_session() {
 
 restore() {
   tmux start-server
-  local session_number=-1
+  local count=0
   local window_number
   local dimensions="$(terminal_size)"
 
@@ -44,16 +44,15 @@ restore() {
         window_number=$(( window_number + 1 ))
       else
         new_session "$session_name" "$window_name" "$dir" "$dimensions"
-        session_number=$(( session_number + 1 ))
+        count=$(( count + 1 ))
         window_number=0
       fi
       if [[ ${automatic_rename} -gt 0 ]]; then
-          tmux setw -t "${session_number}:${window_number}" automatic-rename on
+          tmux setw -t "${window_number}" automatic-rename on
       fi
     fi
   done < ~/.tmux-session
 
-  local count=$(( session_number + 1 ))
   echo "restored $count session(s)"
 }
 
