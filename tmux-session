@@ -3,7 +3,7 @@
 #
 # TODO: persist and restore the state & position of panes.
 set -e
-set -x
+# set -x
 
 dump() {
   local d=$'\t'
