@@ -3,6 +3,7 @@
 #
 # TODO: persist and restore the state & position of panes.
 set -e
+set -x
 
 dump() {
   local d=$'\t'
@@ -33,23 +34,26 @@ new_session() {
 restore() {
   tmux start-server
   local count=0
+  local window_number
   local dimensions="$(terminal_size)"
 
   while IFS=$'\t' read session_name window_name automatic_rename dir; do
     if [[ -d "$dir" && $window_name != "log" && $window_name != "man" ]]; then
       if session_exists "$session_name"; then
         add_window "$session_name" "$window_name" "$dir"
+        window_number=$(( window_number + 1 ))
       else
         new_session "$session_name" "$window_name" "$dir" "$dimensions"
         count=$(( count + 1 ))
+        window_number=0
       fi
       if [[ ${automatic_rename} -gt 0 ]]; then
-          tmux setw -t "${session_name}:${window_name}" automatic-rename on
+          tmux setw -t "${session_name}:${window_number}" automatic-rename on
       fi
     fi
   done < ~/.tmux-session
 
-  echo "restored $count sessions"
+  echo "restored $count session(s)"
 }
 
 case "$1" in
