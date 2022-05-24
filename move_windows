@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Andrzej Piszczek's script to move windows to another monitor
 # https://askubuntu.com/a/1086024
@@ -16,34 +16,40 @@ do
             ;;
         \?)
             echo "Invalid option: -${OPTARG}" 1>&2
-            print_usage 1>&2
+            print_usage >&2
             exit 1
             ;;
     esac
 done
 shift $((OPTIND - 1))
 
-
-if [ ! -z "$1" ] || [ -z "$2" ]; then
-    command=$(wmctrl -l | grep "$1" | cut -d" " -f1)
-
-    if [ ! -z "$command" ]; then
-        position=$(xrandr | grep "^$2" | cut -d"+" -f2)
-
-        if [ ! -z "$position" ]; then
-            for window in $command; do
-               wmctrl -ir $window -b remove,maximized_vert
-               wmctrl -ir $window -b remove,maximized_horz
-               wmctrl -ir $window -e 0,$position,0,1920,1080
-               wmctrl -ir $window -b add,maximized_vert
-               wmctrl -ir $window -b add,maximized_horz
-            done
-        else
-            echo -e "not found monitor with given name"
-        fi
-    else
-        echo -e "not found windows with given name"
-    fi
-else
-    echo -e "specify window and monitor name;\nmove.sh window-name monitor-name"
+if [[ ! ${#} -eq 2 ]]
+then
+    print_usage >&2
+    exit 1
 fi
+
+windows=$(wmctrl -l | grep "${1}" | cut -d" " -f1)
+
+if [[ -z "${windows}" ]]
+then
+    echo "No windows found!" >&2
+    exit 1
+fi
+
+monitor=$(xrandr | grep "^${2}" | cut -d"+" -f2)
+
+if [[ -z "${monitor}" ]]
+then
+    echo "No such monitor!" >&2
+    exit 1
+fi
+
+for window in ${windows}
+do
+    wmctrl -ir ${window} -b remove,maximized_vert
+    wmctrl -ir ${window} -b remove,maximized_horz
+    wmctrl -ir ${window} -e 0,${monitor},0,1920,1080
+    wmctrl -ir ${window} -b add,maximized_vert
+    wmctrl -ir ${window} -b add,maximized_horz
+done
