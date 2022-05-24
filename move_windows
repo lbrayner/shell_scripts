@@ -3,6 +3,27 @@
 # Andrzej Piszczek's script to move windows to another monitor
 # https://askubuntu.com/a/1086024
 
+print_usage() {
+	echo "$(basename "${0}") [-h] TITLE MONITOR"
+}
+
+while getopts :h opt
+do
+    case ${opt} in
+        h)
+            print_usage
+            exit
+            ;;
+        \?)
+            echo "Invalid option: -${OPTARG}" 1>&2
+            print_usage 1>&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+
 if [ ! -z "$1" ] || [ -z "$2" ]; then
     command=$(wmctrl -l | grep "$1" | cut -d" " -f1)
 
