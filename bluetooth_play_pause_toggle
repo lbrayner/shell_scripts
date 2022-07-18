@@ -9,7 +9,9 @@ print_usage() {
                             On Linux, it's probably probably hci0, but you can list
                             them with 'hciconfig -a'.
 
-    -m MAC_ADDRESS:      the MAC address of the external paired-up device"
+    -m MAC_ADDRESS:      the MAC address of the external paired-up device
+
+                            It can be in on of these forms: 00:00:00:00:00:00 or 00_00_00_00_00_00."
 }
 
 device=
@@ -49,6 +51,7 @@ bt_command=Play
 
 echo ${bt_command} > "${bt_command_file}"
 
+# Replace all colons with underscores
 mac_address=${mac_address//:/_}
 dbus-send --print-reply --system --dest=org.bluez \
     /org/bluez/hci0/dev_${mac_address} org.bluez.MediaControl1.${bt_command}
