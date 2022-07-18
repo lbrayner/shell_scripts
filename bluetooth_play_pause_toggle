@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# set -x
+
+print_usage() {
+    echo -e "\nusage: $(basename $0) -d BLUETOOTH_DEVICE [-h] -m MAC_ADDRESS\n
+    -d BLUETOOTH_DEVICE: the name of the Bluetooth device
+
+                            On Linux, it's probably probably hci0, but you can list
+                            them with 'hciconfig -a'.
+
+    -m MAC_ADDRESS:      the MAC address of the external paired-up device"
+}
+
+device=
+mac_address=
+while getopts :d:hm: opt
+do
+    case ${opt} in
+        d)
+            device=${OPTARG}
+            ;;
+        h)
+            print_usage
+            exit
+            ;;
+        m)
+            mac_address=${OPTARG}
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" 1>&2
+            print_usage 1>&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+cache_dir=~/.cache
+
+[[ ! -d "${cache_dir}"  ]] && mkdir -p "${cache_dir}"
+
+bt_command_file="${cache_dir}/bluetooth_play_pause_toggle"
+bt_command=Play
+
+[[ -e ${bt_command_file} ]] && bt_command=$(cat "${bt_command_file}")
+
+[[ ${bt_command} == "Play" ]] && bt_command=Pause || bt_command=Play
+
+echo ${bt_command} > "${bt_command_file}"
+
+mac_address=${mac_address//:/_}
+dbus-send --print-reply --system --dest=org.bluez \
+    /org/bluez/hci0/dev_${mac_address} org.bluez.MediaControl1.${bt_command}
