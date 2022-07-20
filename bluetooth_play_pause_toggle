@@ -38,6 +38,8 @@ do
 done
 shift $((OPTIND - 1))
 
+[[ -z "${device}" || -z "${mac_address}" ]] && print_usage >&2 && exit 1
+
 cache_dir=~/.cache
 
 [[ ! -d "${cache_dir}"  ]] && mkdir -p "${cache_dir}"
@@ -54,4 +56,4 @@ echo ${bt_command} > "${bt_command_file}"
 # Replace all colons with underscores
 mac_address=${mac_address//:/_}
 dbus-send --print-reply --system --dest=org.bluez \
-    /org/bluez/hci0/dev_${mac_address} org.bluez.MediaControl1.${bt_command}
+    /org/bluez/${device}/dev_${mac_address} org.bluez.MediaControl1.${bt_command}
