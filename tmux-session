@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Restore tmux session after reboot
+# https://superuser.com/a/615716
+
 # Save and restore the state of tmux sessions and windows.
 #
 # TODO: persist and restore the state & position of panes.
