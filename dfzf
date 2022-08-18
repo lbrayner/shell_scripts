@@ -37,7 +37,7 @@ fi
 
 list_files(){
     # https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405
-    hash ag &>/dev/null && ag -g "" "${1}" && return
+    hash rg &>/dev/null && rg --files "${1}" && return
     find "${1}" ! -path \*/.\* -type f \
         ! -iname \*.o \
         ! -iname \*.lo \
