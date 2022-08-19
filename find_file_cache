@@ -7,7 +7,7 @@ print_usage() {
 }
 
 clear_cache=""
-cache_dir=~/.cache/fzf_cache
+cache_dir=~/.cache/find_file_cache
 while getopts ":hCc:" opt
 do
     case ${opt} in
