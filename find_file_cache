@@ -66,7 +66,7 @@ then
     if [[ -z "${DFZF_DEFAULT_COMMAND}" ]] || \
         ! "${DFZF_DEFAULT_COMMAND}" "${dir}" > "${cache_file}"
     then
-        list_files "${dir}" > "${cache_file}"
+        list_files "${dir}" | sort > "${cache_file}"
     fi
 fi
 
