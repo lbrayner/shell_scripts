@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+print_usage() {
+	echo "$(basename "${0}") [-h] [-n] [-w] ARG
+
+    Activate window by various methods.
+
+    -h            show this help message and exit
+    -n            Activate window by Title (substring, the default method)
+    -w            Activate window by WM_CLASS (exact match)
+
+    This script is a convenient way of using
+    https://github.com/lbrayner/activate-window-by-title, a GNOME shell
+    extension."
+}
+
+method=name
+while getopts :hnw opt
+do
+    case ${opt} in
+        h)
+            print_usage
+            exit
+            ;;
+        n)
+            method=name
+            ;;
+        w)
+            method=wm_class
+            ;;
+        \?)
+            echo "Invalid option: -${OPTARG}" 1>&2
+            print_usage >&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [[ ! ${#} -eq 1  ]]
+then
+    print_usage >&2
+    exit 1
+fi
+
+arg="${1}"
+
+case ${method} in
+    name)
+        dbusmethod=activateBySubstring
+        ;;
+    wm_class)
+        dbusmethod=activateByWmClass
+        ;;
+esac
+
+gdbus call --session \
+    --dest org.gnome.Shell \
+    --object-path /de/lucaswerkmeister/ActivateWindowByTitle \
+    --method de.lucaswerkmeister.ActivateWindowByTitle.${dbusmethod} "${arg}"
