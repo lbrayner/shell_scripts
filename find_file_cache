@@ -2,6 +2,8 @@
 
 # set -x
 
+hash rg &>/dev/null || { echo "Ripgrep required." >&2 && exit 1; }
+
 print_usage() {
 	printf '\n%s\n' "$(basename "${0}") [-C] [-c CACHE_DIR] [DIR]"
 }
@@ -11,63 +13,34 @@ cache_dir=~/.cache/find_file_cache
 while getopts ":hCc:" opt
 do
     case ${opt} in
-        h)
-            print_usage
-            exit
-            ;;
         C)
             clear_cache="true"
             ;;
         c)
             cache_dir="${OPTARG}"
             ;;
-        \?)
-            echo "Invalid option: -$OPTARG" >&2
-            exit 1
+        h)
+            print_usage
+            exit
             ;;
     esac
 done
 shift $((OPTIND - 1))
 
-if [[ ! ${#} -le 1  ]]
-then
+if [[ ! ${#} -le 1  ]]; then
     print_usage >&2
     exit 1
 fi
-
-list_files(){
-    # https://github.com/junegunn/fzf.vim/issues/121#issuecomment-209534405
-    hash rg &>/dev/null && rg --files "${1}" && return
-    find "${1}" ! -path \*/.\* -type f \
-        ! -iname \*.o \
-        ! -iname \*.lo \
-        ! -iname \*.elc \
-        ! -iname \*.fasl \
-        ! -iname \*.class \
-        ! -iname \*.exe \
-        ! -iname \*.bin
-}
 
 dir="."
 [[ -n "${1}" ]] && dir="${1}"
 
 [[ ! -d "${cache_dir}"  ]] && mkdir -p "${cache_dir}"
-
 cache_file="${cache_dir}/$(printf $(readlink -f "${dir}") | base64)"
+[[ -n "${clear_cache}" && -f "${cache_file}" ]] && rm "${cache_file}"
 
-if [[ -n "${clear_cache}" && -f "${cache_file}" ]]
-then
-    rm "${cache_file}"
-fi
-
-if [[ ! -f "${cache_file}" ]]
-then
-    # No arguments allowed
-    if [[ -z "${DFZF_DEFAULT_COMMAND}" ]] || \
-        ! "${DFZF_DEFAULT_COMMAND}" "${dir}" > "${cache_file}"
-    then
-        list_files "${dir}" | sort > "${cache_file}"
-    fi
+if [[ ! -f "${cache_file}" ]]; then
+    rg --files "${dir}" | sort > "${cache_file}"
 fi
 
 cat "${cache_file}"
