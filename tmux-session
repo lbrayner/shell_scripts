@@ -7,7 +7,7 @@
 #
 # TODO: persist and restore the state & position of panes.
 set -e
-# set -x
+set -x
 
 dump() {
   local d=$'\t'
@@ -18,8 +18,8 @@ ${d}#{pane_current_path}"
 }
 
 save() {
-  echo "WARNING! Script in development."
-  dump > ~/.tmux-session
+  echo "WARNING! Script in development. Session saved to “~/.tmux-session.test”."
+  dump > ~/.tmux-session.test # TODO test
 }
 
 terminal_size() {
@@ -31,7 +31,11 @@ session_exists() {
 }
 
 add_window() {
-  tmux new-window -d -t "$1:" -n "$2" -c "$3"
+  tmux new-window -t "$1:" -n "$2" -c "$3"
+}
+
+split_window() {
+  tmux split-window -c "${1}"
 }
 
 new_session() {
@@ -48,16 +52,21 @@ restore() {
   while IFS=$'\t' read automatic_rename session_name window_name facts path; do
     if [[ -d "$path" && $window_name != "log" && $window_name != "man" ]]; then
       if session_exists "$session_name"; then
-        add_window "$session_name" "$window_name" "$path"
-        window_number=$(( window_number + 1 ))
+        if [[ "${current_window}" == "${window_name}" && "${facts}" != 1111 ]]; then
+          split_window "${path}"
+        else
+          add_window "$session_name" "$window_name" "$path"
+          current_window="${window_name}"
+          window_number=$(( window_number + 1 ))
+        fi
       else
         new_session "$session_name" "$window_name" "$path" "$dimensions"
         count=$(( count + 1 ))
         window_number=0
       fi
-      [[ ${automatic_rename} -eq 1 ]] && tmux setw -t ${window_number} automatic-rename on
+      [[ ${automatic_rename} -eq 1 ]] && tmux setw -t ${window_number} automatic-rename on # TODO should be run only once
     fi
-  done < ~/.tmux-session
+  done < ~/.tmux-session.test # TODO test
 
   echo "restored $count session(s)"
 }
