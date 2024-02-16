@@ -7,7 +7,7 @@
 #
 # TODO: persist and restore position of panes.
 set -e
-set -x
+# set -x
 
 dump() {
   local d=$'\t'
@@ -19,7 +19,7 @@ ${d}#{pane_current_path}"
 
 save() {
   echo "WARNING! Script in development. Session saved to “~/.tmux-session.test”."
-  dump > ~/.tmux-session.test # TODO test
+  dump > ~/.tmux-session
 }
 
 terminal_size() {
@@ -59,7 +59,7 @@ restore() {
       window_number=0
       automatic_rename ${automatic_rename} ${window_number}
     fi
-  done < ~/.tmux-session.test # TODO test
+  done < ~/.tmux-session
 
   echo "Restored ${count} session(s)."
 }
