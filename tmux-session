@@ -61,7 +61,7 @@ restore() {
     fi
   done < ~/.tmux-session.test # TODO test
 
-  echo "restored ${count} session(s)"
+  echo "Restored ${count} session(s)."
 }
 
 case "${1}" in
@@ -69,6 +69,6 @@ save | restore )
   ${1}
   ;;
 * )
-  echo "valid commands: save, restore" >&2
+  echo "Valid commands: save, restore." >&2
   exit 1
 esac
