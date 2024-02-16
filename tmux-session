@@ -43,6 +43,10 @@ new_session() {
   tmux new-session -d -s "$1" -n "$2" $4
 }
 
+automatic_rename() {
+  [[ ${1} -eq 1 ]] && tmux setw -t ${2} automatic-rename on
+}
+
 restore() {
   tmux start-server
   local count=0
@@ -58,13 +62,14 @@ restore() {
           add_window "$session_name" "$window_name" "$path"
           current_window="${window_name}"
           window_number=$(( window_number + 1 ))
+          automatic_rename ${automatic_rename} ${window_number}
         fi
       else
         new_session "$session_name" "$window_name" "$path" "$dimensions"
         count=$(( count + 1 ))
         window_number=0
+        automatic_rename ${automatic_rename} ${window_number}
       fi
-      [[ ${automatic_rename} -eq 1 ]] && tmux setw -t ${window_number} automatic-rename on # TODO should be run only once
     fi
   done < ~/.tmux-session.test # TODO test
 
