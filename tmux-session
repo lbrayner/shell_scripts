@@ -5,7 +5,7 @@
 
 # Save and restore the state of tmux sessions and windows.
 #
-# TODO: persist and restore the state & position of panes.
+# TODO: persist and restore position of panes.
 set -e
 set -x
 
@@ -27,11 +27,11 @@ terminal_size() {
 }
 
 session_exists() {
-  tmux has-session -t "$1" 2>/dev/null
+  tmux has-session -t "${1}" 2>/dev/null
 }
 
 add_window() {
-  tmux new-window -t "$1:" -n "$2" -c "$3"
+  tmux new-window -t "${1}:" -n "${2}" -c "${3}"
 }
 
 split_window() {
@@ -39,8 +39,8 @@ split_window() {
 }
 
 new_session() {
-  cd "$3" &&
-  tmux new-session -d -s "$1" -n "$2" $4
+  cd "${3}" &&
+  tmux new-session -d -s "${1}" -n "${2}" ${4}
 }
 
 automatic_rename() {
@@ -56,18 +56,18 @@ restore() {
   local dimensions="$(terminal_size)"
 
   while IFS=$'\t' read automatic_rename session_name window_name facts path; do
-    if [[ -d "$path" && $window_name != "log" && $window_name != "man" ]]; then
-      if session_exists "$session_name"; then
+    if [[ -d "${path}" ]]; then
+      if session_exists "${session_name}"; then
         if [[ "${current_window}" == "${window_name}" && "${facts}" != 1111 ]]; then
           split_window "${path}"
         else
-          add_window "$session_name" "$window_name" "$path"
+          add_window "${session_name}" "${window_name}" "${path}"
           current_window="${window_name}"
           window_number=$(( window_number + 1 ))
           automatic_rename ${automatic_rename} ${window_number}
         fi
       else
-        new_session "$session_name" "$window_name" "$path" "$dimensions"
+        new_session "${session_name}" "${window_name}" "${path}" "${dimensions}"
         count=$(( count + 1 ))
         window_number=0
         automatic_rename ${automatic_rename} ${window_number}
@@ -75,12 +75,12 @@ restore() {
     fi
   done < ~/.tmux-session.test # TODO test
 
-  echo "restored $count session(s)"
+  echo "restored ${count} session(s)"
 }
 
-case "$1" in
+case "${1}" in
 save | restore )
-  $1
+  ${1}
   ;;
 * )
   echo "valid commands: save, restore" >&2
