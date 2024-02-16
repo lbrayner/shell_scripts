@@ -30,19 +30,6 @@ session_exists() {
   tmux has-session -t "${1}" 2>/dev/null
 }
 
-add_window() {
-  tmux new-window -t "${1}:" -n "${2}" -c "${3}"
-}
-
-split_window() {
-  tmux split-window -c "${1}"
-}
-
-new_session() {
-  cd "${3}" &&
-  tmux new-session -d -s "${1}" -n "${2}" ${4}
-}
-
 automatic_rename() {
   if [[ ${1} -eq 1 ]]; then
     tmux setw -t ${2} automatic-rename on
@@ -56,22 +43,21 @@ restore() {
   local dimensions="$(terminal_size)"
 
   while IFS=$'\t' read automatic_rename session_name window_name facts path; do
-    if [[ -d "${path}" ]]; then
-      if session_exists "${session_name}"; then
-        if [[ "${current_window}" == "${window_name}" && "${facts}" != 1111 ]]; then
-          split_window "${path}"
-        else
-          add_window "${session_name}" "${window_name}" "${path}"
-          current_window="${window_name}"
-          window_number=$(( window_number + 1 ))
-          automatic_rename ${automatic_rename} ${window_number}
-        fi
+    [[ -d "${path}" ]] || continue
+    if session_exists "${session_name}"; then
+      if [[ "${current_window}" == "${window_name}" && "${facts}" != 1111 ]]; then
+        tmux split-window -c "${path}"
       else
-        new_session "${session_name}" "${window_name}" "${path}" "${dimensions}"
-        count=$(( count + 1 ))
-        window_number=0
+        tmux new-window -t "${session_name}:" -n "${window_name}" -c "${path}"
+        current_window="${window_name}"
+        window_number=$(( window_number + 1 ))
         automatic_rename ${automatic_rename} ${window_number}
       fi
+    else
+      cd "${path}" && tmux new-session -d -s "${session_name}" -n "${window_name}" ${dimensions}
+      count=$(( count + 1 ))
+      window_number=0
+      automatic_rename ${automatic_rename} ${window_number}
     fi
   done < ~/.tmux-session.test # TODO test
 
