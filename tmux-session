@@ -54,7 +54,7 @@ restore() {
         automatic_rename ${automatic_rename} ${window_number}
       fi
     else
-      cd "${path}" && tmux new-session -d -s "${session_name}" -n "${window_name}" ${dimensions}
+      tmux new-session -d -c "${path}" -s "${session_name}" -n "${window_name}" ${dimensions}
       count=$(( count + 1 ))
       window_number=0
       automatic_rename ${automatic_rename} ${window_number}
