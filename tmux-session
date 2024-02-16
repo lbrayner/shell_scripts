@@ -18,7 +18,6 @@ ${d}#{pane_current_path}"
 }
 
 save() {
-  echo "WARNING! Script in development. Session saved to “~/.tmux-session.test”."
   dump > ~/.tmux-session
 }
 
