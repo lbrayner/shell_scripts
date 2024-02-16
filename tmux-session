@@ -44,7 +44,9 @@ new_session() {
 }
 
 automatic_rename() {
-  [[ ${1} -eq 1 ]] && tmux setw -t ${2} automatic-rename on
+  if [[ ${1} -eq 1 ]]; then
+    tmux setw -t ${2} automatic-rename on
+  fi
 }
 
 restore() {
