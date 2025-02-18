@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+if [[ -z "${YTDL_PATCHED}" ]]; then
+  echo '$YTDL_PATCHED not set.' >&2
+  exit 1
+fi
+
+if [[ ! -d "${YTDL_PATCHED}" ]]; then
+  echo "${YTDL_PATCHED} is not a directory." >&2
+  exit 1
+fi
+
+PYTHONPATH="${YTDL_PATCHED}" OPENSSL_CONF=/dev/null QT_QPA_PLATFORM=phantom python -m yt_dlp "${@}"
