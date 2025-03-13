@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 if [[ ${#} -eq 0  ]]; then
-  <&0 xargs -d'\n' setsid -f mpv --msg-level=all=no --terminal=no
+  <&0 xargs -d'\n' setsid -f mpv --msg-level=all=no --terminal=no --playlist-start=0
   exit
 fi
 
-setsid -f mpv --msg-level=all=no --terminal=no "${@}"
+setsid -f mpv --msg-level=all=no --terminal=no --playlist-start=0 "${@}"
