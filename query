@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [[ ${#} -eq 0 || ${#} -gt 4 ]]; then
+	echo "1 to 4 arguments" >&2
+	exit 1
+fi
+
+if [[ ${#} -eq 1 ]]; then
+  find . ! -path \*/.\* -type f ! -name \*.m3u | rg --sort path -F -i -e "${1}"
+  exit 0
+fi
+
+if [[ ${#} -eq 2 ]]; then
+  find . ! -path \*/.\* -type f ! -name \*.m3u | rg -F -i -e "${1}" | rg --sort path -F -i -e "${2}"
+  exit 0
+fi
+
+if [[ ${#} -eq 3 ]]; then
+  find . ! -path \*/.\* -type f ! -name \*.m3u | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg --sort path -F -i -e "${3}"
+  exit 0
+fi
+
+find . ! -path \*/.\* -type f ! -name \*.m3u | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg -F -i -e "${3}" | rg --sort path -F -i -e "${4}"
