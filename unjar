@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 
+# set -x
+
 if [[ ${#} -ne 1 ]]; then
 	echo "1 argument" >&2
 	exit 1
 fi
+
+file="${1}"
+extension_as_is="${file##*.}"
+extension="${extension_as_is,,}" # lower case
+
+case ${extension} in
+  ear|jar|war)
+    ;;
+  *)
+    echo "File '${file}' not supported. Java archive required (.ear, .jar, .war)." 1>&2
+    exit 1
+    ;;
+esac
