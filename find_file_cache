@@ -48,7 +48,7 @@ cache_file="${cache_dir}/$(printf $(readlink -f "${dir}") | base64)"
 [[ -n "${clear_cache}" && -f "${cache_file}" ]] && rm "${cache_file}"
 
 if [[ ! -f "${cache_file}" ]]; then
-    rg --files "${dir}" | sort > "${cache_file}"
+    rg --files --sort path "${dir}" > "${cache_file}"
 fi
 
 cat "${cache_file}"
