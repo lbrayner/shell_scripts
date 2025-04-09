@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Run it multiple times if there are more nested levels
+
+# set -x
+set -e
+
+if [[ ${#} -ne 1 ]]; then
+	echo "1 argument" >&2
+	exit 1
+fi
+
+file="${1}"
+extension="${file##*.}"
+
+case ${extension} in
+  ear|jar|war)
+    ;;
+  *)
+    echo "File '${file}' not supported. Java archive required (.ear, .jar, .war)." 1>&2
+    exit 1
+    ;;
+esac
+
+name_with_extension="${file##*/}"
+name="${name_with_extension%.*}"
+folder="${name}"
+
+unzip -nq "${file}" -d "${folder}"
+
+# https://unix.stackexchange.com/a/9499
+find "${folder}" -type f \( -name "*.ear" -o -name "*.jar" -o -name "*.war" \) -print0 | \
+  while IFS= read -r -d "" file; do
+    echo "Extracting ${file}..."
+    archive="${file}_"
+    mv "${file}" "${archive}"
+    unzip -nq "${archive}" -d "${file}"
+    rm "${archive}"
+  done
