@@ -19,3 +19,15 @@ case ${extension} in
     exit 1
     ;;
 esac
+
+name_with_extension="${file##*/}"
+name="${name_with_extension%.*}"
+folder="${name}"
+
+unzip -n "${file}" -d "${folder}"
+
+# https://unix.stackexchange.com/a/9499
+find "${folder}" -type f -name "*.jar" -print0 | \
+  while IFS= read -r -d "" file; do
+    echo "file = $file"
+  done
