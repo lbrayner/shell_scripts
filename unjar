@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
+# Run it multiple times if there are more nested levels
+
 # set -x
+set -e
 
 if [[ ${#} -ne 1 ]]; then
 	echo "1 argument" >&2
@@ -24,10 +27,14 @@ name_with_extension="${file##*/}"
 name="${name_with_extension%.*}"
 folder="${name}"
 
-unzip -n "${file}" -d "${folder}"
+unzip -nq "${file}" -d "${folder}"
 
 # https://unix.stackexchange.com/a/9499
 find "${folder}" -type f \( -name "*.ear" -o -name "*.jar" -o -name "*.war" \) -print0 | \
   while IFS= read -r -d "" file; do
-    echo "file = $file"
+    echo "Extracting ${file}..."
+    archive="${file}_"
+    mv "${file}" "${archive}"
+    unzip -nq "${archive}" -d "${file}"
+    rm "${archive}"
   done
