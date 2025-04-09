@@ -27,7 +27,7 @@ folder="${name}"
 unzip -n "${file}" -d "${folder}"
 
 # https://unix.stackexchange.com/a/9499
-find "${folder}" -type f -name "*.jar" -print0 | \
+find "${folder}" -type f \( -name "*.ear" -o -name "*.jar" -o -name "*.war" \) -print0 | \
   while IFS= read -r -d "" file; do
     echo "file = $file"
   done
