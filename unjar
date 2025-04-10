@@ -11,8 +11,7 @@ if [[ ${#} -ne 1 ]]; then
 fi
 
 file="${1}"
-extension_as_is="${file##*.}"
-extension="${extension_as_is,,}" # lower case
+extension="${file##*.}"
 
 case ${extension} in
   ear|jar|war)
