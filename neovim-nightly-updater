@@ -1,17 +1,49 @@
 #!/usr/bin/env bash
 
-# set -x
+set -e
+set -x
+
+get_timestamp(){
+  stat -c '%y' "${1}"
+}
 
 folder="/tmp/$(basename "${0}" | base64)"
 
 [[ -d "${folder}" ]] || mkdir "${folder}"
 
-name=nvim-linux-x86_64.tar.gz
-file="${folder}/${name}"
+file="${folder}/nvim-linux-x86_64.tar.gz"
 
 zflag=()
 
 [[ -e "${file}" ]] && zflag=(-z "${file}")
 
-curl -L "${zflag[@]}" -o "${file}" \
-  https://github.com/neovim/neovim/releases/download/nightly/${name}
+curl -LR "${zflag[@]}" -o "${file}" \
+  https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz
+
+[[ -e /opt/nvim-linux-x86_64/bin/nvim ]] && before="$(get_timestamp /opt/nvim-linux-x86_64/bin/nvim)"
+after="$(get_timestamp "${file}")"
+
+[[ "${before}" == "${after}" ]] && exit
+
+[[ -n "${before}" ]] && before=$(mktemp -u) && (cd /opt && rg --files nvim-linux-x86_64/) | sort > ${before}
+echo "PWD $PWD"
+
+# installation_folder=/opt
+
+# start="${folder}/start"
+# touch "${start}"
+#
+
+sudo tar -C /opt -xf "${file}"
+
+[[ -z "${before}" ]] && exit
+
+after=$(mktemp -u) && tar -tf "${file}" | rg -v '/$' | sort > ${after}
+old_files=$(mktemp -u) && comm -2 -3 ${before} ${after} > ${old_files}
+
+[[ -s ${old_files} ]] || exit
+
+(cd /opt && xargs -t -d'\n' sudo -k ls -lh < ${old_files})
+
+#
+# find  -depth ! -cnewer start -print0 | sponge /dev/stdout
