@@ -6,6 +6,12 @@ folder="/tmp/$(basename "${0}" | base64)"
 
 [[ -d "${folder}" ]] || mkdir "${folder}"
 
-wget -N --no-if-modified-since \
-  -O "${folder}/nvim-linux-x86_64.tar.gz" \
-  https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz
+name=nvim-linux-x86_64.tar.gz
+file="${folder}/${name}"
+
+zflag=()
+
+[[ -e "${file}" ]] && zflag=(-z "${file}")
+
+curl -L "${zflag[@]}" -o "${file}" \
+  https://github.com/neovim/neovim/releases/download/nightly/${name}
