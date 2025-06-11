@@ -41,4 +41,13 @@ except=$(tempname except) && comm -2 -3 ${before} ${after} > ${except}
 
 [[ -s ${except} ]] || exit
 
-(cd /opt && xargs -t -d'\n' sudo -k rm -I < ${except})
+echo -e "\nThese files were found in excess:\n"
+cat ${except}
+echo
+
+read -p "About to delete. Are you sure? " -n 1 -r
+echo # move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+  (cd /opt && xargs -t -d'\n' sudo -k rm < ${except})
+fi
