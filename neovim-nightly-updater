@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# set -x
+
+folder="/tmp/$(basename "${0}" | base64)"
+
+[[ -d "${folder}" ]] || mkdir "${folder}"
+
+wget -N --no-if-modified-since \
+  -O "${folder}/nvim-linux-x86_64.tar.gz" \
+  https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz
