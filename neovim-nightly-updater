@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
+# set -x
 
 get_timestamp(){
   stat -c '%y' "${1}"
+}
+
+tempname(){
+  mktemp -p "${folder}" --suffix=_"${1}" -u
 }
 
 folder="/tmp/$(basename "${0}" | base64)"
@@ -25,25 +29,16 @@ after="$(get_timestamp "${file}")"
 
 [[ "${before}" == "${after}" ]] && exit
 
-[[ -n "${before}" ]] && before=$(mktemp -u) && (cd /opt && rg --files nvim-linux-x86_64/) | sort > ${before}
-echo "PWD $PWD"
-
-# installation_folder=/opt
-
-# start="${folder}/start"
-# touch "${start}"
-#
+[[ -n "${before}" ]] && before=$(tempname before) && \
+  (cd /opt && rg --files nvim-linux-x86_64/) | sort > ${before}
 
 sudo tar -C /opt -xf "${file}"
 
 [[ -z "${before}" ]] && exit
 
-after=$(mktemp -u) && tar -tf "${file}" | rg -v '/$' | sort > ${after}
-old_files=$(mktemp -u) && comm -2 -3 ${before} ${after} > ${old_files}
+after=$(tempname after) && tar -tf "${file}" | rg -v '/$' | sort > ${after}
+except=$(tempname except) && comm -2 -3 ${before} ${after} > ${except}
 
-[[ -s ${old_files} ]] || exit
+[[ -s ${except} ]] || exit
 
-(cd /opt && xargs -t -d'\n' sudo -k ls -lh < ${old_files})
-
-#
-# find  -depth ! -cnewer start -print0 | sponge /dev/stdout
+(cd /opt && xargs -t -d'\n' sudo -k rm -I < ${except})
