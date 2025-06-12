@@ -12,9 +12,14 @@ program="${0##*/}"
 print_usage() {
     echo "${program} [-h]
 
-    Install/Update Neovim from https://github.com/neovim/neovim/releases/.
+    Install/Update Neovim from https://github.com/neovim/neovim/releases.
 
     -h            show this help message and exit
+
+    Following official installation instructions from
+    https://github.com/neovim/neovim/blob/master/INSTALL.md#linux.
+
+    Add /opt/nvim-linux-x86_64/bin/ to \$PATH.
 
     Currently only 'nightly' is supported."
 }
