@@ -45,9 +45,10 @@ echo -e "\nThese files were found in excess:\n"
 cat ${except}
 echo
 
-read -p "About to delete. Are you sure? " -n 1 -r
-echo # move to a new line
+read -p "About to delete above files. Are you sure? " -n 1 -r
+echo
+
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  (cd /opt && xargs -t -d'\n' sudo -k rm < ${except})
+  (cd /opt && sudo -k xargs -t -d'\n' rm < ${except})
 fi
