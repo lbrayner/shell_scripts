@@ -10,7 +10,7 @@ get_timestamp(){
 program="${0##*/}"
 
 print_usage() {
-	echo "${program} [-h]
+    echo "${program} [-h]
 
     Install/Update Neovim from https://github.com/neovim/neovim/releases/.
 
@@ -21,17 +21,17 @@ print_usage() {
 
 while getopts :h opt
 do
-    case ${opt} in
-        h)
-            print_usage
-            exit
-            ;;
-        \?)
-            echo "Invalid option: -${OPTARG}" >&2
-            print_usage >&2
-            exit 1
-            ;;
-    esac
+  case ${opt} in
+    h)
+      print_usage
+      exit
+      ;;
+    \?)
+      echo "Invalid option: -${OPTARG}" >&2
+      print_usage >&2
+      exit 1
+      ;;
+  esac
 done
 shift $((OPTIND - 1))
 
