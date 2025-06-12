@@ -7,7 +7,35 @@ get_timestamp(){
   stat -c '%y' "${1}"
 }
 
-folder="/tmp/$(basename "${0}" | base64)"
+program="${0##*/}"
+
+print_usage() {
+	echo "${program} [-h]
+
+    Install/Update Neovim from https://github.com/neovim/neovim/releases/.
+
+    -h            show this help message and exit
+
+    Currently only 'nightly' is supported."
+}
+
+while getopts :h opt
+do
+    case ${opt} in
+        h)
+            print_usage
+            exit
+            ;;
+        \?)
+            echo "Invalid option: -${OPTARG}" >&2
+            print_usage >&2
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+folder="/tmp/$(echo "${program}" | base64)"
 
 [[ -d "${folder}" ]] || mkdir "${folder}"
 
