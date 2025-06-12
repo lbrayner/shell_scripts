@@ -3,10 +3,6 @@
 set -e
 # set -x
 
-get_timestamp(){
-  stat -c '%y' "${1}"
-}
-
 program="${0##*/}"
 
 print_usage() {
@@ -39,6 +35,10 @@ do
   esac
 done
 shift $((OPTIND - 1))
+
+get_timestamp(){
+  stat -c '%y' "${1}"
+}
 
 folder="/tmp/$(echo "${program}" | base64)"
 
