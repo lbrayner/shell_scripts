@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e
-# set -x
+set -x
 
 program="${0##*/}"
 
@@ -57,7 +57,8 @@ curl -LR "${zflag[@]}" -o "${file}" \
 [[ -n "${before}" ]] && tar -C "${folder}" -xf "${file}" nvim-linux-x86_64/bin/nvim && \
   after="$(cd "${folder}" && get_timestamp nvim-linux-x86_64/bin/nvim)"
 
-[[ -n "${before}" ]] && [[ "${before}" >= "${after}" ]] && exit
+[[ -n "${before}" ]] && [[ "${before}" == "${after}" ]] && exit
+[[ -n "${before}" ]] && [[ "${before}" > "${after}" ]] && exit
 
 [[ -n "${before}" ]] && before="${folder}/before" && \
   (cd /opt && rg --files nvim-linux-x86_64/) | sort > "${before}"
