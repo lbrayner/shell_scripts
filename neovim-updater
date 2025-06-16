@@ -60,19 +60,19 @@ curl -LR "${zflag[@]}" -o "${file}" \
 [[ -n "${before}" ]] && [[ "${before}" >= "${after}" ]] && exit
 
 [[ -n "${before}" ]] && before="${folder}/before" && \
-  (cd /opt && rg --files nvim-linux-x86_64/) | sort > ${before}
+  (cd /opt && rg --files nvim-linux-x86_64/) | sort > "${before}"
 
 sudo tar -C /opt -xf "${file}"
 
 [[ -z "${before}" ]] && exit
 
-after="${folder}/after" && tar -tf "${file}" | rg -v '/$' | sort > ${after}
-except="${folder}/except" && comm -2 -3 ${before} ${after} > ${except}
+after="${folder}/after" && tar -tf "${file}" | rg -v '/$' | sort > "${after}"
+except="${folder}/except" && comm -2 -3 "${before}" "${after}" > "${except}"
 
-[[ -s ${except} ]] || exit
+[[ -s "${except}" ]] || exit
 
 echo -e "\nThese files were found in excess:\n"
-cat ${except}
+cat "${except}"
 echo
 
 read -p "About to delete above files. Are you sure? " -n 1 -r
@@ -80,5 +80,5 @@ echo
 
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-  (cd /opt && sudo -k xargs -t -d'\n' rm < ${except})
+  (cd /opt && sudo -k xargs -t -d'\n' rm < "${except}")
 fi
