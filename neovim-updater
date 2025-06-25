@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-set -e
-set -x
+# set -e
+# set -x
 
 program="${0##*/}"
 
@@ -40,7 +40,7 @@ get_timestamp(){
   stat -c '%y' "${1}"
 }
 
-folder="/tmp/$(echo "${program}" | base64)"
+folder="/tmp/${program}"
 
 [[ -d "${folder}" ]] || mkdir "${folder}"
 
