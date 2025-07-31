@@ -11,21 +11,30 @@ print_usage() {
     Install/Update Neovim from https://github.com/neovim/neovim/releases.
 
     -h            show this help message and exit
+    -n            'nightly' release
+    -s            'stable' release
 
     Following official installation instructions from
     https://github.com/neovim/neovim/blob/master/INSTALL.md#linux.
 
     Add /opt/nvim-linux-x86_64/bin/ to \$PATH.
 
-    Currently only 'nightly' is supported."
+    Currently 'nightly' and 'stable' releases are supported."
 }
 
-while getopts :h opt
+release=nightly
+while getopts :hns opt
 do
   case ${opt} in
     h)
       print_usage
       exit
+      ;;
+    n)
+      release=nightly
+      ;;
+    s)
+      release=stable
       ;;
     \?)
       echo "Invalid option: -${OPTARG}" >&2
@@ -40,9 +49,9 @@ get_timestamp(){
   stat -c '%y' "${1}"
 }
 
-folder="/tmp/${program}"
+folder="/tmp/${program}/${release}"
 
-[[ -d "${folder}" ]] || mkdir "${folder}"
+[[ -d "${folder}" ]] || mkdir -p "${folder}"
 
 file="${folder}/nvim-linux-x86_64.tar.gz"
 
@@ -51,7 +60,7 @@ zflag=()
 [[ -e "${file}" ]] && zflag=(-z "${file}")
 
 curl -LR "${zflag[@]}" -o "${file}" \
-  https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz
+  https://github.com/neovim/neovim/releases/download/${release}/nvim-linux-x86_64.tar.gz
 
 [[ -e /opt/nvim-linux-x86_64/bin/nvim ]] && before="$(get_timestamp /opt/nvim-linux-x86_64/bin/nvim)"
 [[ -n "${before}" ]] && tar -C "${folder}" -xf "${file}" nvim-linux-x86_64/bin/nvim && \
