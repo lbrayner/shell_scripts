@@ -6,7 +6,7 @@
 program="${0##*/}"
 
 print_usage() {
-    echo "${program} [-h]
+    echo "${program} [-h|-n|-s]
 
     Install/Update Neovim from https://github.com/neovim/neovim/releases.
 
