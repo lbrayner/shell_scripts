@@ -1,12 +1,48 @@
 #!/usr/bin/env bash
 
+set -x
+
+program="${0##*/}"
+
+print_usage() {
+    echo "${program} [-P|-h]
+
+    Query files (specialized in media files and M3U playlists).
+
+    -P            DO NOT exclude M3U playlists (they are excluded by default)
+    -h            show this help message and exit"
+}
+
+exclude=(! -name "*.m3u")
+while getopts :hns opt
+do
+  case ${opt} in
+    h)
+      print_usage
+      exit
+      ;;
+    n)
+      release=nightly
+      ;;
+    s)
+      release=stable
+      ;;
+    \?)
+      echo "Invalid option: -${OPTARG}" >&2
+      print_usage >&2
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 if [[ ${#} -eq 0 || ${#} -gt 4 ]]; then
 	echo "1 to 4 arguments" >&2
 	exit 1
 fi
 
 files(){
-  find -L . ! -path \*/.\* -type f ! -name \*.m3u
+  find -L . ! -path \*/.\* -type f "${exclude[@]}"
 }
 
 if [[ ${#} -eq 1 ]]; then
@@ -15,15 +51,13 @@ if [[ ${#} -eq 1 ]]; then
 fi
 
 if [[ ${#} -eq 2 ]]; then
-  find -L . ! -path \*/.\* -type f ! -name \*.m3u | rg -F -i -e "${1}" | rg --sort path -F -i -e "${2}"
+  files | rg -F -i -e "${1}" | rg --sort path -F -i -e "${2}"
   exit 0
 fi
 
 if [[ ${#} -eq 3 ]]; then
-  find -L . ! -path \*/.\* -type f ! -name \*.m3u | rg -F -i -e "${1}" | rg -F -i -e "${2}" | \
-    rg --sort path -F -i -e "${3}"
+  files | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg --sort path -F -i -e "${3}"
   exit 0
 fi
 
-find -L . ! -path \*/.\* -type f ! -name \*.m3u | rg -F -i -e "${1}" | rg -F -i -e "${2}" | \
-  rg -F -i -e "${3}" | rg --sort path -F -i -e "${4}"
+files | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg -F -i -e "${3}" | rg --sort path -F -i -e "${4}"
