@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 program="${0##*/}"
 
@@ -10,22 +10,21 @@ print_usage() {
     Query files (specialized in media files and M3U playlists).
 
     -P            DO NOT exclude M3U playlists (they are excluded by default)
-    -h            show this help message and exit"
+    -h            show this help message and exit
+
+    Prefix (.prefix) files are excluded."
 }
 
-exclude=(! -name "*.m3u")
-while getopts :hns opt
+exclude=(! -name "*.prefix" ! -name "*.m3u")
+while getopts :Ph opt
 do
   case ${opt} in
+    P)
+      exclude=(! -name "*.prefix")
+      ;;
     h)
       print_usage
       exit
-      ;;
-    n)
-      release=nightly
-      ;;
-    s)
-      release=stable
       ;;
     \?)
       echo "Invalid option: -${OPTARG}" >&2
