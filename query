@@ -56,13 +56,15 @@ if [[ ${#} -eq 1 ]]; then
 fi
 
 if [[ ${#} -eq 2 ]]; then
-  files | rg -F -i -e "${1}" | rg --sort path -F -i -e "${2}"
+  files | rg --color always -F -i -e "${1}" | rg --sort path -F -i -e "${2}"
   exit 0
 fi
 
 if [[ ${#} -eq 3 ]]; then
-  files | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg --sort path -F -i -e "${3}"
+  files | rg --color always -F -i -e "${1}" | rg --color always -F -i -e "${2}" | \
+    rg --sort path -F -i -e "${3}"
   exit 0
 fi
 
-files | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg -F -i -e "${3}" | rg --sort path -F -i -e "${4}"
+files | rg --color always -F -i -e "${1}" | rg --color always -F -i -e "${2}" | \
+  rg --color always -F -i -e "${3}" | rg --sort path -F -i -e "${4}"
