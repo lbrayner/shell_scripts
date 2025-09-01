@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 program="${0##*/}"
 
 print_usage() {
     echo "${program} [-P|-h]
 
-    Query files (specialized in media files and M3U playlists).
+    Query files (performant, specialized in media files and M3U playlists).
 
-    -P            DO NOT exclude M3U playlists (they are excluded by default)
+    -Y            Exclude youtube-dl control files
     -h            show this help message and exit
+    -p            DO NOT exclude M3U playlists (they are excluded by default)
 
     Prefix (.prefix) files are excluded."
 }
 
-exclude=(! -name "*.prefix" ! -name "*.m3u")
-while getopts :Ph opt
+playlist=(! -name "*.m3u")
+ytdl=()
+while getopts :Yhp opt
 do
   case ${opt} in
-    P)
-      exclude=(! -name "*.prefix")
+    Y)
+      ytdl=(! -name "*.part" ! -name "*.ytdl")
       ;;
     h)
       print_usage
       exit
+      ;;
+    p)
+      playlist=()
       ;;
     \?)
       echo "Invalid option: -${OPTARG}" >&2
@@ -34,7 +39,6 @@ do
   esac
 done
 shift $((OPTIND - 1))
-
 if [[ ${#} -eq 0 || ${#} -gt 4 ]]; then
 	echo "1 to 4 arguments" >&2
 	exit 1
@@ -43,6 +47,8 @@ fi
 files(){
   find -L . ! -path \*/.\* -type f "${exclude[@]}"
 }
+
+exclude=("${playlist[@]}" "${ytdl[@]}")
 
 if [[ ${#} -eq 1 ]]; then
   files | rg --sort path -F -i -e "${1}"
