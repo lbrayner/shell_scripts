@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
+mpv="mpv --msg-level=all=no --terminal=no --playlist-start=0"
+
 if [[ ${#} -eq 0  ]]; then
-  <&0 xargs -d'\n' setsid -f mpv --msg-level=all=no --terminal=no --playlist-start=0
+  <&0 xargs -d'\n' setsid -f ${mpv}
   exit
 fi
 
-setsid -f mpv --msg-level=all=no --terminal=no --playlist-start=0 "${@}"
+if [[ "${!#}" == "-" ]]; then
+  <&0 xargs -d'\n' setsid -f ${mpv} "${@:1:$#-1}" # drop the last parameter
+  exit
+fi
+
+setsid -f ${mpv} "${@}"
