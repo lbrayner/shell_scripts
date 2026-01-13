@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+set -x
+
+ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
+words=~/.local/share/dict/words
+socket=""
+
+if [[ -f ${words} ]]; then
+  socket="--input-ipc-server=${ipc_server_folder}/$(shuf ${words} | head -1)"
+fi
+
 mpv="mpv --msg-level=all=no --terminal=no --playlist-start=0"
 
 if [[ ${#} -eq 0  ]]; then
