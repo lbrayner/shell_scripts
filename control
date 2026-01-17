@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -x
+
+ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
+program="${0##*/}"
+
+print_usage() {
+    echo "${program} [-h|-s SOCKET_ALIAS] COMMAND
+
+    Control MPV via IPC
+
+    -h            show this help message and exit
+    -s            SOCKET_ALIAS (required)"
+}
+
+alias=""
+while getopts :hs: opt
+do
+  case ${opt} in
+    h)
+      print_usage
+      exit
+      ;;
+    s)
+      alias=${OPTARG}
+      ;;
+    \?)
+      echo "Invalid option: -${OPTARG}" >&2
+      print_usage >&2
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+[[ -n "${alias}" ]] || print_usage >&2 && exit 1
