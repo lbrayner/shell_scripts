@@ -19,18 +19,16 @@ next_available_name(){
   done
 }
 
-name=""
-socket=()
+mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
 
 if [[ -f "${words}" ]]; then
   name=$(next_available_name)
 
   if [[ -n ${name} ]]; then
     socket=(--input-ipc-server="${ipc_server_folder}/${name}")
+    mpv+=(--title="[${name}] \${filename}" "${socket[@]}")
   fi
 fi
-
-mpv=(mpv --title="[${name}] \${filename}" "${socket[@]}" --msg-level=all=no --terminal=no --playlist-start=0)
 
 if [[ ${#} -eq 0  ]]; then
   <&0 xargs -d'\n' setsid -f "${mpv[@]}"
