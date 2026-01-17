@@ -7,18 +7,31 @@ words=~/.local/share/dict/words
 
 [[ -d "${ipc_server_folder}" ]] || mkdir "${ipc_server_folder}"
 
-next_available_name(){
+next_available_name()(
+  # https://stackoverflow.com/a/34985567 "locally scoped" function
+  is_name_available(){
+    s="${ipc_server_folder}/${1}"
+    if test -e "${s}"  && lsof "${s}" 2>&1 >/dev/null; then
+      return 1
+    fi
+  }
+
+  if test -n "${1}" && is_name_available ${1}; then
+    echo ${1}
+    return
+  fi
+
   lc=$(wc -l < "${words}")
   for (( i = 1; i <= ${lc}; i++ )); do
     w=$(sed -n ${i}p "${words}")
-    s="${ipc_server_folder}/${w}"
-    if test ! -e "${s}"  || ! lsof "${s}" 2>&1 >/dev/null; then
-      echo "${w}"
+    if is_name_available ${w}; then
+      echo ${w}
       return
     fi
   done
-}
+)
 
+name=""
 socket=()
 while getopts :hs: opt
 do
@@ -30,7 +43,6 @@ do
       ;;
     s)
       name=${OPTARG}
-      socket=(--input-ipc-server="${ipc_server_folder}/${OPTARG}")
       ;;
   esac
 done
@@ -39,7 +51,7 @@ shift $((OPTIND - 1))
 mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
 
 if [[ -z "${socket[@]}" && -f "${words}" ]]; then
-  name=$(next_available_name)
+  name=$(next_available_name ${name})
 
   if [[ -n ${name} ]]; then
     socket=(--input-ipc-server="${ipc_server_folder}/${name}")
