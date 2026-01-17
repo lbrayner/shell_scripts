@@ -6,22 +6,23 @@ ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
 
 print_usage() {
-    echo "${program} [-h|-s SOCKET_ALIAS] COMMAND
+    echo "${program} [-h] -s SOCKET_ALIAS [-a FILE...|-t]
 
     Control MPV via IPC
 
-    -c            toggle
-    -h            show this help message and exit
-    -s            SOCKET_ALIAS (required)"
+    -a FILE...            append files to playlist
+    -h                    show this help message and exit
+    -s SOCKET_ALIAS       IPC socket alias (required, autocompleted)
+    -t                    toggle play/pause"
 }
 
 alias=""
-command_=""
-while getopts :c:hs: opt
+subcommand=""
+while getopts :ahs:t opt
 do
   case ${opt} in
-    c)
-      command_=${OPTARG}
+    a)
+      subcommand="append"
       ;;
     h)
       print_usage
@@ -29,6 +30,9 @@ do
       ;;
     s)
       alias=${OPTARG}
+      ;;
+    t)
+      subcommand="toggle"
       ;;
     \?)
       echo "Invalid option: -${OPTARG}" >&2
@@ -39,4 +43,18 @@ do
 done
 shift $((OPTIND - 1))
 
-[[ -n "${alias}" && -n "${command_}" ]] || print_usage >&2 && exit 1
+[[ -z "${alias}" || -z "${subcommand}" ]] && print_usage >&2 && exit 1
+
+socket="${ipc_server_folder}/${alias}"
+
+case ${subcommand} in
+  append)
+    for file in "${@}"
+    do
+      echo '{"command": ["loadfile", "'"${file}"'", "append-play"]}' | socat - "${socket}"
+    done
+    ;;
+  toggle)
+    echo '{"command": ["cycle", "pause"]}' | socat - "${socket}"
+    ;;
+esac
