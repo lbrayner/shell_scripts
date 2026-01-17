@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
@@ -10,14 +10,19 @@ print_usage() {
 
     Control MPV via IPC
 
+    -c            toggle
     -h            show this help message and exit
     -s            SOCKET_ALIAS (required)"
 }
 
 alias=""
-while getopts :hs: opt
+command_=""
+while getopts :c:hs: opt
 do
   case ${opt} in
+    c)
+      command_=${OPTARG}
+      ;;
     h)
       print_usage
       exit
@@ -34,4 +39,4 @@ do
 done
 shift $((OPTIND - 1))
 
-[[ -n "${alias}" ]] || print_usage >&2 && exit 1
+[[ -n "${alias}" && -n "${command_}" ]] || print_usage >&2 && exit 1
