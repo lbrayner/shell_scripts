@@ -6,11 +6,11 @@ ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
 
 print_usage() {
-    echo "${program} [-h] -s SOCKET_ALIAS [-a FILE...|-t]
+    echo "${program} [-h] -s SOCKET_ALIAS [-a [FILE...]|-t]
 
     Control MPV via IPC
 
-    -a FILE...            append files to playlist
+    -a FILE...            append files to playlist (accepts stdin)
     -h                    show this help message and exit
     -s SOCKET_ALIAS       IPC socket alias (required, autocompleted)
     -t                    toggle play/pause"
@@ -49,15 +49,8 @@ socket="${ipc_server_folder}/${alias}"
 
 case ${subcommand} in
   append)
-    # if [[ ${#} -eq 0  ]]; then
-    #   readarray -t files
-    # else
-    #   readarray -t files < <(cat "$@")
-    # fi
-    #
-    # echo "${files[@]}"
-
-    if [ "$#" -gt 0 ]; then
+    # https://unix.stackexchange.com/a/433089
+    if [[ ${#} -gt 0 ]]; then
       # We have command line arguments.
       # Output them with newlines in-between.
       printf '%s\n' "$@"
@@ -67,13 +60,8 @@ case ${subcommand} in
       cat
     fi |
     while IFS= read -r file; do
-      # printf 'Got "%s"\n' "$string"
       echo '{"command": ["loadfile", "'"${file}"'", "append-play"]}' | socat - "${socket}"
     done
-
-    # for file in "${@}"; do
-    #   echo '{"command": ["loadfile", "'"${file}"'", "append-play"]}' | socat - "${socket}"
-    # done
     ;;
   toggle)
     echo '{"command": ["cycle", "pause"]}' | socat - "${socket}"
