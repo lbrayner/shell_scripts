@@ -2,8 +2,10 @@
 
 set -x
 
-ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
+ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 words=~/.local/share/dict/words
+
+[[ -d "${ipc_server_folder}" ]] || mkdir "${ipc_server_folder}"
 
 next_available_name(){
   lc=$(wc -l < "${words}")
