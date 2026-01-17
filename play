@@ -4,13 +4,26 @@ set -x
 
 ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 words=~/.local/share/dict/words
-socket=""
 
-if [[ -f ${words} ]]; then
-  socket="--input-ipc-server=${ipc_server_folder}/$(shuf ${words} | head -1)"
+next_available_socket_name(){
+  lc=$(wc -l < "${words}")
+  for (( i = 1; i <= ${lc}; i++ )); do
+    s="${ipc_server_folder}/$(head -n ${i} "${words}")"
+    if [[ ! -e "${s}"  ]]; then
+      echo "${s}"
+      return
+    fi
+  done
+}
+
+socket=()
+
+if [[ -f "${words}" ]]; then
+  socket=(--input-ipc-server="$(next_available_socket_name)")
 fi
 
-mpv="mpv --msg-level=all=no --terminal=no --playlist-start=0"
+mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0 "${socket[@]}")
+mpv="${mpv[@]}"
 
 if [[ ${#} -eq 0  ]]; then
   <&0 xargs -d'\n' setsid -f ${mpv}
