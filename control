@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"

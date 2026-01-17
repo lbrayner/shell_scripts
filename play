@@ -19,15 +19,35 @@ next_available_name(){
   done
 }
 
+socket=()
+while getopts :hs: opt
+do
+  case ${opt} in
+    h)
+      program="${0##*/}"
+      echo "${program} [-h] -s IPC_SOCKET_ALIAS (see 'control -h')"
+      exit
+      ;;
+    s)
+      name=${OPTARG}
+      socket=(--input-ipc-server="${ipc_server_folder}/${OPTARG}")
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
 
-if [[ -f "${words}" ]]; then
+if [[ -z "${socket[@]}" && -f "${words}" ]]; then
   name=$(next_available_name)
 
   if [[ -n ${name} ]]; then
     socket=(--input-ipc-server="${ipc_server_folder}/${name}")
-    mpv+=(--title="[${name}] \${filename}" "${socket[@]}")
   fi
+fi
+
+if [[ -n "${socket[@]}" ]]; then
+  mpv+=(--title="[${name}] \${filename}" "${socket[@]}")
 fi
 
 if [[ ${#} -eq 0  ]]; then
