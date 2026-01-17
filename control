@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# set -x
+set -x
 
 ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
@@ -49,10 +49,31 @@ socket="${ipc_server_folder}/${alias}"
 
 case ${subcommand} in
   append)
-    for file in "${@}"
-    do
+    # if [[ ${#} -eq 0  ]]; then
+    #   readarray -t files
+    # else
+    #   readarray -t files < <(cat "$@")
+    # fi
+    #
+    # echo "${files[@]}"
+
+    if [ "$#" -gt 0 ]; then
+      # We have command line arguments.
+      # Output them with newlines in-between.
+      printf '%s\n' "$@"
+    else
+      # No command line arguments.
+      # Just pass stdin on.
+      cat
+    fi |
+    while IFS= read -r file; do
+      # printf 'Got "%s"\n' "$string"
       echo '{"command": ["loadfile", "'"${file}"'", "append-play"]}' | socat - "${socket}"
     done
+
+    # for file in "${@}"; do
+    #   echo '{"command": ["loadfile", "'"${file}"'", "append-play"]}' | socat - "${socket}"
+    # done
     ;;
   toggle)
     echo '{"command": ["cycle", "pause"]}' | socat - "${socket}"
