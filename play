@@ -12,7 +12,7 @@ next_available_name(){
   for (( i = 1; i <= ${lc}; i++ )); do
     w=$(sed -n ${i}p "${words}")
     s="${ipc_server_folder}/${w}"
-    if [[ ! -e "${s}"  ]]; then
+    if ! lsof "${s}" 2>&1 >/dev/null; then
       echo "${w}"
       return
     fi
