@@ -2,7 +2,7 @@
 
 # set -x
 
-ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
+ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 
 _control() {
   local cur="${COMP_WORDS[COMP_CWORD]}"

@@ -2,7 +2,7 @@
 
 # set -x
 
-ipc_server_folder="/var/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
+ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 words=~/.local/share/dict/words
 
 [[ -d "${ipc_server_folder}" ]] || mkdir "${ipc_server_folder}"
@@ -16,7 +16,17 @@ next_available_name()(
     fi
   }
 
+  set_main(){
+    m="${ipc_server_folder}/main"
+    [[ ! -e "${m}" ]] && touch "${m}"
+    s="${ipc_server_folder}/${1}"
+    if ! lsof "${m}" 2>&1 >/dev/null; then
+      ln -sf "${s}" "${m}"
+    fi
+  }
+
   if test -n "${1}" && is_name_available ${1}; then
+    set_main ${1}
     echo ${1}
     return
   fi
@@ -25,6 +35,7 @@ next_available_name()(
   for (( i = 1; i <= ${lc}; i++ )); do
     w=$(sed -n ${i}p "${words}")
     if is_name_available ${w}; then
+      set_main ${w}
       echo ${w}
       return
     fi
