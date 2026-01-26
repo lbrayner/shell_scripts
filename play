@@ -19,9 +19,8 @@ next_available_name()(
   set_main(){
     m="${ipc_server_folder}/main"
     [[ ! -e "${m}" ]] && touch "${m}"
-    m="$(readlink -f "${m}")"
     s="${ipc_server_folder}/${1}"
-    if ! lsof "${m}" 2>&1 >/dev/null; then
+    if ! lsof "$(readlink -f "${m}")" 2>&1 >/dev/null; then
       ln -sf "${s}" "${m}"
     fi
   }
