@@ -44,6 +44,12 @@ next_available_name()(
 
 name=""
 socket=()
+
+if test ${#} -eq 1 && test "${1##*.}" = "m3u"; then
+  name="${1%.*}"
+  socket=(--input-ipc-server="${ipc_server_folder}/${name}")
+fi
+
 while getopts :hs: opt
 do
   case ${opt} in
