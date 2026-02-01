@@ -12,13 +12,14 @@ print_usage() {
 
     -a FILE...            append files to playlist (accepts stdin)
     -h                    show this help message and exit
+    -m                    set SOCKET_ALIAS as main
     -s SOCKET_ALIAS       IPC socket alias (required, autocompleted)
     -t                    toggle play/pause"
 }
 
 alias=""
 subcommand=""
-while getopts :ahs:t opt
+while getopts :ahms:t opt
 do
   case ${opt} in
     a)
@@ -27,6 +28,9 @@ do
     h)
       print_usage
       exit
+      ;;
+    m)
+      subcommand="main"
       ;;
     s)
       alias=${OPTARG}
@@ -62,6 +66,9 @@ case ${subcommand} in
     while IFS= read -r file; do
       echo '{"command": ["loadfile", "'"${file}"'", "append-play"]}' | socat - "${socket}"
     done
+    ;;
+  main)
+    ln -sf "${socket}" "${ipc_server_folder}/main"
     ;;
   toggle)
     echo '{"command": ["cycle", "pause"]}' | socat - "${socket}"
