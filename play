@@ -64,6 +64,15 @@ do
 done
 shift $((OPTIND - 1))
 
+args=()
+
+for arg in "${@}"; do
+  [[ "${arg}" == "--" ]] && continue
+  args+=("${arg}")
+done
+
+set -- "${args[@]}"
+
 mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
 
 if [[ -z "${socket[@]}" && -f "${words}" ]]; then
