@@ -15,7 +15,7 @@ print_usage() {
     Prefix (.prefix) files are excluded."
 }
 
-exclude=(! -name "*.prefix" ! -name "*.m3u")
+exclude=(! -name "*.prefix" ! -name "*.m3u" ! -name "*.m3u.*")
 while getopts :Ph opt
 do
   case ${opt} in
