@@ -7,11 +7,15 @@ words=~/.local/share/dict/words
 
 [[ -d "${ipc_server_folder}" ]] || mkdir "${ipc_server_folder}"
 
+of(){
+  lsof "${@}" >/dev/null 2>&1
+}
+
 next_available_name()(
   # https://stackoverflow.com/a/34985567 "locally scoped" function
   is_name_available(){
     s="${ipc_server_folder}/${1}"
-    if test -e "${s}"  && lsof "${s}" 2>&1 >/dev/null; then
+    if test -e "${s}"  && of "${s}"; then
       return 1
     fi
   }
@@ -20,7 +24,7 @@ next_available_name()(
     m="${ipc_server_folder}/main"
     [[ ! -e "${m}" ]] && touch "${m}"
     s="${ipc_server_folder}/${1}"
-    if ! lsof "$(readlink -f "${m}")" 2>&1 >/dev/null; then
+    if ! of "$(readlink -f "${m}")"; then
       ln -sf "${s}" "${m}"
     fi
   }
