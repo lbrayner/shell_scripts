@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -x
+# set -x
 
 ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
@@ -53,16 +53,19 @@ socket="${ipc_server_folder}/${alias}"
 
 case ${subcommand} in
   append)
-    loadfile=("loadfile")
+    files=()
     if [[ ${#} -gt 0 ]]; then
-      loadfile+=("${@}")
+      files=("${@}")
     else
       while IFS= read -r file; do
-        loadfile+=("${file}")
+        files+=("${file}")
       done
     fi
-    loadfile+=("append-play")
-    echo '{"command": '"$(jq -c -n '$ARGS.positional' --args "${loadfile[@]}")"'}' | socat - "${socket}"
+    playlist=$(mktemp -p .)
+    playlist="${playlist#./}"
+    printf '%s\n' "${files[@]}" > ${playlist}
+    echo '{"command": ["loadlist", "'${playlist}'", "append"]}' | socat - "${socket}"
+    rm ${playlist}
     ;;
   main)
     ln -sf "${socket}" "${ipc_server_folder}/main"
