@@ -7,6 +7,23 @@ words=~/.local/share/dict/words
 
 [[ -d "${ipc_server_folder}" ]] || mkdir "${ipc_server_folder}"
 
+name=""
+
+while getopts :hs: opt
+do
+  case ${opt} in
+    h)
+      program="${0##*/}"
+      echo "${program} [-h] -s IPC_SOCKET_ALIAS (see 'control -h')"
+      exit
+      ;;
+    s)
+      name=${OPTARG}
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
 of(){
   lsof "${@}" >/dev/null 2>&1
 }
@@ -46,24 +63,6 @@ next_available_name()(
   done
 )
 
-name=""
-socket=()
-
-while getopts :hs: opt
-do
-  case ${opt} in
-    h)
-      program="${0##*/}"
-      echo "${program} [-h] -s IPC_SOCKET_ALIAS (see 'control -h')"
-      exit
-      ;;
-    s)
-      name=${OPTARG}
-      ;;
-  esac
-done
-shift $((OPTIND - 1))
-
 args=()
 
 for arg in "${@}"; do
@@ -78,6 +77,7 @@ if [[ "${1##*.}" == "m3u" ]]; then
 fi
 
 mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
+socket=()
 
 if [[ -z "${socket[@]}" && -f "${words}" ]]; then
   name=$(next_available_name ${name})
