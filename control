@@ -6,7 +6,7 @@ ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
 
 print_usage() {
-    echo "${program} [-h] -s SOCKET_ALIAS [-a [FILE...]|-t]
+    echo "${program} [-h] -s SOCKET_ALIAS [-a [FILE...]|-m|-t]
 
     Control MPV via IPC
 
