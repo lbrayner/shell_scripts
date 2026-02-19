@@ -7,15 +7,25 @@ words=~/.local/share/dict/words
 
 [[ -d "${ipc_server_folder}" ]] || mkdir "${ipc_server_folder}"
 
+main=""
 name=""
 
-while getopts :hs: opt
+while getopts :hms: opt
 do
   case ${opt} in
     h)
       program="${0##*/}"
-      echo "${program} [-h] -s IPC_SOCKET_ALIAS (see 'control -h')"
+      echo "${program} [-h|-m] [-s IPC_SOCKET_ALIAS (see 'control -h')] FILE...
+
+      MPV wrapper with IPC input socket auto management
+
+      -h                    show this help message and exit
+      -m                    set SOCKET_ALIAS as main (see -s)
+      -s SOCKET_ALIAS       IPC socket alias (if not supplied, one will be assigned automatically)"
       exit
+      ;;
+    m)
+      main="true"
       ;;
     s)
       name=${OPTARG}
@@ -41,7 +51,7 @@ next_available_name()(
     m="${ipc_server_folder}/main"
     [[ ! -e "${m}" ]] && touch "${m}"
     s="${ipc_server_folder}/${1}"
-    if ! of "$(readlink -f "${m}")"; then
+    if [[ -n "${main}" ]] || ! of "$(readlink -f "${m}")"; then
       ln -sf "${s}" "${m}"
     fi
   }
