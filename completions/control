@@ -10,7 +10,7 @@ _control() {
 
   case ${prev} in
     -s)
-      local curdir="$(pwd)"
+      local curdir="${PWD}"
       cd "${ipc_server_folder}" 2>/dev/null && _filedir
       cd "${curdir}"
       ;;
