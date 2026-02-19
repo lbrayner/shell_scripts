@@ -32,7 +32,7 @@ next_available_name()(
   # https://stackoverflow.com/a/34985567 "locally scoped" function
   is_name_available(){
     s="${ipc_server_folder}/${1}"
-    if test -e "${s}"  && of "${s}"; then
+    if [[ -e "${s}" ]] && of "${s}"; then
       return 1
     fi
   }
@@ -46,7 +46,7 @@ next_available_name()(
     fi
   }
 
-  if test -n "${1}" && is_name_available ${1}; then
+  if [[ -n "${1}" ]] && is_name_available ${1}; then
     set_main ${1}
     echo ${1}
     return
