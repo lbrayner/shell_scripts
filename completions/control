@@ -5,14 +5,11 @@
 ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 
 _control() {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
   local prev=${COMP_WORDS[((COMP_CWORD - 1))]}
 
   case ${prev} in
     -s)
-      local curdir="${PWD}"
       cd "${ipc_server_folder}" 2>/dev/null && _filedir
-      cd "${curdir}"
       ;;
     *)
       _filedir
