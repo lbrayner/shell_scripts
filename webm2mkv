@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+print_usage() {
+  echo "$(basename "${0}") ARG..."
+}
+
+if [[ ${#} -eq 0 ]]
+then
+  print_usage 1>&2
+  exit 1
+fi
+
+for arg in "${@}"
+do
+  file="${arg}"
+  extension_as_is="${file##*.}"
+  extension="${extension_as_is,,}" # lower case
+
+  if [[ ${extension} != webm ]]; then
+    echo "File '${file}' not supported. WebM file required." 1>&2
+    continue
+  fi
+
+  destination="${file%.*}.mkv"
+
+  ffmpeg -i "${file}" -vcodec copy -acodec copy "${destination}"
+done
