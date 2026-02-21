@@ -35,7 +35,22 @@ do
 done
 shift $((OPTIND - 1))
 
-if [[ ${#} -eq 0 || ${#} -gt 4 ]]; then
+terms=()
+
+while [[ ${#} -gt 0 ]]; do
+  case "${1}" in
+    --)
+      shift  # Remove -- from the argument list
+      break
+      ;;
+    *)
+      terms+=("${1}")
+      shift
+      ;;
+  esac
+done
+
+if [[ ${#terms[@]} -eq 0 || ${#terms[@]} -gt 4 ]]; then
 	echo "1 to 4 arguments" >&2
 	exit 1
 fi
@@ -44,19 +59,44 @@ files(){
   find -L . ! -path \*/.\* -type f "${exclude[@]}"
 }
 
-if [[ ${#} -eq 1 ]]; then
-  files | rg --sort path -F -i -e "${1}"
+r0(){
+  rg -F -i -e "${terms[0]}" "${@}"
+}
+
+if [[ ${#} -eq 0 ]]; then
+  r1(){
+    files | r0
+  }
+else
+  r1(){
+    r0 "${@}"
+  }
+fi
+
+if [[ ${#terms[@]} -eq 1 ]]; then
+  r0(){
+    rg --sort path -F -i -e "${terms[0]}" "${@}"
+  }
+  r1 "${@}"
   exit 0
 fi
 
-if [[ ${#} -eq 2 ]]; then
-  files | rg -F -i -e "${1}" | rg --sort path -F -i -e "${2}"
+r9(){
+  rg --sort path -F -i -e "${1}"
+}
+
+if [[ ${#terms[@]} -eq 2 ]]; then
+  r1 "${@}" | r9 "${terms[1]}"
   exit 0
 fi
 
-if [[ ${#} -eq 3 ]]; then
-  files | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg --sort path -F -i -e "${3}"
+r2(){
+  rg -F -i -e "${1}"
+}
+
+if [[ ${#terms[@]} -eq 3 ]]; then
+  r1 "${@}" | r2 "${terms[1]}" | r9 "${terms[2]}"
   exit 0
 fi
 
-files | rg -F -i -e "${1}" | rg -F -i -e "${2}" | rg -F -i -e "${3}" | rg --sort path -F -i -e "${4}"
+r1 "${@}" | r2 "${terms[1]}" | r2 "${terms[2]}" | r9 "${terms[3]}"
