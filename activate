@@ -11,7 +11,7 @@ print_usage() {
     -w            Activate window by WM_CLASS (exact match)
 
     This script is a convenient way of using
-    https://github.com/lbrayner/activate-window-by-title, a GNOME shell
+    https://github.com/lucaswerkmeister/activate-window-by-title, a GNOME shell
     extension."
 }
 
