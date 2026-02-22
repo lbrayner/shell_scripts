@@ -6,7 +6,8 @@ print_usage() {
     Activate window by various methods.
 
     -h            show this help message and exit
-    -n            Activate window by Title (substring, the default method)
+    -s            Activate window by title Substring (substring, the default method)
+    -t            Activate window by Title (exact match)
     -w            Activate window by WM_CLASS (exact match)
 
     This script is a convenient way of using
@@ -15,15 +16,18 @@ print_usage() {
 }
 
 method=name
-while getopts :hnw opt
+while getopts :hstw opt
 do
     case ${opt} in
         h)
             print_usage
             exit
             ;;
-        n)
-            method=name
+        s)
+            method=substring
+            ;;
+        t)
+            method=title
             ;;
         w)
             method=wm_class
@@ -46,8 +50,11 @@ fi
 arg="${1}"
 
 case ${method} in
-    name)
+    substring)
         dbusmethod=activateBySubstring
+        ;;
+    title)
+        dbusmethod=activateByTitle
         ;;
     wm_class)
         dbusmethod=activateByWmClass
