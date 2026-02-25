@@ -7,20 +7,26 @@ program="${0##*/}"
 print_usage() {
     echo "${program} [-P|-h]
 
-    Query files (specialized in media files and M3U playlists).
+    Query files (specialized in media files, M3U playlists, subtitles).
 
     -P            DO NOT exclude M3U playlists (they are excluded by default)
+    -S            DO NOT exclude subtitles (they are excluded by default)
     -h            show this help message and exit
 
     Prefix (.prefix) files are excluded."
 }
 
-exclude=(! -name "*.prefix" ! -name "*.m3u" ! -name "*.m3u.*")
-while getopts :Ph opt
+exclude=(! -name "*.prefix")
+exclude_playlists=""
+exclude_subtitles=""
+while getopts :PSh opt
 do
   case ${opt} in
     P)
-      exclude=(! -name "*.prefix")
+      exclude_playlists="false"
+      ;;
+    S)
+      exclude_subtitles="false"
       ;;
     h)
       print_usage
@@ -34,6 +40,14 @@ do
   esac
 done
 shift $((OPTIND - 1))
+
+if [[ -z "${exclude_playlists}" ]]; then
+  exclude+=(! -name "*.m3u" ! -name "*.m3u.*")
+fi
+
+if [[ -z "${exclude_subtitles}" ]]; then
+  exclude+=(! -iname "*.srt" ! -iname "*.vtt")
+fi
 
 terms=()
 
