@@ -34,45 +34,6 @@ do
 done
 shift $((OPTIND - 1))
 
-of(){
-  lsof "${@}" >/dev/null 2>&1
-}
-
-next_available_name()(
-  # https://stackoverflow.com/a/34985567 "locally scoped" function
-  is_name_available(){
-    s="${ipc_server_folder}/${1}"
-    if [[ -e "${s}" ]] && of "${s}"; then
-      return 1
-    fi
-  }
-
-  set_main(){
-    m="${ipc_server_folder}/main"
-    [[ ! -e "${m}" ]] && touch "${m}"
-    s="${ipc_server_folder}/${1}"
-    if [[ -n "${main}" ]] || ! of "$(readlink -f "${m}")"; then
-      ln -sf "${s}" "${m}"
-    fi
-  }
-
-  if [[ -n "${1}" ]] && is_name_available ${1}; then
-    set_main ${1}
-    echo ${1}
-    return
-  fi
-
-  lc=$(wc -l < "${words}")
-  for (( i = 1; i <= ${lc}; i++ )); do
-    w=$(sed -n ${i}p "${words}")
-    if is_name_available ${w}; then
-      set_main ${w}
-      echo ${w}
-      return
-    fi
-  done
-)
-
 args=()
 
 for arg in "${@}"; do
@@ -90,6 +51,45 @@ mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
 socket=()
 
 if [[ -z "${socket[@]}" && -f "${words}" ]]; then
+  next_available_name()(
+    of(){
+      lsof "${@}" >/dev/null 2>&1
+    }
+
+    # https://stackoverflow.com/a/34985567 "locally scoped" function
+    is_name_available(){
+      s="${ipc_server_folder}/${1}"
+      if [[ -e "${s}" ]] && of "${s}"; then
+        return 1
+      fi
+    }
+
+    set_main(){
+      m="${ipc_server_folder}/main"
+      [[ ! -e "${m}" ]] && touch "${m}"
+      s="${ipc_server_folder}/${1}"
+      if [[ -n "${main}" ]] || ! of "$(readlink -f "${m}")"; then
+        ln -sf "${s}" "${m}"
+      fi
+    }
+
+    if [[ -n "${1}" ]] && is_name_available ${1}; then
+      set_main ${1}
+      echo ${1}
+      return
+    fi
+
+    lc=$(wc -l < "${words}")
+    for (( i = 1; i <= ${lc}; i++ )); do
+      w=$(sed -n ${i}p "${words}")
+      if is_name_available ${w}; then
+        set_main ${w}
+        echo ${w}
+        return
+      fi
+    done
+  )
+
   name=$(next_available_name ${name})
 
   if [[ -n ${name} ]]; then
