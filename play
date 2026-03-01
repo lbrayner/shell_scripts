@@ -48,9 +48,8 @@ if [[ "${1##*.}" == "m3u" ]]; then
 fi
 
 mpv=(mpv --msg-level=all=no --terminal=no --playlist-start=0)
-socket=()
 
-if [[ -z "${socket[@]}" && -f "${words}" ]]; then
+if [[ -f "${words}" ]]; then
   next_available_name()(
     of(){
       lsof "${@}" >/dev/null 2>&1
@@ -91,14 +90,15 @@ if [[ -z "${socket[@]}" && -f "${words}" ]]; then
   )
 
   name=$(next_available_name ${name})
+  socket=()
 
   if [[ -n ${name} ]]; then
     socket=(--input-ipc-server="${ipc_server_folder}/${name}")
   fi
-fi
 
-if [[ -n "${socket[@]}" ]]; then
-  mpv+=(--title="[${name}] \${filename}" "${socket[@]}")
+  if [[ -n "${socket[@]}" ]]; then
+    mpv+=(--title="[${name}] \${filename}" "${socket[@]}")
+  fi
 fi
 
 if [[ ${#} -eq 0  ]]; then
