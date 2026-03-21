@@ -14,12 +14,13 @@ print_usage() {
     -h                    show this help message and exit
     -m                    set SOCKET_ALIAS as main
     -s SOCKET_ALIAS       IPC socket alias (required, autocompleted)
+    -r                    revalidate marks
     -t                    toggle play/pause"
 }
 
 alias=""
 subcommand=""
-while getopts :ahms:t opt
+while getopts :ahmrs:t opt
 do
   case ${opt} in
     a)
@@ -31,6 +32,9 @@ do
       ;;
     m)
       subcommand="main"
+      ;;
+    r)
+      subcommand="revalidate_marks"
       ;;
     s)
       alias=${OPTARG}
@@ -69,6 +73,10 @@ case ${subcommand} in
     ;;
   main)
     ln -sf "${socket}" "${ipc_server_folder}/main"
+    ;;
+  revalidate_marks)
+    echo '{"command": ["script-message-to", "bindings", "marks", "revalidate_marks"]}' | \
+      socat - "${socket}"
     ;;
   toggle)
     echo '{"command": ["cycle", "pause"]}' | socat - "${socket}"
