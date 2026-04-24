@@ -5,7 +5,7 @@
 program="${0##*/}"
 
 print_usage() {
-    echo "${program} [-P|-h]
+    echo "${program} [-P|-S|-h]
 
     Query files (specialized in media files, M3U playlists, subtitles).
 
