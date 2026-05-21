@@ -43,7 +43,7 @@ done
 
 set -- "${args[@]}"
 
-if [[ "${1##*.}" == "m3u" ]]; then
+if [[ -z "${name}" && "${1##*.}" == "m3u" ]]; then
   name="${1%.*}"
 fi
 
