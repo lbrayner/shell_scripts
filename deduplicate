@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# set -x
+
+program="${0##*/}"
+
+print_usage() {
+    echo "${program} TEXT_FILE"
+}
+
+[[ ${#} != 1 ]] && print_usage >&2 && exit 1
+
+{ file -i "${1}" 2>&1 | rg -qF 'text/plain' ; } || echo "Not a text file"
+
+sort -u "${1}" | sponge "${1}"
