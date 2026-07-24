@@ -10,7 +10,7 @@ print_usage() {
 
     Control MPV via IPC
 
-    -P                    Playlist index clear
+    -P                    Playlist Index clear
     -a FILE...            append files to playlist (accepts stdin)
     -h                    show this help message and exit
     -m                    set SOCKET_ALIAS as main
