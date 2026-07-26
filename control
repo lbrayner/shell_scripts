@@ -6,11 +6,10 @@ ipc_server_folder="/tmp/9572cf67-b586-4c68-a7da-7cb904b396b3"
 program="${0##*/}"
 
 print_usage() {
-    echo "${program} [-h] -s SOCKET_ALIAS [-P|-a [FILE...]|-m|-t]
+    echo "${program} [-h] -s SOCKET_ALIAS [-a [FILE...]|-m|-t]
 
     Control MPV via IPC
 
-    -P                    Playlist Index clear
     -a FILE...            append files to playlist (accepts stdin)
     -h                    show this help message and exit
     -m                    set SOCKET_ALIAS as main
@@ -20,12 +19,9 @@ print_usage() {
 
 alias=""
 subcommand=""
-while getopts :Pahms:t opt
+while getopts :ahms:t opt
 do
   case ${opt} in
-    P)
-      subcommand="playlist_index_clear"
-      ;;
     a)
       subcommand="append"
       ;;
@@ -73,10 +69,6 @@ case ${subcommand} in
     ;;
   main)
     ln -sf "${socket}" "${ipc_server_folder}/main"
-    ;;
-  playlist_index_clear)
-    echo '{"command": ["script-message-to", "message_handler", "playlist_index", "playlist_index_clear"]}' | \
-      socat - "${socket}"
     ;;
   toggle)
     echo '{"command": ["cycle", "pause"]}' | socat - "${socket}"
